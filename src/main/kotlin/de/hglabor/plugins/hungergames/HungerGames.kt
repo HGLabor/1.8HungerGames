@@ -32,8 +32,10 @@ class HungerGames: KSpigot() {
 
     fun registerMechanics() {
         GameManager.enable()
+        Bukkit.pluginManager.registerEvents(Soup(), this)
+        Bukkit.pluginManager.registerEvents(Tracker(), this)
+        Bukkit.pluginManager.registerEvents(Tracker(), this)
     }
-}
 
 val Manager by lazy { HungerGames.INSTANCE }
 val PrimaryColor = ChatColor.DARK_PURPLE
