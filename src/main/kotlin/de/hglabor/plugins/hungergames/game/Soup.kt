@@ -18,6 +18,7 @@ class Soup : Listener {
                     health = p.maxHealth
                 }
                 p.health = health
+                p.setFoodLevel(20)
                 p.inventory.setItemInMainHand(ItemStack(Material.BOWL))
             }
         }
