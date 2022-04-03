@@ -12,7 +12,6 @@ import org.bukkit.event.entity.PlayerDeathEvent
 object DeathMessages {
     fun announce(event: PlayerDeathEvent) {
         val hgPlayer = event.entity.hgPlayer
-        event.deathMessage = null
         if (event.entity.killer != null) {
             announce(hgPlayer, event.entity.killer.hgPlayer)
         } else {
@@ -22,27 +21,30 @@ object DeathMessages {
                 announce(hgPlayer)
             }
         }
-        announcePlayerCount()
+        event.deathMessage = null
+        if (PlayerList.alivePlayers.size > 1)
+            announcePlayerCount()
     }
 
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
         val deadText = "${ChatColor.LIGHT_PURPLE}${dead.name}"
         val killerText = "${ChatColor.LIGHT_PURPLE}${killer.name}"
-        val slainText = " ${KColors.GRAY}was slain by "
+        val slainText = " ${KColors.GRAY}was eliminated by "
         broadcast(Prefix + deadText + slainText + killerText)
-        announcePlayerCount()
     }
 
     private fun announce(dead: HGPlayer) {
         val deadText = "${ChatColor.LIGHT_PURPLE}${dead.name}"
-        broadcast(Prefix + deadText + ChatColor.GRAY + " died")
-        announcePlayerCount()
+        broadcast(Prefix + deadText + ChatColor.GRAY + " was eliminated")
     }
 
     private fun announce(dead: HGPlayer, deathMessage: String) {
         val deadText = "${ChatColor.LIGHT_PURPLE}${dead.name}${KColors.GRAY}"
-        broadcast(Prefix + deathMessage.replace(dead.name.toRegex(), deadText))
-        announcePlayerCount()
+        var message = deathMessage
+        if (message.contains("was slain by")) {
+            message = message.replace("was slain by", "was eliminated by${ChatColor.LIGHT_PURPLE}")
+        }
+        broadcast(Prefix + message.replace(dead.name.toRegex(), deadText))
     }
 
     private fun announcePlayerCount() {
