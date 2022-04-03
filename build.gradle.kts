@@ -67,4 +67,9 @@ bukkit {
             description = "Start the next gamephase"
         }
     }
+    commands {
+        register("kit") {
+            description = "Choose a kit"
+        }
+    }
 }
