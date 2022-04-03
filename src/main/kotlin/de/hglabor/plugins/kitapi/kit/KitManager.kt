@@ -7,6 +7,7 @@ object KitManager {
         Anchor.value,
         Automatic.value,
         Ninja.value,
+        None.value,
         Phantom.value,
         Stomper.value,
         ZickZack.value
