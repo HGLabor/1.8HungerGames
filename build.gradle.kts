@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val javaVersion = "1.8"
-val mcVersion = "1.8.1"
+val mcVersion = "1.8.8"
 
 group = "de.hglabor"
 version = "${mcVersion}_v1"
@@ -28,7 +28,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     // Spigot
-    compileOnly("org.spigotmc", "spigot-api", "1.8.8-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc", "spigot-api", "$mcVersion-R0.1-SNAPSHOT")
 
     // KSpigot
     implementation(files("/libs/KSpigot-1.8.0.jar"))
@@ -62,4 +62,9 @@ bukkit {
     apiVersion = "1.8"
     softDepend = listOf("WorldEdit")
     authors = listOf("BestAuto")
+    commands {
+        register("start") {
+            description = "Start the next gamephase"
+        }
+    }
 }
