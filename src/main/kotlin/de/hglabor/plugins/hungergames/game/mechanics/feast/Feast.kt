@@ -1,6 +1,7 @@
 package de.hglabor.plugins.hungergames.game.mechanics.feast
 
 import de.hglabor.plugins.hungergames.Manager
+import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.utils.RandomCollection
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -143,15 +144,15 @@ class Feast(world: World) : Listener {
         ironItems.add(1.0, ItemStack(Material.IRON_CHESTPLATE))
         ironItems.add(1.0, ItemStack(Material.IRON_LEGGINGS))
         ironItems.add(1.0, ItemStack(Material.IRON_BOOTS))
-        ironItems.add(1.6, ItemStack(Material.IRON_SWORD))
-        ironItems.add(1.4   , ItemStack(Material.IRON_PICKAXE))
+        ironItems.add(1.0, ItemStack(Material.IRON_SWORD))
+        ironItems.add(1.07   , ItemStack(Material.IRON_PICKAXE))
 
         val diamondItems: RandomCollection<ItemStack> = RandomCollection()
         diamondItems.add(1.0, ItemStack(Material.DIAMOND_HELMET))
         diamondItems.add(1.0, ItemStack(Material.DIAMOND_CHESTPLATE))
         diamondItems.add(1.0, ItemStack(Material.DIAMOND_LEGGINGS))
         diamondItems.add(1.0, ItemStack(Material.DIAMOND_BOOTS))
-        diamondItems.add(1.6, ItemStack(Material.DIAMOND_SWORD))
+        diamondItems.add(1.07, ItemStack(Material.DIAMOND_SWORD))
 
         val sizeableItems: RandomCollection<ItemStack> = RandomCollection()
         sizeableItems.add(1.0, ItemStack(Material.COOKED_BEEF))
@@ -221,7 +222,7 @@ class Feast(world: World) : Listener {
     }
 
     private fun broadcastFeastCenter() =
-        broadcast("[${feastCenter!!.x.toInt()}, ${feastCenter!!.y.toInt()}, ${feastCenter!!.z.toInt()}]")
+        broadcast("${Prefix}Will spawn at [${feastCenter!!.x.toInt()}, ${feastCenter!!.y.toInt()}, ${feastCenter!!.z.toInt()}]")
 
     companion object {
         const val BLOCK_KEY = "FEAST_BLOCK"
