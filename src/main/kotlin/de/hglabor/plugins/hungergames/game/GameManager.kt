@@ -24,6 +24,7 @@ object GameManager {
     fun enable() {
         phase.start()
         Bukkit.getPluginManager().registerEvents(phase, Manager)
+        world.worldBorder.setCenter(0.0, 0.0)
         world.worldBorder.size = 600.0*2
 
         listen<PlayerJoinEvent> { it.player.hgPlayer.login() }
