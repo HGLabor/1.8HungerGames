@@ -1,82 +1,69 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
-import com.google.common.collect.ImmutableMap
+import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
+import de.hglabor.plugins.hungergames.player.PlayerList
 import net.axay.kspigot.extensions.broadcast
-import org.bukkit.Bukkit
-import org.bukkit.entity.Player
+import net.axay.kspigot.extensions.onlinePlayers
+import org.bukkit.*
+import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.inventory.ItemStack
 
 
-object EndPhase: GamePhase(25, null) {
-    override fun getTimeString() = "Ended"
+object EndPhase : GamePhase(25, null) {
+    override fun getTimeString() = "End"
+    var winner: HGPlayer? = null
 
     override fun onStart() {
-        broadcast("EndPhase")
-    }
+        broadcast("${ChatColor.RED}Endphase!!")
+        val platformLoc = createWinningPlatform()
+        winner = PlayerList.alivePlayers.singleOrNull() ?: PlayerList.alivePlayers.minByOrNull { it.kills }!!
 
-    override fun tick() {
-        if (elapsedTime == 25L) {
-            Bukkit.shutdown()
+        onlinePlayers.filter { it != winner?.bukkitPlayer }.forEach {
+            it.gameMode = GameMode.SPECTATOR
+            it.teleport(platformLoc)
         }
-    }
-}
 
-class EndPhase(winner: Optional<HGPlayer?>, participants: Int) :
-    GamePhase(HGConfig.getInteger(ConfigKeys.END_RESTART_AFTER)) {
-    val maxParticipants: Int
-    private val winner: Optional<HGPlayer>
-    val rawTime: Int
-
-    init {
-        rawTime = GameStateManager.INSTANCE.getTimer()
-        this.winner = winner
-        maxParticipants = participants
-    }
-
-    protected fun init() {
-        winner.ifPresent { hgPlayer ->
-            val player: Player = Bukkit.getPlayer(hgPlayer.getUUID())
-            if (player != null) {
-                player.allowFlight = true
-                player.isFlying = true
-            }
-        }
-        GameStateManager.INSTANCE.resetTimer()
-    }
-
-    protected fun tick(timer: Int) {
-        if (timer <= maxPhaseTime) {
-            winner.ifPresentOrElse({ hgPlayer ->
-                ChatUtils.broadcastMessage(
-                    "endPhase.winAnnouncementPlayer",
-                    ImmutableMap.of("player", hgPlayer.getName())
-                )
-            }) {
-                ChatUtils.broadcastMessage(
-                    "endPhase.winAnnouncementNobody"
-                )
-            }
-        } else {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restart")
+        winner?.bukkitPlayer?.apply {
+            allowFlight = true
+            isFlying = true
+            teleport(platformLoc)
+            inventory.clear()
+            inventory.addItem(ItemStack(Material.WATER_BUCKET))
         }
     }
 
-    val type: PhaseType
-        get() = PhaseType.END
+    override fun tick(tickCount: Int) {
+        if (tickCount < 5) {
+            broadcast(
+                if (winner != null) "${Prefix}${ChatColor.DARK_PURPLE}${winner?.name} ${ChatColor.GRAY}won."
+                else "${Prefix}${ChatColor.RED}Nobody ${ChatColor.GRAY}won."
+            )
+        }
 
-    protected fun getTimeString(timer: Int): String {
-        return TimeConverter.stringify(rawTime)
+        if (GameManager.elapsedTime.get() == 25L) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop")
+        }
     }
-
-    val currentParticipants: Int
-        get() = playerList.getAlivePlayers().size()
-    protected override val nextPhase: GamePhase?
-        protected get() = null
 
     @EventHandler
     fun onEntityDamageEvent(event: EntityDamageEvent) {
         event.isCancelled = true
+    }
+
+    private fun createWinningPlatform(): Location {
+        val loc = GameManager.world.getHighestBlockAt(0, 0).location.add(0.0, 50.0, 0.0)
+        for (x in -2..2) {
+            for (y in -2..-1) {
+                for (z in -2..2) {
+                    val material = if (y == -2) Material.GLASS else Material.CAKE_BLOCK
+                    loc.clone().add(x.toDouble(), y.toDouble(), z.toDouble()).block.type = material
+                }
+            }
+        }
+        return loc.clone().add(0.0, 2.0, 0.0)
     }
 }
