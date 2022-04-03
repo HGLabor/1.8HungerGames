@@ -35,7 +35,7 @@ object KitCommand : CommandExecutor {
                 return false
             }
             InvincibilityPhase -> {
-                if (player.hgPlayer.kit == None.value) {
+                if (player.hgPlayer.kit != None.value) {
                     sender.sendMessage("${Prefix}You already have a kit.")
                     return false
                 }
