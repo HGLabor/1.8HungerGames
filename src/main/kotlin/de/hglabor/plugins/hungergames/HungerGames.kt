@@ -46,6 +46,7 @@ class HungerGames: KSpigot() {
         DamageNerf.register()
         IronNerf.register()
         LapisInEnchanter.register()
+        KitSelector.register()
     }
 
     private fun whitelistManager() {
