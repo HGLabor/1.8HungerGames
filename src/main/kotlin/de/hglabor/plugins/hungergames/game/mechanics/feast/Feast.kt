@@ -99,7 +99,7 @@ class Feast(world: World) : Listener {
     }*/
 
     private fun createCylinder() {
-        val chunkSet = hashSetOf<Chunk>()
+        //val chunkSet = hashSetOf<Chunk>()
         for (x in -radius until radius) {
             for (z in -radius until radius) {
                 for (y in 0..10) {
@@ -201,9 +201,7 @@ class Feast(world: World) : Listener {
         runBlocking {
             launch {
                 task(false, 0, 20) {
-                    broadcast("Feast in ${timer!!.get()}")
                     if (timer!!.decrementAndGet() <= 0) {
-                        broadcast("${ChatColor.RED}FEAST1111111")
                         //CHEST SPAWNING
                         inPreparation = false
                         isFinished = true
