@@ -4,17 +4,20 @@ import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
-import net.axay.kspigot.extensions.broadcast
+import de.hglabor.plugins.hungergames.utils.TimeConverter
+import de.hglabor.plugins.kitapi.player.PlayerKits
+import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
 object InvincibilityPhase: IngamePhase(120, PvPPhase) {
-    override fun onStart() {
-        broadcast("InvincibilityPhase")
-        PlayerList.allPlayers.forEach(HGPlayer::makeGameReady)
-    }
+    override val timeName = "Grace${ChatColor.DARK_GRAY}"
+    override fun getTimeString() = TimeConverter.stringify((maxDuration - GameManager.elapsedTime.get()).toInt())
 
-    override fun getTimeString(): String = "Invinc: ${maxDuration - GameManager.elapsedTime.get()}"
+    override fun onStart() {
+        PlayerList.allPlayers.forEach(HGPlayer::makeGameReady)
+        PlayerKits.register()
+    }
 
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {

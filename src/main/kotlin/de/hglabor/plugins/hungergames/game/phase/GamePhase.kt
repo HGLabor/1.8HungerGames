@@ -10,6 +10,7 @@ abstract class GamePhase(val maxDuration: Long, val nextPhase: GamePhase?) : Lis
 
     open fun tick(tickCount: Int) {}
 
+    abstract val timeName: String
     abstract fun getTimeString(): String
 
     fun start() {

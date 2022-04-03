@@ -14,13 +14,14 @@ import org.bukkit.inventory.ItemStack
 
 
 object EndPhase : GamePhase(25, null) {
-    override fun getTimeString() = "End"
+    override fun getTimeString() = "Ended"
+    override val timeName = "Game${ChatColor.DARK_GRAY}"
+
     var winner: HGPlayer? = null
 
     override fun onStart() {
-        broadcast("${ChatColor.RED}Endphase!!")
         val platformLoc = createWinningPlatform()
-        winner = PlayerList.alivePlayers.singleOrNull() ?: PlayerList.alivePlayers.minByOrNull { it.kills }!!
+        winner = PlayerList.alivePlayers.singleOrNull() ?: PlayerList.alivePlayers.minByOrNull { it.kills.get() }!!
 
         onlinePlayers.filter { it != winner?.bukkitPlayer }.forEach {
             it.gameMode = GameMode.SPECTATOR
@@ -29,7 +30,7 @@ object EndPhase : GamePhase(25, null) {
 
         winner?.bukkitPlayer?.apply {
             allowFlight = true
-            isFlying = true
+            isFlying = false
             teleport(platformLoc)
             inventory.clear()
             inventory.addItem(ItemStack(Material.WATER_BUCKET))
