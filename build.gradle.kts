@@ -66,10 +66,11 @@ bukkit {
         register("start") {
             description = "Start the next gamephase"
         }
-    }
-    commands {
         register("kit") {
             description = "Choose a kit"
+        }
+        register("feast") {
+            description = "Point your compass towards the feast"
         }
     }
 }
