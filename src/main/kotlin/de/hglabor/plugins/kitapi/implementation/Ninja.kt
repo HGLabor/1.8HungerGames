@@ -31,6 +31,9 @@ val Ninja = Kit("Ninja", ::NinjaProperties) {
     }
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, player ->
+        if(it.isCancelled) {
+            return@kitPlayerEvent
+        }
         lastDamaged[player] = it.entity as? Player ?: return@kitPlayerEvent
     }
 }
