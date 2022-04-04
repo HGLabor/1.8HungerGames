@@ -13,6 +13,7 @@ import net.axay.kspigot.runnables.task
 import org.bukkit.Bukkit
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.world.ChunkUnloadEvent
 import java.util.concurrent.atomic.AtomicLong
 
 object GameManager {
@@ -24,9 +25,11 @@ object GameManager {
     fun enable() {
         phase.start()
         Bukkit.getPluginManager().registerEvents(phase, Manager)
+        world.setSpawnLocation(0, world.getHighestBlockYAt(0, 0) + 15, 0)
+        world.loadChunk(world.spawnLocation.chunk)
         world.worldBorder.setCenter(0.0, 0.0)
         world.worldBorder.size = 600.0*2
-
+        listen<ChunkUnloadEvent> { if (it.chunk == world.spawnLocation.chunk) it.isCancelled = true }
         listen<PlayerJoinEvent> { it.player.hgPlayer.login() }
 
         runBlocking {
