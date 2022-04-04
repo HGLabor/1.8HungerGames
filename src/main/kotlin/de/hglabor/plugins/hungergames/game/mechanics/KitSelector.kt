@@ -1,6 +1,5 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
-import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitManager
 import de.hglabor.plugins.kitapi.player.PlayerKits.chooseKit
@@ -18,29 +17,31 @@ import org.bukkit.event.player.PlayerInteractEvent
 
 object KitSelector {
     val kitSelectorItem = itemStack(Material.CHEST) { meta { name = "${ChatColor.LIGHT_PURPLE}Kit Selector" } }
+    val gui = kSpigotGUI(GUIType.FIVE_BY_NINE) {
+        title = "${ChatColor.LIGHT_PURPLE}"
+        page(1) {
+            val compound = createRectCompound<Kit<*>>(Slots.RowTwoSlotTwo, Slots.RowFourSlotEight,
+                iconGenerator = { kit ->
+                    kit.internal.displayItem.apply {
+                        meta {
+                            name = "${ChatColor.LIGHT_PURPLE}${kit.properties.kitname}"
+                        }
+                    }
+                },
+                onClick = { clickEvent, kit ->
+                    clickEvent.bukkitEvent.isCancelled = true
+                    clickEvent.player.chooseKit(kit)
+                    clickEvent.player.closeInventory()
+                })
+            compound.sortContentBy { kit -> kit.properties.kitname }
+            compound.setContent(KitManager.kits)
+        }
+    }
 
     fun register() {
         listen<PlayerInteractEvent> {
             if (it.item == kitSelectorItem) {
-                it.player.openGUI(kSpigotGUI(GUIType.FIVE_BY_NINE) {
-                    page(1) {
-                        val compound = createRectCompound<Kit<*>>(Slots.RowTwoSlotTwo, Slots.RowFourSlotEight,
-                            iconGenerator = { kit ->
-                                kit.internal.displayItem.apply {
-                                    meta {
-                                        name = "${ChatColor.LIGHT_PURPLE}${kit.properties.kitname}"
-                                    }
-                                }
-                            },
-                            onClick = { clickEvent, kit ->
-                                clickEvent.bukkitEvent.isCancelled = true
-                                clickEvent.player.chooseKit(kit)
-                                clickEvent.player.closeInventory()
-                            })
-                        compound.sortContentBy { kit -> kit.properties.kitname }
-                        compound.setContent(KitManager.kits)
-                    }
-                })
+                it.player.openGUI(gui)
             }
         }
     }
