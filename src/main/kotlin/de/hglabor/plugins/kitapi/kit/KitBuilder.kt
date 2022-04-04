@@ -1,5 +1,7 @@
 package de.hglabor.plugins.kitapi.kit
 
+import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.Cooldown
 import de.hglabor.plugins.kitapi.cooldown.CooldownManager
 import de.hglabor.plugins.kitapi.cooldown.CooldownScope
@@ -62,6 +64,7 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
     ) {
         kit.internal.kitPlayerEvents += listen<T> {
             val player = playerGetter(it) ?: return@listen
+            if (!player.hgPlayer.isAlive) return@listen
             if (player.hasKit(kit))
                 callback(it, player)
         }
@@ -81,7 +84,7 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
                 CooldownManager.addCooldown(cooldown, this)
             }
         } else {
-            sendMessage("Du hast noch cooldown")
+            sendMessage("${Prefix}You are still on cooldown.")
         }
     }
 
