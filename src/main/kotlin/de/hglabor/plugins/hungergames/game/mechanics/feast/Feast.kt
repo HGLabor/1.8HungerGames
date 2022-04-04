@@ -24,15 +24,15 @@ import kotlin.random.Random
 class Feast(world: World) : Listener {
     private val feastBlocks: MutableSet<Block>
     private val world: World
-    private var feastCenter: Location? = null
+    var feastCenter: Location? = null
     private var platformMaterial: Material? = null
     private var radius = 0
     private var timer: AtomicInteger? = null
     private var totalTime = 0
     private var airHeight = 0
     private var maxItemsInChest: Int
-    private var inPreparation = false
-    private var isFinished = false
+    var inPreparation = false
+    var isFinished = false
     private var shouldDamageItems = false
 
     init {

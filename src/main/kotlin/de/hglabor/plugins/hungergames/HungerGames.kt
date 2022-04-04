@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames
 
+import de.hglabor.plugins.hungergames.commands.FeastCommand
 import de.hglabor.plugins.hungergames.commands.KitCommand
 import de.hglabor.plugins.hungergames.commands.StartCommand
 import de.hglabor.plugins.hungergames.game.GameManager
@@ -33,6 +34,7 @@ class HungerGames: KSpigot() {
 
     private fun registerCommands() {
         StartCommand.register("start")
+        FeastCommand.register("feast")
         KitCommand.register("kit")
         getCommand("kit").apply {
             executor = KitCommand
