@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Material
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
@@ -25,11 +26,15 @@ val Automatic = Kit("Automatic", ::AutomaticProperties) {
             val item = player.inventory.getItem(i) ?: continue
             if (item.type != Material.MUSHROOM_SOUP) continue
             player.health = min(player.health + this.kit.properties.soupHealAmount, maxHealth)
+            val heldSlot = player.inventory.heldItemSlot
             player.inventory.heldItemSlot = i
             player.inventory.setItem(i, ItemStack(Material.AIR))
             item.type = Material.BOWL
             val droppedItem = player.world.dropItem(player.location, item)
             droppedItem.pickupDelay = 40
+            taskRunLater(4) {
+                player.inventory.heldItemSlot = heldSlot
+            }
             break
         }
     }

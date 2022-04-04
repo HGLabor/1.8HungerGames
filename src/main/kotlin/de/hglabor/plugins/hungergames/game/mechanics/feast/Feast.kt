@@ -3,13 +3,13 @@ package de.hglabor.plugins.hungergames.game.mechanics.feast
 import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.utils.RandomCollection
+import de.hglabor.plugins.hungergames.utils.TimeConverter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.sync
 import net.axay.kspigot.runnables.task
 import org.bukkit.ChatColor
-import org.bukkit.Chunk
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World
@@ -78,7 +78,7 @@ class Feast(world: World) : Listener {
     }
 
     fun spawn() {
-        broadcastFeastCenter()
+        announceFeast()
         inPreparation = true
         createCylinder()
         startCountDown()
@@ -145,7 +145,7 @@ class Feast(world: World) : Listener {
         ironItems.add(1.0, ItemStack(Material.IRON_LEGGINGS))
         ironItems.add(1.0, ItemStack(Material.IRON_BOOTS))
         ironItems.add(1.0, ItemStack(Material.IRON_SWORD))
-        ironItems.add(1.07   , ItemStack(Material.IRON_PICKAXE))
+        ironItems.add(1.07, ItemStack(Material.IRON_PICKAXE))
 
         val diamondItems: RandomCollection<ItemStack> = RandomCollection()
         diamondItems.add(1.0, ItemStack(Material.DIAMOND_HELMET))
@@ -205,22 +205,41 @@ class Feast(world: World) : Listener {
                         //CHEST SPAWNING
                         inPreparation = false
                         isFinished = true
-                        feastBlocks.forEach{ feastBlock: Block ->
+                        feastBlocks.forEach { feastBlock: Block ->
                             feastBlock.removeMetadata(BLOCK_KEY, Manager)
                         }
                         sync {
-                            broadcastFeastCenter()
+                            announceFeast()
                             spawnFeastLoot()
                         }
                         it.cancel()
+                    } else {
+                        if (timer!!.get() % 60 == 0 || when (timer!!.get()) {
+                                30, 15, 10, 5, 3, 2, 1 -> true
+                                else -> false
+                            }
+                        ) {
+                            announceFeast()
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun broadcastFeastCenter() =
-        broadcast("${Prefix}Will spawn at [${feastCenter!!.x.toInt()}, ${feastCenter!!.y.toInt()}, ${feastCenter!!.z.toInt()}]")
+    private fun announceFeast() {
+        broadcast("${Prefix}Feast will spawn at ${getCenterString()} ${ChatColor.GRAY}in ${getTimeString()}${ChatColor.GRAY}.")
+    }
+
+    private fun getCenterString(): String? {
+        val loc = feastCenter ?: return null
+        return "${ChatColor.WHITE}${loc.x}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.y}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.z}${ChatColor.DARK_GRAY}"
+    }
+
+    private fun getTimeString(): String? {
+        val time = timer?.get() ?: return null
+        return "${ChatColor.WHITE}${TimeConverter.stringify(time)}"
+    }
 
     companion object {
         const val BLOCK_KEY = "FEAST_BLOCK"

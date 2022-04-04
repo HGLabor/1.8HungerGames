@@ -24,8 +24,10 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     val isAlive: Boolean
         get() = status == PlayerStatus.INGAME || status == PlayerStatus.OFFLINE
     var status: PlayerStatus = PlayerStatus.LOBBY
+
     //TODO var combatLogMob: UUID? = null
     var offlineTime: AtomicInteger = AtomicInteger(120)
+
     //var hasBeenRevived: Boolean = false
     var kills: AtomicInteger = AtomicInteger(0)
     var isInCombat = false
@@ -63,9 +65,18 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             inventory.clear()
             inventory.addItem(ItemStack(Material.COMPASS))
             gameMode = GameMode.SURVIVAL
+            closeInventory()
             feedSaturate()
             heal()
             kit.internal.givePlayer(this)
+            if (!GameManager.world.spawnLocation.chunk.isLoaded)
+                GameManager.world.loadChunk(GameManager.world.spawnLocation.chunk)
+            val loc = GameManager.world.spawnLocation.clone().apply {
+                x = 0.0
+                y = 100.0
+                z = 0.0
+            }
+            teleport(loc)
         }
     }
 }

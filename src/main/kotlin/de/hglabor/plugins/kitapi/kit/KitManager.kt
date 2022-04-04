@@ -9,7 +9,7 @@ object KitManager {
         Ninja.value,
         None.value,
         Phantom.value,
-        Stomper.value,
+        //Stomper.value,
         ZickZack.value
     )
 }
