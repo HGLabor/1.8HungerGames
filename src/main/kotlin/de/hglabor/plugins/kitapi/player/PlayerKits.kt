@@ -39,6 +39,10 @@ object PlayerKits {
         return hgPlayer.kit == kit
     }
 
+    fun Player.hasKit(kit: Lazy<Kit<*>>): Boolean {
+        return hgPlayer.kit == kit
+    }
+
     fun Player.chooseKit(kit: Kit<*>) {
         hgPlayer.kit = kit
         sendMessage("${Prefix}You chose the kit ${ChatColor.LIGHT_PURPLE}${kit.properties.kitname}${ChatColor.GRAY}.")

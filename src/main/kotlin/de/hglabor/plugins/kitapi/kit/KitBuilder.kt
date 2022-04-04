@@ -60,9 +60,10 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      */
     inline fun <reified T : Event> kitPlayerEvent(
         crossinline playerGetter: (T) -> Player?,
+        ignoreCancelled: Boolean = false,
         crossinline callback: (event: T, player: Player) -> Unit,
     ) {
-        kit.internal.kitPlayerEvents += listen<T> {
+        kit.internal.kitPlayerEvents += listen<T>(ignoreCancelled = ignoreCancelled) {
             val player = playerGetter(it) ?: return@listen
             if (!player.hgPlayer.isAlive) return@listen
             if (player.hasKit(kit))
