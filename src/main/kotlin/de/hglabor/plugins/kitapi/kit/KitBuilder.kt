@@ -1,5 +1,7 @@
 package de.hglabor.plugins.kitapi.kit
 
+import de.hglabor.plugins.hungergames.player.PlayerStatus
+import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.Cooldown
 import de.hglabor.plugins.kitapi.cooldown.CooldownManager
 import de.hglabor.plugins.kitapi.cooldown.CooldownScope
@@ -62,7 +64,7 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
     ) {
         kit.internal.kitPlayerEvents += listen<T> {
             val player = playerGetter(it) ?: return@listen
-            if (player.hasKit(kit))
+            if (player.hasKit(kit) && player.hgPlayer.status == PlayerStatus.INGAME)
                 callback(it, player)
         }
     }
