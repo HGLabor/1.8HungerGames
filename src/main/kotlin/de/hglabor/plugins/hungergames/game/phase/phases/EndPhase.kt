@@ -40,7 +40,7 @@ object EndPhase : GamePhase(25, null) {
     override fun tick(tickCount: Int) {
         if (tickCount < 5) {
             broadcast(
-                if (winner != null) "${Prefix}${ChatColor.DARK_PURPLE}${winner?.name} ${ChatColor.GRAY}won."
+                if (winner != null) "${Prefix}${ChatColor.LIGHT_PURPLE}${winner?.name} ${ChatColor.GRAY}won."
                 else "${Prefix}${ChatColor.RED}Nobody ${ChatColor.GRAY}won."
             )
         }
