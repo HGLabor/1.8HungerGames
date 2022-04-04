@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-object LobbyPhase : GamePhase(120, InvincibilityPhase) {
+object LobbyPhase : GamePhase(240, InvincibilityPhase) {
     override val timeName = "Starting${ChatColor.DARK_GRAY}"
     override fun getTimeString() = TimeConverter.stringify((maxDuration - GameManager.elapsedTime.get()).toInt())
 
