@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.kit
 
 import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.items.meta
+import net.axay.kspigot.items.setLore
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -51,10 +52,13 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
         var displayItem: ItemStack = ItemStack(Material.BARRIER)
 
         fun givePlayer(player: Player) {
-            for ((id: Int, item: KitItem) in items) {
+            for ((_: Int, item: KitItem) in items) {
                 val kitItemStack = item.stack.apply {
                     meta {
                         displayName = "${ChatColor.DARK_PURPLE}${properties.kitname}"
+                        setLore {
+                            + "${ChatColor.DARK_PURPLE}Kititem"
+                        }
                     }
                 }
                 if (!player.inventory.contains(kitItemStack))
