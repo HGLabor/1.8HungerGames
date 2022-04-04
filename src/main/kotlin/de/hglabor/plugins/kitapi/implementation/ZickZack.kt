@@ -12,7 +12,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 class ZickZackProperties : KitProperties() {
-    val likelihood by int(33)
+    val likelihood by int(30)
     val minCombo by int(3)
 }
 
