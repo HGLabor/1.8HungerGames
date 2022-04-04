@@ -21,14 +21,10 @@ val Phantom = Kit("Phantom", ::PhantomProperties) {
     displayMaterial = Material.FEATHER
 
     clickableItem(itemStack(Material.FEATHER) { meta { name = "${ChatColor.LIGHT_PURPLE}Phantom" } }) {
-        broadcast("1")
         applyCooldown(it) {
-            broadcast("2")
             it.player.apply {
                 allowFlight = true
                 isFlying = true
-                broadcast("3")
-
                 val timer = AtomicInteger(kit.properties.flightTime)
                 task(false, 20, 20) { task ->
                     val t = timer.getAndDecrement()
