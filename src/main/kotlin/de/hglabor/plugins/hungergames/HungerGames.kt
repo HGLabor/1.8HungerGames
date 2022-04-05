@@ -5,6 +5,7 @@ import de.hglabor.plugins.hungergames.commands.KitCommand
 import de.hglabor.plugins.hungergames.commands.StartCommand
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.*
+import de.hglabor.plugins.hungergames.game.mechanics.SoupHealing.register
 import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.extensions.bukkit.register
 import net.axay.kspigot.main.KSpigot
@@ -56,6 +57,8 @@ class HungerGames: KSpigot() {
         IronNerf.register()
         LapisInEnchanter.register()
         KitSelector.register()
+        CocoaSoup.register()
+        CactusSoup.register()
     }
 
     private fun whitelistManager() {

@@ -1,21 +1,14 @@
-package de.hglabor.plugins.hungergames
+package de.hglabor.plugins.hungergames.game.mechanics
 
-import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.inventory.ItemStack
+import net.axay.kspigot.extensions.server
 import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapelessRecipe
 
-class CocoaSoup : JavaPlugin() {
-    override fun onEnable() {
-        logger.info("Enabled!")
-        setUp()
-    }
+object CactusSoup {
 
-    override fun onDisable() {
-        logger.info("Disabled")
-    }
+    fun register() {
 
-    private fun setUp() {
         val mushroom_soup = ItemStack(Material.MUSHROOM_SOUP, 1)
         val MUSHROOM_SOUP = ShapelessRecipe(mushroom_soup)
         MUSHROOM_SOUP.addIngredient(Material.BOWL)
