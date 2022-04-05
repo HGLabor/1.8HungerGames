@@ -15,6 +15,5 @@ object KitManager {
         Redstoner,
         Stomper,
         ZickZack,
-        Fireman
     ).map { it.value }
 }
