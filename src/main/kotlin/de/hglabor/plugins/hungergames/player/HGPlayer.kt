@@ -72,14 +72,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             feedSaturate()
             heal()
             kit.internal.givePlayer(this)
-            if (!GameManager.world.spawnLocation.chunk.isLoaded)
-                GameManager.world.loadChunk(GameManager.world.spawnLocation.chunk)
-            val loc = GameManager.world.spawnLocation.clone().apply {
-                x = 0.0
-                y = 100.0
-                z = 0.0
-            }
-            teleport(loc)
+            teleport(GameManager.world.spawnLocation)
         }
     }
 
