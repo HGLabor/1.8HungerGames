@@ -15,7 +15,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 
-class NinjaProperties : CooldownProperties(16000) {
+class NinjaProperties : CooldownProperties(10000) {
     val maxDistance by int(30)
 }
 
