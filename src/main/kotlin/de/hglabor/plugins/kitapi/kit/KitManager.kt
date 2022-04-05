@@ -8,6 +8,7 @@ object KitManager {
         Automatic,
         Blink,
         Counter,
+        Digger,
         Magma,
         Ninja,
         None,
