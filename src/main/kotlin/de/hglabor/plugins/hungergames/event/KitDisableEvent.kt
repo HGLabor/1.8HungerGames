@@ -7,10 +7,15 @@ import org.bukkit.event.player.PlayerEvent
 
 class KitDisableEvent(player: Player, val kit: Kit<*>) : PlayerEvent(player) {
 
-    private val handlers = HandlerList()
+    companion object {
+        @JvmStatic
+        private val HANDLERS = HandlerList()
 
-    override fun getHandlers(): HandlerList {
-        return handlers
+        @JvmStatic
+        fun getHandlerList(): HandlerList = HANDLERS
     }
 
+    override fun getHandlers(): HandlerList {
+        return HANDLERS
+    }
 }
