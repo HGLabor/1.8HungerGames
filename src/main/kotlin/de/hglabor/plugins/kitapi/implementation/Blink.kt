@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
+import net.axay.kspigot.extensions.events.isRightClick
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Material
@@ -34,6 +35,11 @@ val Blink = Kit("Blink", ::BlinkProperties) {
 
     clickableItem(ItemStack(Material.NETHER_STAR)) {
         applyCooldown(it) {
+            if (!it.action.isRightClick) {
+                cancelCooldown()
+                return@applyCooldown
+            }
+
             val player = it.player
             val toLocation =
                 player.location.add(player.location.direction.normalize().multiply(kit.properties.distance))
