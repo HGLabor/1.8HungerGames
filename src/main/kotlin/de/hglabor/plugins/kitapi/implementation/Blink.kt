@@ -14,7 +14,7 @@ import org.bukkit.block.BlockFace
 import org.bukkit.inventory.ItemStack
 
 
-class BlinkProperties : MultipleUsesCooldownProperties(5, 16000) {
+class BlinkProperties : MultipleUsesCooldownProperties(4, 16000) {
     val distance by double(4.0)
 }
 
@@ -45,11 +45,12 @@ val Blink = Kit("Blink", ::BlinkProperties) {
                 player.location.add(player.location.direction.normalize().multiply(kit.properties.distance))
             if (toLocation.isSafe()) {
                 player.teleport(toLocation)
+                player.playSound(player.location, Sound.FIREWORK_LAUNCH, 100f, 100f)
             } else {
                 player.sendMessage("${Prefix}This location is ${ChatColor.RED}not safe${ChatColor.GRAY}. You would have suffocated.")
                 cancelCooldown()
             }
-            player.playSound(player.location, Sound.FIREWORK_LAUNCH, 100f, 100f)
+            player.location.subtract(0.0, 1.0, 0.0).block.setType(Material.LEAVES, false)
             //player.sendMessage("Blink! Uses: ${kit.properties.getUses(player)}")
         }
     }
