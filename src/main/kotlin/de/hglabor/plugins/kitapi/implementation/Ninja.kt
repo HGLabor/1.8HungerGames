@@ -1,15 +1,17 @@
 package de.hglabor.plugins.kitapi.implementation
 
+import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
-import net.axay.kspigot.runnables.taskRunLater
 import net.axay.kspigot.utils.OnlinePlayerMap
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 
@@ -24,6 +26,7 @@ val Ninja = Kit("Ninja", ::NinjaProperties) {
     val lastDamagedTask = OnlinePlayerMap<KSpigotRunnable?>()
 
     kitPlayerEvent<PlayerToggleSneakEvent> {
+        if (GameManager.phase == LobbyPhase) return@kitPlayerEvent
         if (!it.player.isSneaking) return@kitPlayerEvent
         applyCooldown(it) {
             val toPlayer = lastDamaged[it.player]
@@ -36,7 +39,8 @@ val Ninja = Kit("Ninja", ::NinjaProperties) {
         }
     }
 
-    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, player ->
+    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, EventPriority.HIGH) { it, player ->
+        if (GameManager.phase == LobbyPhase) return@kitPlayerEvent
         if (!it.isCancelled) {
             lastDamaged[player] = it.entity as? Player ?: return@kitPlayerEvent
             lastDamagedTask[player]?.cancel()
