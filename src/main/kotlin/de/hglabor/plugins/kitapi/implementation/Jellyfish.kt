@@ -35,7 +35,6 @@ val JellyfishKit = Kit("Jellyfish", ::JellyfishProperties) {
 
     kitPlayerEvent<PlayerInteractEvent> {
         if(it.action != Action.RIGHT_CLICK_BLOCK) return@kitPlayerEvent
-        val player = it.player
         it.clickedBlock.getRelative(BlockFace.UP).type = Material.STATIONARY_WATER
         Bukkit.getScheduler().runTaskLater(HungerGames.INSTANCE, {
             it.clickedBlock.getRelative(BlockFace.UP).type = Material.AIR
