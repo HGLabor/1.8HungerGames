@@ -7,5 +7,5 @@ import org.bukkit.Material
 class CounterProperties: KitProperties()
 
 val Counter = Kit("Counter", ::CounterProperties) {
-    displayMaterial = Material.FIREBALL
+    displayMaterial = Material.STAINED_GLASS_PANE
 }
