@@ -6,6 +6,7 @@ object KitManager {
     val kits = setOf(
         Anchor,
         Automatic,
+        Blink,
         Counter,
         Magma,
         Ninja,
