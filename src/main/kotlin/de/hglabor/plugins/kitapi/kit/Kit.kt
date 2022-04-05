@@ -1,8 +1,11 @@
 package de.hglabor.plugins.kitapi.kit
 
+import de.hglabor.plugins.hungergames.event.KitEnableEvent
+import de.hglabor.plugins.hungergames.player.hgPlayer
 import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.setLore
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -52,6 +55,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
         var displayItem: ItemStack = ItemStack(Material.BARRIER)
 
         fun givePlayer(player: Player) {
+            player.hgPlayer.enableKit()
             for ((_: Int, item: KitItem) in items) {
                 val kitItemStack = item.stack.apply {
                     meta {

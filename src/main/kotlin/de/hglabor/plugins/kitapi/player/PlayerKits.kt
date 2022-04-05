@@ -36,11 +36,11 @@ object PlayerKits {
     }*/
 
     fun Player.hasKit(kit: Kit<*>): Boolean {
-        return hgPlayer.kit == kit
+        return hgPlayer.kit == kit && hgPlayer.isKitEnabled
     }
 
     fun Player.hasKit(kit: Lazy<Kit<*>>): Boolean {
-        return hgPlayer.kit == kit
+        return hgPlayer.kit == kit && hgPlayer.isKitEnabled
     }
 
     fun Player.chooseKit(kit: Kit<*>) {
