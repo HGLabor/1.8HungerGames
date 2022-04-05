@@ -26,6 +26,7 @@ object LobbyPhase : GamePhase(240, InvincibilityPhase) {
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
         PlayerList.getPlayer(event.player)
+        event.player.inventory.clear()
         event.player.inventory.addItem(KitSelector.kitSelectorItem)
     }
 
