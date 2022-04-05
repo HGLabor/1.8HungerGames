@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.cooldown
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.player.hgPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -22,6 +23,13 @@ object CooldownManager {
         cooldownCoroutineScope.launch {
             delay(cooldown.property.get())
             cooldownCollection -= uuid
+
+            // Reset uses
+            val properties = player.hgPlayer.kit.properties
+            if (properties is MultipleUsesCooldownProperties) {
+                properties.usesMap[player.uniqueId]?.set(properties.uses)
+            }
+
             player.sendMessage("${Prefix}Your cooldown has expired.")
         }
     }

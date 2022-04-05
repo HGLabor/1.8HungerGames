@@ -5,6 +5,7 @@ import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.Cooldown
 import de.hglabor.plugins.kitapi.cooldown.CooldownManager
 import de.hglabor.plugins.kitapi.cooldown.CooldownScope
+import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
 import net.axay.kspigot.event.listen
 import org.bukkit.Material
@@ -83,8 +84,20 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      */
     inline fun Player.applyCooldown(cooldown: Cooldown, block: CooldownScope.() -> Unit) {
         if (!CooldownManager.hasCooldown(cooldown, this)) {
-            if (CooldownScope().apply(block).shouldApply) {
-                CooldownManager.addCooldown(cooldown, this)
+            val properties = kit.properties
+
+            if (properties is MultipleUsesCooldownProperties) {
+                if (properties.hasUses(this)) {
+                    CooldownScope().apply(block)
+                    properties.decrementUses(this)
+                } else {
+                    CooldownManager.addCooldown(cooldown, this)
+                }
+
+            } else {
+                if (CooldownScope().apply(block).shouldApply) {
+                    CooldownManager.addCooldown(cooldown, this)
+                }
             }
         } else {
             sendMessage("${Prefix}You are still on cooldown.")
