@@ -33,6 +33,9 @@ dependencies {
     // KSpigot
     implementation(files("/libs/KSpigot-1.8.0.jar"))
 
+    // HGLaborUtils
+    implementation("de.hglabor", "hglabor-utils", "1.17.1_v3") //We don't use any version specific code
+
     // KMONGO
     implementation("org.litote.kmongo", "kmongo", "4.4.0")
     implementation("org.litote.kmongo", "kmongo-serialization-mapping", "4.4.0")
