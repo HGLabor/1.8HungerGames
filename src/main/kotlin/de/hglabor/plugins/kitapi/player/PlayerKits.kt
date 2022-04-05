@@ -13,6 +13,10 @@ import net.axay.kspigot.extensions.broadcast
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.ItemSpawnEvent
+import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryType
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 object PlayerKits {
@@ -45,6 +49,29 @@ object PlayerKits {
                 }
             }
         }
+
+        listen<PlayerDropItemEvent> {
+            if (it.itemDrop.itemStack.isKitItem) {
+                it.isCancelled = true
+            }
+        }
+
+        listen<ItemSpawnEvent> {
+            if (it.entity.itemStack.isKitItem) {
+                it.isCancelled = true
+            }
+        }
+
+        /*
+        // TODO cancel putting items in other inventory...
+        listen<InventoryClickEvent> {
+            if (it.clickedInventory.type != InventoryType.PLAYER || it.clickedInventory.type != InventoryType.CRAFTING) {
+                if (it.currentItem.isKitItem) {
+                    broadcast(it.clickedInventory.type.toString())
+                    it.isCancelled = true
+                }
+            }
+        }*/
     }
 
     /*fun Player.addKit(kit: Kit<*>) {
