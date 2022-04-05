@@ -6,11 +6,13 @@ import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.kit.ClickableKitItem
 import de.hglabor.plugins.kitapi.kit.Kit
+import de.hglabor.plugins.kitapi.kit.PlaceableKitItem
 import de.hglabor.plugins.kitapi.kit.isKitItem
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 object PlayerKits {
@@ -26,6 +28,20 @@ object PlayerKits {
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is ClickableKitItem) {
                     kitItem.onClick.invoke(event)
+                }
+            }
+        }
+
+        listen<BlockPlaceEvent> { event ->
+            val item = event.player.itemInHand ?: return@listen
+            val hgPlayer = event.player.hgPlayer
+            val playerKit = hgPlayer.kit
+            if (item.isKitItem) {
+                val kitKey = item.itemMeta.displayName.split("${ChatColor.DARK_PURPLE}").last()
+                if (playerKit.properties.kitname != kitKey) return@listen
+                val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
+                if (kitItem is PlaceableKitItem) {
+                    kitItem.onBlockPlace.invoke(event)
                 }
             }
         }

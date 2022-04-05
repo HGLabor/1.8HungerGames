@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.kit
 
 import org.bukkit.ChatColor
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
@@ -13,6 +14,11 @@ class SimpleKitItem(override val stack: ItemStack) : KitItem()
 class ClickableKitItem(
     override val stack: ItemStack,
     val onClick: (PlayerInteractEvent) -> Unit,
+) : KitItem()
+
+class PlaceableKitItem(
+    override val stack: ItemStack,
+    val onBlockPlace: (BlockPlaceEvent) -> Unit,
 ) : KitItem()
 
 val ItemStack.isKitItem: Boolean
