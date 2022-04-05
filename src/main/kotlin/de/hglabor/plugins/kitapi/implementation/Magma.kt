@@ -7,6 +7,7 @@ import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
@@ -18,8 +19,7 @@ class MagmaProperties : KitProperties() {
 val Magma = Kit("Magma", ::MagmaProperties) {
     displayMaterial = Material.FIREBALL
 
-    kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }, false) { it, player ->
-        if (GameManager.phase == InvincibilityPhase) return@kitPlayerEvent
+    kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, player ->
         val isFireDamage = when (it.cause) {
             EntityDamageEvent.DamageCause.LAVA,
             EntityDamageEvent.DamageCause.FIRE,
@@ -32,7 +32,7 @@ val Magma = Kit("Magma", ::MagmaProperties) {
         }
     }
 
-    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, damager ->
+    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, EventPriority.HIGH, false) { it, damager ->
         if (it.isCancelled) return@kitPlayerEvent
         val entity = it.entity
         if ((0..100).random() <= kit.properties.likelihood) {
