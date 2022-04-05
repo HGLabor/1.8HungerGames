@@ -88,8 +88,9 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
 
             if (properties is MultipleUsesCooldownProperties) {
                 if (properties.hasUses(this)) {
-                    CooldownScope().apply(block)
-                    properties.decrementUses(this)
+                    if (CooldownScope().apply(block).shouldApply) {
+                        properties.decrementUses(this)
+                    }
                 } else {
                     CooldownManager.addCooldown(cooldown, this)
                 }
