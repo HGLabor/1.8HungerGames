@@ -10,6 +10,7 @@ import net.axay.kspigot.event.listen
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
+import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
@@ -60,10 +61,11 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      */
     inline fun <reified T : Event> kitPlayerEvent(
         crossinline playerGetter: (T) -> Player?,
+        priority: EventPriority = EventPriority.NORMAL,
         ignoreCancelled: Boolean = false,
         crossinline callback: (event: T, player: Player) -> Unit,
     ) {
-        kit.internal.kitPlayerEvents += listen<T>(ignoreCancelled = ignoreCancelled) {
+        kit.internal.kitPlayerEvents += listen<T>(priority = priority, ignoreCancelled = ignoreCancelled) {
             val player = playerGetter(it) ?: return@listen
             if (!player.hgPlayer.isAlive) return@listen
             if (player.hasKit(kit))
