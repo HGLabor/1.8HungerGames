@@ -13,6 +13,7 @@ object KitManager {
         Phantom,
         Redstoner,
         Stomper,
-        ZickZack
+        ZickZack,
+        Fireman
     ).map { it.value }
 }
