@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
+import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.RecraftInspector
@@ -7,6 +8,7 @@ import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
+import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.extensions.broadcast
 import org.bukkit.ChatColor
 
@@ -14,16 +16,16 @@ import org.bukkit.ChatColor
 object PvPPhase : IngamePhase(1800, EndPhase) {
     private val recraftInspector: RecraftInspector = RecraftInspector()
     override val timeName = "Ingame${ChatColor.DARK_GRAY}"
-    override fun getTimeString() = TimeConverter.stringify((GameManager.elapsedTime.get()).toInt())
+    override fun getTimeString() = TimeConverter.stringify(remainingTime.toInt())
 
     override fun tick(tickCount: Int) {
         // recraft nerf
         if (tickCount % 5 == 0) recraftInspector.tick()
 
         // Bordershrink
-        if ((maxDuration - GameManager.elapsedTime.get()).toInt() == 10*60) {
+        if ((maxDuration - GameManager.elapsedTime.get()).toInt() == 10 * 60) {
             broadcast("Border starts shrinking")
-            GameManager.world.worldBorder.setSize(25.0*2, 10*60)
+            GameManager.world.worldBorder.setSize(25.0 * 2, 10 * 60)
         }
 
         // Feast
@@ -36,6 +38,9 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
             GameManager.feast?.spawn()
         }
 
+        when (remainingTime.toInt()) {
+            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most kills wins in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+        }
         // Winner
         if (PlayerList.alivePlayers.size == 1) {
             GameManager.startNextPhase()
