@@ -22,4 +22,7 @@ class PlaceableKitItem(
 ) : KitItem()
 
 val ItemStack.isKitItem: Boolean
-    get() = itemMeta.lore.first() == "${ChatColor.DARK_PURPLE}Kititem"
+    get() {
+        if (itemMeta.lore == null || itemMeta.lore.isEmpty()) return false
+        return itemMeta.lore.first() == "${ChatColor.DARK_PURPLE}Kititem"
+    }
