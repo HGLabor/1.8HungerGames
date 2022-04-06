@@ -16,5 +16,6 @@ object KitManager {
         Redstoner,
         Stomper,
         ZickZack,
+        Jellyfish
     ).map { it.value }
 }
