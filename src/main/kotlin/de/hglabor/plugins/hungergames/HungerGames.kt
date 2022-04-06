@@ -10,7 +10,6 @@ import net.axay.kspigot.extensions.bukkit.register
 import net.axay.kspigot.main.KSpigot
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
-import org.bukkit.command.CommandExecutor
 import java.util.*
 
 class HungerGames: KSpigot() {

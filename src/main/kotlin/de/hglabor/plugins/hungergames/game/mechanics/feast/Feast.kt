@@ -2,8 +2,10 @@ package de.hglabor.plugins.hungergames.game.mechanics.feast
 
 import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.utils.BlockQueue
 import de.hglabor.plugins.hungergames.utils.RandomCollection
 import de.hglabor.plugins.hungergames.utils.TimeConverter
+import de.hglabor.plugins.hungergames.utils.WorldUtils
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.axay.kspigot.extensions.broadcast
@@ -21,103 +23,42 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
 
 
-class Feast(world: World) : Listener {
-    private val feastBlocks: MutableSet<Block>
-    private val world: World
+class Feast(val world: World) : Listener {
+    private val feastBlocks: MutableSet<Block> = HashSet()
     var feastCenter: Location? = null
-    private var platformMaterial: Material? = null
-    private var radius = 0
-    private var timer: AtomicInteger? = null
-    private var totalTime = 0
-    private var airHeight = 0
-    private var maxItemsInChest: Int
+    var platformMaterial: Material = Material.GRASS
+    var radius = 20
+    var timer: AtomicInteger = AtomicInteger(300)
+    var totalTime = 0
+    var airHeight = 8
+    var maxItemsInChest = 6
     var inPreparation = false
     var isFinished = false
     private var shouldDamageItems = false
-
-    init {
-        this.world = world
-        feastBlocks = HashSet()
-        maxItemsInChest = 6
-    }
-
-    fun center(feastCenter: Location?): Feast {
-        this.feastCenter = feastCenter
-        return this
-    }
-
-    fun material(platformMaterial: Material?): Feast {
-        this.platformMaterial = platformMaterial
-        return this
-    }
-
-    fun radius(radius: Int): Feast {
-        this.radius = radius
-        return this
-    }
-
-    fun timer(timer: Int): Feast {
-        this.timer = AtomicInteger(timer)
-        totalTime = timer
-        return this
-    }
-
-    fun maxItemsInChest(maxItemsInChest: Int): Feast {
-        this.maxItemsInChest = maxItemsInChest
-        return this
-    }
-
-    fun air(height: Int): Feast {
-        airHeight = height
-        return this
-    }
-
-    fun damageItems(shouldDamage: Boolean): Feast {
-        shouldDamageItems = shouldDamage
-        return this
-    }
+    val queue: BlockQueue = BlockQueue()
 
     fun spawn() {
         announceFeast()
         inPreparation = true
-        createCylinder()
-        startCountDown()
+        feastCenter?.clone()?.let {
+            createCylinder()
+            startCountDown()
+        }
     }
 
-    /*private fun setBlock(loc: Location, material: Material, data: Byte) {
-        val world = loc.world
-        val x = loc.blockX
-        val y = loc.blockY
-        val z = loc.blockZ
-        val nmsWorld = (world as CraftWorld).handle
-        val nmsChunk = nmsWorld.getChunkAt(x shr 4, z shr 4)
-        val ibd: IBlockData = net.minecraft.server.v1_8_R3.Block.getByCombinedId(material.id + (data.toInt() shl 12))
-        nmsChunk.a(BlockPosition(x, y, z), ibd)
-        *//*val cs: ChunkSection = ChunkSection(y shr 4 shl 4, true)
-        nmsChunk.sections[y shr 4] = cs
-        cs.setType(x and 15, y and 15, z and 15, ibd)*//*
-    }*/
-
     private fun createCylinder() {
-        //val chunkSet = hashSetOf<Chunk>()
+        val radiusSquared = (radius * radius).toDouble()
         for (x in -radius until radius) {
             for (z in -radius until radius) {
-                for (y in 0..10) {
-                    val loc = feastCenter?.block?.getRelative(x, y, z)?.location!!
-                    val material = if (y == 0) platformMaterial ?: Material.GRASS else Material.AIR
-                    /*setBlock(loc, material, 0)
-                    chunkSet.add(loc.chunk)*/
-                    loc.block.type = material
+                if (x * x + z * z <= radiusSquared) {
+                    for (y in 0..airHeight) {
+                        val loc = feastCenter?.block?.getRelative(x, y, z)?.location!!
+                        val material = if (y == 0) platformMaterial else Material.AIR
+                        WorldUtils.setBlock(loc, material, 0, queue)
+                    }
                 }
             }
         }
-        /*chunkSet.forEach { chunk ->
-            val pmc = PacketPlayOutMapChunk((chunk as CraftChunk).handle, true, 65535)
-            onlinePlayers.forEach { player ->
-                (player as CraftPlayer).handle.playerConnection.sendPacket(pmc)
-            }
-        }*/
-
     }
 
     private fun spawnFeastLoot() {
@@ -201,7 +142,7 @@ class Feast(world: World) : Listener {
         runBlocking {
             launch {
                 task(false, 0, 20) {
-                    if (timer!!.decrementAndGet() <= 0) {
+                    if (timer.decrementAndGet() <= 0) {
                         //CHEST SPAWNING
                         inPreparation = false
                         isFinished = true
@@ -214,7 +155,7 @@ class Feast(world: World) : Listener {
                         }
                         it.cancel()
                     } else {
-                        if (timer!!.get() % 60 == 0 || when (timer!!.get()) {
+                        if (timer.get() % 60 == 0 || when (timer.get()) {
                                 30, 15, 10, 5, 3, 2, 1 -> true
                                 else -> false
                             }
@@ -233,11 +174,11 @@ class Feast(world: World) : Listener {
 
     private fun getCenterString(): String? {
         val loc = feastCenter ?: return null
-        return "${ChatColor.WHITE}${loc.x}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.y}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.z}${ChatColor.DARK_GRAY}"
+        return "${ChatColor.WHITE}${loc.blockX}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.blockY}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.blockZ}${ChatColor.DARK_GRAY}"
     }
 
-    private fun getTimeString(): String? {
-        val time = timer?.get() ?: return null
+    private fun getTimeString(): String {
+        val time = timer.get()
         return "${ChatColor.WHITE}${TimeConverter.stringify(time)}"
     }
 

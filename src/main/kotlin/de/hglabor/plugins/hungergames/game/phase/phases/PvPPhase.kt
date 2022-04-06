@@ -9,7 +9,6 @@ import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
 import net.axay.kspigot.extensions.broadcast
 import org.bukkit.ChatColor
-import org.bukkit.Material
 
 
 object PvPPhase : IngamePhase(1800, EndPhase) {
@@ -28,14 +27,12 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
         }
 
         // Feast
-        if (GameManager.elapsedTime.get() == 600.toLong()) {
+        if (tickCount == 600) {
             val world = GameManager.world
 
-            GameManager.feast = Feast(world)
-                .center(LocationUtils.getHighestBlock(world, (world.worldBorder.size / 4).toInt(), 0))
-                .radius(20)
-                .timer(300)
-                .material(Material.GRASS)
+            GameManager.feast = Feast(world).apply {
+                feastCenter = LocationUtils.getHighestBlock(world, (world.worldBorder.size / 4).toInt(), 0)
+            }
             GameManager.feast?.spawn()
         }
 
