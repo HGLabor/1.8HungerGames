@@ -2,6 +2,8 @@ package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.hungergames.HungerGames
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
+import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
+import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.event.listen
 import org.bukkit.Bukkit
@@ -13,14 +15,13 @@ import org.bukkit.event.block.BlockFromToEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 
-class JellyfishProperties : CooldownProperties(30000) {
+class JellyfishProperties : MultipleUsesCooldownProperties(15,30000) {
 
     val waterRemoveDelay by int(50)
-    val maxUses by int(15)
 
 }
 
-val JellyfishKit = Kit("Jellyfish", ::JellyfishProperties) {
+val Jellyfish = Kit("Jellyfish", ::JellyfishProperties) {
 
     displayMaterial = Material.RAW_FISH
     val waterBlocks = ArrayList<Block>()
@@ -34,14 +35,18 @@ val JellyfishKit = Kit("Jellyfish", ::JellyfishProperties) {
     }
 
     kitPlayerEvent<PlayerInteractEvent> {
-        if(it.action != Action.RIGHT_CLICK_BLOCK) return@kitPlayerEvent
-        it.clickedBlock.getRelative(BlockFace.UP).type = Material.STATIONARY_WATER
-        Bukkit.getScheduler().runTaskLater(HungerGames.INSTANCE, {
-            it.clickedBlock.getRelative(BlockFace.UP).type = Material.AIR
-            waterBlocks.remove(it.clickedBlock.getRelative(BlockFace.UP))
-        }, kit.properties.waterRemoveDelay.toLong())
-        waterBlocks.add(it.clickedBlock.getRelative(BlockFace.UP))
-        //TODO wait for bestauto to implement max uses...
+        applyCooldown(it) {
+            if(it.action != Action.RIGHT_CLICK_BLOCK) {
+                cancelCooldown()
+                return@kitPlayerEvent
+            }
+            it.clickedBlock.getRelative(BlockFace.UP).type = Material.STATIONARY_WATER
+            Bukkit.getScheduler().runTaskLater(HungerGames.INSTANCE, {
+                it.clickedBlock.getRelative(BlockFace.UP).type = Material.AIR
+                waterBlocks.remove(it.clickedBlock.getRelative(BlockFace.UP))
+            }, kit.properties.waterRemoveDelay.toLong())
+            waterBlocks.add(it.clickedBlock.getRelative(BlockFace.UP))
+        }
     }
 
 }

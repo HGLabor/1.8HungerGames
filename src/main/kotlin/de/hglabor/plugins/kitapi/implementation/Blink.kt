@@ -41,8 +41,7 @@ val Blink = Kit("Blink", ::BlinkProperties) {
             }
 
             val player = it.player
-            val toLocation =
-                player.location.add(player.location.direction.normalize().multiply(kit.properties.distance))
+            val toLocation = player.location.add(player.location.direction.normalize().multiply(kit.properties.distance))
             if (toLocation.isSafe()) {
                 player.teleport(toLocation)
                 player.playSound(player.location, Sound.FIREWORK_LAUNCH, 100f, 100f)
