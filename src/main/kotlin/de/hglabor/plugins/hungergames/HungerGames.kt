@@ -64,6 +64,9 @@ class HungerGames: KSpigot() {
         Bukkit.getOfflinePlayer(UUID.fromString("5e492d5e-b610-4351-8fcb-b2fc4bdd3245")).apply { //BESTAUTO
             isWhitelisted = true; isOp = true
         }
+        Bukkit.getOfflinePlayer(UUID.fromString("e4ccbe7c-45ef-4194-b645-851f2002de89")).apply { //MOOZIII
+            isWhitelisted = true; isOp = true
+        }
     }
 }
 
