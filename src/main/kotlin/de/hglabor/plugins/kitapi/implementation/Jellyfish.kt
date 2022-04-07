@@ -35,11 +35,8 @@ val Jellyfish = Kit("Jellyfish", ::JellyfishProperties) {
     }
 
     kitPlayerEvent<PlayerInteractEvent> {
+        if(it.action != Action.RIGHT_CLICK_BLOCK) return@kitPlayerEvent
         applyCooldown(it) {
-            if(it.action != Action.RIGHT_CLICK_BLOCK) {
-                cancelCooldown()
-                return@kitPlayerEvent
-            }
             it.clickedBlock.getRelative(BlockFace.UP).type = Material.STATIONARY_WATER
             Bukkit.getScheduler().runTaskLater(HungerGames.INSTANCE, {
                 it.clickedBlock.getRelative(BlockFace.UP).type = Material.AIR
