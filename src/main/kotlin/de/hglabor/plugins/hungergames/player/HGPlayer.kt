@@ -1,4 +1,4 @@
-package de.hglabor.plugins.hungergames.player
+    package de.hglabor.plugins.hungergames.player
 
 import de.hglabor.plugins.hungergames.event.KitDisableEvent
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
@@ -46,16 +46,17 @@ open class HGPlayer(val uuid: UUID, val name: String) {
         }
 
         board = player.setScoreboard {
-            title = "${ChatColor.DARK_PURPLE}${ChatColor.BOLD}HGLabor"
+            title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
             period = 20
-            val p = "${ChatColor.LIGHT_PURPLE}"
             content {
                 +" "
-                +{ "${p}Players${ChatColor.DARK_GRAY}: ${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
-                +{ "${p}Kit${ChatColor.DARK_GRAY}: ${ChatColor.WHITE}${kit.properties.kitname}" }
-                +{ "${p}Kills${ChatColor.DARK_GRAY}: ${ChatColor.WHITE}${kills.get()}" }
-                +{ "${p}${GameManager.phase.timeName}${ChatColor.DARK_GRAY}: ${GameManager.phase.getTimeString()}" }
+                +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players: ${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
+                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit: ${ChatColor.WHITE}${kit.properties.kitname}" }
+                +{ "${ChatColor.RED}${ChatColor.BOLD}Kills: ${ChatColor.WHITE}${kills.get()}" }
+                +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}: ${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
                 +" "
+                //grün, aqua, rot, gelb
+                // danke für die übersetzung taito, was hätte man nur ohne dich gemacht
             }
         }
 
