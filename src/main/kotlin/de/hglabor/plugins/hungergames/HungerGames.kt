@@ -52,7 +52,7 @@ class HungerGames: KSpigot() {
         WoodToInv.register()
         BuildHeightLimit.register()
         DamageNerf.register()
-        IronNerf.register()
+        OreNerf.register()
         LapisInEnchanter.register()
         KitSelector.register()
     }
