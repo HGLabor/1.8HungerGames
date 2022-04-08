@@ -61,6 +61,7 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      */
     inline fun <reified T : PlayerEvent> kitPlayerEvent(crossinline callback: (event: T) -> Unit) {
         kit.internal.kitPlayerEvents += listen<T> {
+            if (!it.player.hgPlayer.isAlive) return@listen
             if (it.player.hasKit(kit))
                 callback.invoke(it)
         }

@@ -82,6 +82,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
 
         if (properties is MultipleUsesCooldownProperties) {
             internal.kitPlayerEvents += listen<KitEnableEvent> {
+                if (!it.player.hgPlayer.isAlive) return@listen
                 if (!it.player.hasKit(this)) return@listen
                 if (!properties.usesMap.contains(it.player.uniqueId)) {
                     properties.usesMap[it.player.uniqueId] = AtomicInteger(properties.uses)
