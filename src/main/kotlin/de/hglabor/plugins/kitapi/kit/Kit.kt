@@ -1,13 +1,20 @@
 package de.hglabor.plugins.kitapi.kit
 
+import de.hglabor.plugins.hungergames.event.KitEnableEvent
+import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
+import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
 import net.axay.kspigot.chat.KColors
+import net.axay.kspigot.event.listen
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.setLore
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+import java.util.concurrent.atomic.AtomicInteger
 
 open class Kit<P : KitProperties> private constructor(val key: String, val properties: P) {
 
@@ -52,6 +59,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
         var displayItem: ItemStack = ItemStack(Material.BARRIER)
 
         fun givePlayer(player: Player) {
+            player.hgPlayer.enableKit()
             for ((_: Int, item: KitItem) in items) {
                 val kitItemStack = item.stack.apply {
                     meta {
@@ -71,5 +79,14 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
 
     init {
         properties.kitname = key
+
+        if (properties is MultipleUsesCooldownProperties) {
+            internal.kitPlayerEvents += listen<KitEnableEvent> {
+                if (!it.player.hasKit(this)) return@listen
+                if (!properties.usesMap.contains(it.player.uniqueId)) {
+                    properties.usesMap[it.player.uniqueId] = AtomicInteger(properties.uses)
+                }
+            }
+        }
     }
 }

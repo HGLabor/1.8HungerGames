@@ -13,7 +13,7 @@ object DeathMessages {
     fun announce(event: PlayerDeathEvent) {
         val hgPlayer = event.entity.hgPlayer
         if (event.entity.killer != null) {
-            announce(hgPlayer, event.entity.killer.hgPlayer)
+            announce(event.entity.killer.hgPlayer, hgPlayer)
         } else {
             if (event.deathMessage != null) {
                 announce(hgPlayer, event.deathMessage)
@@ -27,8 +27,8 @@ object DeathMessages {
     }
 
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
-        val deadText = "${ChatColor.RED}${dead.name}"
-        val killerText = "${ChatColor.GREEN}${killer.name}"
+        val deadText = "${ChatColor.RED}${dead.name} ${ChatColor.GRAY}(${ChatColor.DARK_RED}${dead.kit.properties.kitname}${ChatColor.GRAY})"
+        val killerText = "${ChatColor.GREEN}${killer.name} ${ChatColor.GRAY}(${ChatColor.DARK_GREEN}${killer.kit.properties.kitname}${ChatColor.GRAY})"
         val slainText = " ${KColors.GRAY}was eliminated by "
         broadcast(Prefix + deadText + slainText + killerText)
     }

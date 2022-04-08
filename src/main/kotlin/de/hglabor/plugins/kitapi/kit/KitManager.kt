@@ -4,12 +4,18 @@ import de.hglabor.plugins.kitapi.implementation.*
 
 object KitManager {
     val kits = setOf(
-        Anchor.value,
-        Automatic.value,
-        Ninja.value,
-        None.value,
-        Phantom.value,
-        //Stomper.value,
-        ZickZack.value
-    )
+        Anchor,
+        Automatic,
+        Blink,
+        Counter,
+        Digger,
+        Magma,
+        Ninja,
+        None,
+        Phantom,
+        Redstoner,
+        Stomper,
+        ZickZack,
+        Jellyfish
+    ).map { it.value }
 }

@@ -8,6 +8,7 @@ import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -22,7 +23,7 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDu
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
         player.hgPlayer.status = PlayerStatus.ELIMINATED
-        player.spigot().respawn()
+        taskRunLater(1) { player.spigot().respawn() }
         player.gameMode = GameMode.SPECTATOR
         DeathMessages.announce(event)
 

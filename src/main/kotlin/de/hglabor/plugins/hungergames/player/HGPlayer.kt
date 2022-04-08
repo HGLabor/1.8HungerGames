@@ -1,5 +1,7 @@
     package de.hglabor.plugins.hungergames.player
 
+import de.hglabor.plugins.hungergames.event.KitDisableEvent
+import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.Recraft
@@ -34,6 +36,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     val recraft = Recraft()
     var board: Board? = null
     var kit: Kit<*> = None.value
+    var isKitEnabled = true
 
     fun login() {
         val player = bukkitPlayer ?: return
@@ -70,15 +73,18 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             feedSaturate()
             heal()
             kit.internal.givePlayer(this)
-            if (!GameManager.world.spawnLocation.chunk.isLoaded)
-                GameManager.world.loadChunk(GameManager.world.spawnLocation.chunk)
-            val loc = GameManager.world.spawnLocation.clone().apply {
-                x = 0.0
-                y = 100.0
-                z = 0.0
-            }
-            teleport(loc)
+            teleport(GameManager.world.spawnLocation)
         }
+    }
+
+    fun enableKit() {
+        isKitEnabled = true
+        Bukkit.getPluginManager().callEvent(KitEnableEvent(bukkitPlayer ?: return, kit))
+    }
+
+    fun disableKit() {
+        isKitEnabled = false
+        Bukkit.getPluginManager().callEvent(KitDisableEvent(bukkitPlayer ?: return, kit))
     }
 }
 

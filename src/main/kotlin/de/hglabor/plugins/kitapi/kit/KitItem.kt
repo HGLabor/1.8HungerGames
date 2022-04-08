@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.kit
 
 import org.bukkit.ChatColor
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
@@ -15,5 +16,13 @@ class ClickableKitItem(
     val onClick: (PlayerInteractEvent) -> Unit,
 ) : KitItem()
 
+class PlaceableKitItem(
+    override val stack: ItemStack,
+    val onBlockPlace: (BlockPlaceEvent) -> Unit,
+) : KitItem()
+
 val ItemStack.isKitItem: Boolean
-    get() = itemMeta.lore.first() == "${ChatColor.DARK_PURPLE}Kititem"
+    get() {
+        if (itemMeta.lore == null || itemMeta.lore.isEmpty()) return false
+        return itemMeta.lore.first() == "${ChatColor.DARK_PURPLE}Kititem"
+    }

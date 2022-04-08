@@ -5,11 +5,14 @@ import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.Cooldown
 import de.hglabor.plugins.kitapi.cooldown.CooldownManager
 import de.hglabor.plugins.kitapi.cooldown.CooldownScope
+import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
 import net.axay.kspigot.event.listen
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
+import org.bukkit.event.EventPriority
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
@@ -44,6 +47,15 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
     }
 
     /**
+     * Gives the [stack] to the player if he has the kit
+     * and executed the [onClick] callback when the player
+     * places the item.
+     */
+    fun placeableItem(stack: ItemStack, onBuild: (BlockPlaceEvent) -> Unit) {
+        kit.internal.items[currentItemId++] = PlaceableKitItem(stack, onBuild)
+    }
+
+    /**
      * Executes the given [callback] if the player of the
      * [PlayerEvent] has this kit.
      */
@@ -60,9 +72,11 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      */
     inline fun <reified T : Event> kitPlayerEvent(
         crossinline playerGetter: (T) -> Player?,
+        priority: EventPriority = EventPriority.NORMAL,
+        ignoreCancelled: Boolean = false,
         crossinline callback: (event: T, player: Player) -> Unit,
     ) {
-        kit.internal.kitPlayerEvents += listen<T> {
+        kit.internal.kitPlayerEvents += listen<T>(priority = priority, ignoreCancelled = ignoreCancelled) {
             val player = playerGetter(it) ?: return@listen
             if (!player.hgPlayer.isAlive) return@listen
             if (player.hasKit(kit))
@@ -80,8 +94,21 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      */
     inline fun Player.applyCooldown(cooldown: Cooldown, block: CooldownScope.() -> Unit) {
         if (!CooldownManager.hasCooldown(cooldown, this)) {
-            if (CooldownScope().apply(block).shouldApply) {
-                CooldownManager.addCooldown(cooldown, this)
+            val properties = kit.properties
+
+            if (properties is MultipleUsesCooldownProperties) {
+                if (properties.hasUses(this)) {
+                    if (CooldownScope().apply(block).shouldApply) {
+                        properties.decrementUses(this)
+                    }
+                } else {
+                    CooldownManager.addCooldown(cooldown, this)
+                }
+
+            } else {
+                if (CooldownScope().apply(block).shouldApply) {
+                    CooldownManager.addCooldown(cooldown, this)
+                }
             }
         } else {
             sendMessage("${Prefix}You are still on cooldown.")

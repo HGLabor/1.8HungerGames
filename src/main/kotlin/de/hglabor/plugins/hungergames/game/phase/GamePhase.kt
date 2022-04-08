@@ -5,6 +5,7 @@ import org.bukkit.event.Listener
 
 abstract class GamePhase(val maxDuration: Long, val nextPhase: GamePhase?) : Listener {
     var tickCount: Int = 0
+    val remainingTime get() = maxDuration - GameManager.elapsedTime.get()
 
     open fun onStart() {}
 
