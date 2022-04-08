@@ -6,13 +6,11 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapelessRecipe
 
 object CactusSoup {
-
-    fun register() {
-
-        val mushroom_soup = ItemStack(Material.MUSHROOM_SOUP, 1)
+    fun register() { val mushroom_soup = ItemStack(Material.MUSHROOM_SOUP, 1)
         val MUSHROOM_SOUP = ShapelessRecipe(mushroom_soup)
         MUSHROOM_SOUP.addIngredient(Material.BOWL)
-        MUSHROOM_SOUP.addIngredient(Material.COCOA)
-        server.addRecipe(MUSHROOM_SOUP)
-    }
-}
+        MUSHROOM_SOUP.addIngredient(Material.CACTUS)
+        server.addRecipe(MUSHROOM_SOUP)}}
+
+
+
