@@ -27,22 +27,22 @@ object DeathMessages {
     }
 
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
-        val deadText = "${ChatColor.LIGHT_PURPLE}${dead.name} ${ChatColor.GRAY}(${ChatColor.WHITE}${dead.kit.properties.kitname}${ChatColor.GRAY})"
-        val killerText = "${ChatColor.LIGHT_PURPLE}${killer.name} ${ChatColor.GRAY}(${ChatColor.WHITE}${killer.kit.properties.kitname}${ChatColor.GRAY})"
-        val slainText = " ${KColors.GRAY} was eliminated by "
+        val deadText = "${ChatColor.RED}${dead.name} ${ChatColor.GRAY}(${ChatColor.DARK_RED}${dead.kit.properties.kitname}${ChatColor.GRAY})"
+        val killerText = "${ChatColor.GREEN}${killer.name} ${ChatColor.GRAY}(${ChatColor.DARK_GREEN}${killer.kit.properties.kitname}${ChatColor.GRAY})"
+        val slainText = " ${KColors.GRAY}was eliminated by "
         broadcast(Prefix + deadText + slainText + killerText)
     }
 
     private fun announce(dead: HGPlayer) {
-        val deadText = "${ChatColor.LIGHT_PURPLE}${dead.name}"
+        val deadText = "${ChatColor.RED}${dead.name}"
         broadcast(Prefix + deadText + ChatColor.GRAY + " was eliminated")
     }
 
     private fun announce(dead: HGPlayer, deathMessage: String) {
-        val deadText = "${ChatColor.LIGHT_PURPLE}${dead.name}${KColors.GRAY}"
+        val deadText = "${ChatColor.RED}${dead.name}${KColors.GRAY}"
         var message = deathMessage
         if (message.contains("was slain by")) {
-            message = message.replace("was slain by", "was eliminated by${ChatColor.LIGHT_PURPLE}")
+            message = message.replace("was slain by", "was eliminated by${ChatColor.GREEN}")
         }
         broadcast(Prefix + message.replace(dead.name.toRegex(), deadText))
     }
