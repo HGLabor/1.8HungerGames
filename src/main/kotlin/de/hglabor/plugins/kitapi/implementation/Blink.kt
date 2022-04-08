@@ -41,11 +41,11 @@ val Blink = Kit("Blink", ::BlinkProperties) {
             if (toLocation.isSafe()) {
                 player.teleport(toLocation)
                 player.playSound(player.location, Sound.FIREWORK_LAUNCH, 100f, 100f)
+                player.location.subtract(0.0, 1.0, 0.0).block.setType(Material.LEAVES, false)
             } else {
                 player.sendMessage("${Prefix}This location is ${ChatColor.RED}not safe${ChatColor.GRAY}. You would have suffocated.")
                 cancelCooldown()
             }
-            player.location.subtract(0.0, 1.0, 0.0).block.setType(Material.LEAVES, false)
         }
     }
 }
