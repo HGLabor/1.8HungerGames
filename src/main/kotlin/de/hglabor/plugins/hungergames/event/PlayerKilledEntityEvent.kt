@@ -9,11 +9,15 @@ import org.bukkit.event.HandlerList
 class PlayerKilledEntityEvent(val killer: Player, val dead: LivingEntity) : Event() {
     val deathLocation: Location = dead.location
 
-    override fun getHandlers(): HandlerList {
-        return handlerList
+    companion object {
+        @JvmStatic
+        private val HANDLERS = HandlerList()
+
+        @JvmStatic
+        fun getHandlerList(): HandlerList = HANDLERS
     }
 
-    companion object {
-        val handlerList = HandlerList()
+    override fun getHandlers(): HandlerList {
+        return HANDLERS
     }
 }
