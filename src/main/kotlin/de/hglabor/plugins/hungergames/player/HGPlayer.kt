@@ -50,9 +50,10 @@ open class HGPlayer(val uuid: UUID, val name: String) {
                 +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players: ${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit: ${ChatColor.WHITE}${kit.properties.kitname}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Kills: ${ChatColor.WHITE}${kills.get()}" }
-                +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}${ChatColor.YELLOW}: ${GameManager.phase.getTimeString()}" }
+                +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}: ${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
                 +" "
                 //grün, aqua, rot, gelb
+                // danke für die übersetzung taito, was hätte man nur ohne dich gemacht
             }
         }
 
