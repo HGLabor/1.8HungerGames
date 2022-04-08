@@ -34,12 +34,8 @@ val Blink = Kit("Blink", ::BlinkProperties) {
     }
 
     clickableItem(ItemStack(Material.NETHER_STAR)) {
+        if (!it.action.isRightClick) return@clickableItem
         applyCooldown(it) {
-            if (!it.action.isRightClick) {
-                cancelCooldown()
-                return@applyCooldown
-            }
-
             val player = it.player
             val toLocation = player.location.add(player.location.direction.normalize().multiply(kit.properties.distance))
             if (toLocation.isSafe()) {
@@ -50,7 +46,6 @@ val Blink = Kit("Blink", ::BlinkProperties) {
                 cancelCooldown()
             }
             player.location.subtract(0.0, 1.0, 0.0).block.setType(Material.LEAVES, false)
-            //player.sendMessage("Blink! Uses: ${kit.properties.getUses(player)}")
         }
     }
 }
