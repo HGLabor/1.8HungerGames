@@ -1,5 +1,6 @@
 package de.hglabor.plugins.kitapi.kit
 
+import org.bukkit.Material
 import kotlin.reflect.KProperty
 
 abstract class KitProperties {
@@ -32,4 +33,5 @@ abstract class KitProperties {
     fun float(default: Float) = any(default)
     fun double(default: Double) = any(default)
     fun string(default: String) = any(default)
+    fun material(default: Material) = any(default)
 }
