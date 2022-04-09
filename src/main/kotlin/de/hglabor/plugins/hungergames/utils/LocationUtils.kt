@@ -1,8 +1,10 @@
 package de.hglabor.plugins.hungergames.utils
 
+import net.axay.kspigot.runnables.task
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.block.BlockFace
+import org.bukkit.entity.LivingEntity
 import kotlin.random.Random
 
 object LocationUtils {
@@ -27,5 +29,21 @@ object LocationUtils {
             }
         }
         return getHighestBlock(world, spread, tryCounter + 1)
+    }
+
+    fun setDirection(livingEntity: LivingEntity, loc: Location) {
+        task(true, 1) {
+            val dir = loc.clone().subtract(livingEntity.eyeLocation).toVector()
+            val finalLoc = livingEntity.location.setDirection(dir)
+            finalLoc.pitch = 0f
+            livingEntity.teleport(finalLoc)
+        }
+    }
+
+    fun Location.setDirectionTo(loc: Location): Location {
+        val dir = loc.clone().subtract(this).toVector()
+        val finalLoc = this.setDirection(dir)
+        finalLoc.pitch = 0f
+        return finalLoc
     }
 }
