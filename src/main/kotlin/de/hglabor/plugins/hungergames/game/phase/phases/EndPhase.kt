@@ -15,8 +15,7 @@ import org.bukkit.inventory.ItemStack
 
 object EndPhase : GamePhase(25, null) {
     override fun getTimeString() = "Ended"
-    override val timeName = "Game${ChatColor.DARK_GRAY}"
-
+    override val timeName = "Game"
     var winner: HGPlayer? = null
 
     override fun onStart() {
