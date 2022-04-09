@@ -14,8 +14,12 @@ object KitManager {
         None,
         Phantom,
         Redstoner,
+        Revive,
+        Snail,
+        Spider,
+        Sponge,
+        Squid,
         Stomper,
         ZickZack,
-        Sponge
     ).map { it.value }
 }
