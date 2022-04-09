@@ -43,7 +43,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
          */
         inline operator fun <P : KitProperties> invoke(
             key: Any,
-            crossinline properties: KFunction0<Any>,
+            crossinline properties: () -> P,
             crossinline builder: KitBuilder<P>.() -> Unit,
         ) = lazy {
             createRawKit(key.toString(), properties.invoke()).apply {
