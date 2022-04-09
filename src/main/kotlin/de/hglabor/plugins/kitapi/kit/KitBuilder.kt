@@ -14,6 +14,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
@@ -44,6 +45,15 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      */
     fun clickableItem(stack: ItemStack, onClick: (PlayerInteractEvent) -> Unit) {
         kit.internal.items[currentItemId++] = ClickableKitItem(stack, onClick)
+    }
+
+    /**
+     * Gives the [stack] to the player if he has the kit
+     * and executed the [onClick] callback when the player
+     * interacts with another entity using the item.
+     */
+    fun clickOnEntityItem(stack: ItemStack, onClick: (PlayerInteractAtEntityEvent) -> Unit) {
+        kit.internal.items[currentItemId++] = ClickOnEntityKitItem(stack, onClick)
     }
 
     /**
