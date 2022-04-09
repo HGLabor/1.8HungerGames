@@ -5,6 +5,7 @@ import de.hglabor.plugins.kitapi.kit.KitProperties
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -28,5 +29,10 @@ val Snail = Kit("Snail", ::SnailProperties) {
                 this.kit.properties.effectMultiplier
             )
         )
+    }
+
+    kitPlayerEvent<EntityDamageByEntityEvent>({ it.entity as? Player }, priority = EventPriority.HIGH) { it, player ->
+        if (!player.isSneaking) return@kitPlayerEvent
+        it.damage = it.finalDamage.coerceAtMost(1.0)
     }
 }
