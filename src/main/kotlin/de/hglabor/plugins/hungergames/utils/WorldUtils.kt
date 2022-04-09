@@ -8,6 +8,8 @@ import net.axay.kspigot.runnables.task
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
+import org.bukkit.material.MaterialData
+import kotlin.math.max
 
 object WorldUtils {
     private val defaultQueue = BlockQueue()
@@ -33,6 +35,36 @@ object WorldUtils {
             queue.queuedBlocks[location] = material to data
         }
         queue.startPlacingBlocksInQueue()
+    }
+
+    fun buildFilledCylinder(location: Location, radius: Int, height: Int, materialData: MaterialData, blockQueue: BlockQueue = defaultQueue) {
+        val height = height-1
+        val radiusSquared = (radius * radius).toDouble()
+        for (x in -radius until radius) {
+            for (z in -radius until radius) {
+                if (x * x + z * z <= radiusSquared) {
+                    for (y in 0..height) {
+                        val loc = location.clone().block.getRelative(x, y, z).location
+                        setBlock(loc, materialData.itemType, materialData.data, blockQueue)
+                    }
+                }
+            }
+        }
+    }
+
+    fun buildHollowCylinder(location: Location, radius: Int, height: Int, materialData: MaterialData, blockQueue: BlockQueue = defaultQueue) {
+        val height = max(1, height)
+        val radiusSquared = (radius * radius).toDouble()
+        for (x in -radius until radius) {
+            for (z in -radius until radius) {
+                if (x * x + z * z > radiusSquared) {
+                    for (y in 0..height) {
+                        val loc = location.clone().block.getRelative(x, y, z).location
+                        setBlock(loc, materialData.itemType, materialData.data, blockQueue)
+                    }
+                }
+            }
+        }
     }
 }
 
