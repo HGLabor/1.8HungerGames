@@ -10,7 +10,7 @@ object DamageNerf {
             if (!(it.damager is Player && it.entity is Player)) return@listen
             val itemName = (it.damager as Player).itemInHand.type.name.lowercase()
             if (itemName.endsWith("_sword") || itemName.endsWith("_axe"))
-                it.damage *= 0.7
+                it.damage *= 0.65
         }
     }
 }

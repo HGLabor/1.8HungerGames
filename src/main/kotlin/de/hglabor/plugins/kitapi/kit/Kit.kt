@@ -4,17 +4,16 @@ import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
-import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.setLore
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.reflect.KFunction0
 
 open class Kit<P : KitProperties> private constructor(val key: String, val properties: P) {
 
@@ -44,7 +43,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
          */
         inline operator fun <P : KitProperties> invoke(
             key: Any,
-            crossinline properties: () -> P,
+            crossinline properties: KFunction0<Any>,
             crossinline builder: KitBuilder<P>.() -> Unit,
         ) = lazy {
             createRawKit(key.toString(), properties.invoke()).apply {

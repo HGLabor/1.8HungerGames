@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack
 import java.awt.Container
 
 class DiggerProperties : CooldownProperties(12000) {
-    val radius by int(5)
+    val radius by int(6)
 }
 
 val Digger = Kit("Digger", ::DiggerProperties) {
