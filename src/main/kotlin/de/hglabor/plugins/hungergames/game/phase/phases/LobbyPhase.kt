@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
 object LobbyPhase : GamePhase(240, InvincibilityPhase) {
-    override val timeName = "Starting${ChatColor.DARK_GRAY}"
+    override val timeName = "Starting"
     override fun getTimeString() = TimeConverter.stringify(remainingTime.toInt())
 
     override fun incrementElapsedTime() {

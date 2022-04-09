@@ -15,7 +15,7 @@ import org.bukkit.ChatColor
 
 object PvPPhase : IngamePhase(1800, EndPhase) {
     private val recraftInspector: RecraftInspector = RecraftInspector()
-    override val timeName = "Ingame${ChatColor.DARK_GRAY}"
+    override val timeName = "Ingame"
     override fun getTimeString() = TimeConverter.stringify((GameManager.elapsedTime.get()).toInt())
 
     override fun tick(tickCount: Int) {

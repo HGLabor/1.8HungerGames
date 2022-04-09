@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
 object InvincibilityPhase: IngamePhase(120, PvPPhase) {
-    override val timeName = "Grace${ChatColor.DARK_GRAY}"
+    override val timeName = "Grace"
     override fun getTimeString() = TimeConverter.stringify(remainingTime.toInt())
 
     override fun onStart() {

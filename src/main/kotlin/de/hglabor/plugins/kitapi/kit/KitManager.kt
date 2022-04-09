@@ -7,7 +7,7 @@ object KitManager {
         Anchor,
         Automatic,
         Blink,
-        Counter,
+        //Counter,
         Digger,
         Magma,
         Ninja,
@@ -16,6 +16,6 @@ object KitManager {
         Redstoner,
         Stomper,
         ZickZack,
-        Jellyfish
+        Sponge
     ).map { it.value }
 }
