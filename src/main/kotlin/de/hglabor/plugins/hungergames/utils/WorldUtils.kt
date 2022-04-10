@@ -1,7 +1,6 @@
 package de.hglabor.plugins.hungergames.utils
 
 import de.hglabor.plugins.hungergames.utils.WorldUtils.setBlockInstantly
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.sync
 import net.axay.kspigot.runnables.task
@@ -65,6 +64,25 @@ object WorldUtils {
                 }
             }
         }
+    }
+
+    fun makeCircle(loc: Location, r: Int, h: Int, hollow: Boolean, sphere: Boolean,  blockQueue: BlockQueue = defaultQueue): HashSet<Location> {
+        val surroundingBlocks = HashSet<Location>()
+        val cx = loc.blockX
+        val cy = loc.blockY
+        val cz = loc.blockZ
+        for (x in cx - r..cx + r) {
+            for (z in cz - r..cz + r) {
+                for (y in (if (sphere) cy - r else cy) until if (sphere) cy + r else cy + h) {
+                    val dist =
+                        ((cx - x) * (cx - x) + (cz - z) * (cz - z) + if (sphere) (cy - y) * (cy - y) else 0).toDouble()
+                    if (dist < r * r && !(hollow && dist < (r - 1) * (r - 1))) {
+                        surroundingBlocks.add(loc.world.getBlockAt(x, y, z).location)
+                    }
+                }
+            }
+        }
+        return surroundingBlocks
     }
 }
 
