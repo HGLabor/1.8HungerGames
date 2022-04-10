@@ -9,6 +9,7 @@ object KitManager {
         Blink,
         //Counter,
         Digger,
+        Domino,
         Magma,
         Ninja,
         None,
