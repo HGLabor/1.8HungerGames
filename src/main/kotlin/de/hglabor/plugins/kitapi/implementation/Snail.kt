@@ -24,8 +24,9 @@ val Snail = Kit("Snail", ::SnailProperties) {
             it.damage = it.finalDamage.coerceAtMost(1.0)
         }
 
-        val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
         if ((1..100).random() > this.kit.properties.probability) return@kitPlayerEvent
+        val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
+
         target.addPotionEffect(
             PotionEffect(
                 PotionEffectType.SLOW,
@@ -36,7 +37,8 @@ val Snail = Kit("Snail", ::SnailProperties) {
     }
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.entity as? Player }, priority = EventPriority.HIGH) { it, player ->
-        if (!player.isSneaking) return@kitPlayerEvent
-        it.damage = it.finalDamage.coerceAtMost(1.0)
+        if (player.isSneaking) {
+            it.damage = it.finalDamage.coerceAtMost(1.0)
+        }
     }
 }
