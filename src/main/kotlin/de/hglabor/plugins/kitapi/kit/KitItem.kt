@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.kit
 
 import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -27,8 +28,11 @@ class PlaceableKitItem(
     val onBlockPlace: (BlockPlaceEvent) -> Unit,
 ) : KitItem()
 
-val ItemStack.isKitItem: Boolean
+val ItemStack?.isKitItem: Boolean
     get() {
+        if (this == null) return false
+        if (type == Material.AIR) return false
+        if (itemMeta == null) return false
         if (itemMeta.lore == null || itemMeta.lore.isEmpty()) return false
         return itemMeta.lore.first() == "${ChatColor.DARK_PURPLE}Kititem"
     }
