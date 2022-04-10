@@ -50,7 +50,7 @@ class HungerGames: KSpigot() {
         GameManager.enable()
         SoupHealing.register()
         PlayerTracker.register()
-        WoodToInv.register()
+        BlocksToInv.register()
         BuildHeightLimit.register()
         DamageNerf.register()
         OreNerf.register()
