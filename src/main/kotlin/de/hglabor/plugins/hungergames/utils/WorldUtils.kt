@@ -7,8 +7,6 @@ import net.axay.kspigot.runnables.task
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.material.MaterialData
-import kotlin.math.max
 
 object WorldUtils {
     private val defaultQueue = BlockQueue()
@@ -27,7 +25,7 @@ object WorldUtils {
 
     fun setBlock(location: Location, material: Material, data: Byte, queue: BlockQueue = defaultQueue) {
         val queuedBlock = queue.queuedBlocks[location]
-        val shouldntPlace =  (queuedBlock != null && queuedBlock.first == material && queuedBlock.second == data) ||
+        val shouldntPlace = (queuedBlock != null && queuedBlock.first == material && queuedBlock.second == data) ||
                 (queuedBlock?.first == Material.AIR && material == Material.AIR)
 
         if (!shouldntPlace) {
@@ -36,37 +34,7 @@ object WorldUtils {
         queue.startPlacingBlocksInQueue()
     }
 
-    fun buildFilledCylinder(location: Location, radius: Int, height: Int, materialData: MaterialData, blockQueue: BlockQueue = defaultQueue) {
-        val height = height-1
-        val radiusSquared = (radius * radius).toDouble()
-        for (x in -radius until radius) {
-            for (z in -radius until radius) {
-                if (x * x + z * z <= radiusSquared) {
-                    for (y in 0..height) {
-                        val loc = location.clone().block.getRelative(x, y, z).location
-                        setBlock(loc, materialData.itemType, materialData.data, blockQueue)
-                    }
-                }
-            }
-        }
-    }
-
-    fun buildHollowCylinder(location: Location, radius: Int, height: Int, materialData: MaterialData, blockQueue: BlockQueue = defaultQueue) {
-        val height = max(1, height)
-        val radiusSquared = (radius * radius).toDouble()
-        for (x in -radius until radius) {
-            for (z in -radius until radius) {
-                if (x * x + z * z > radiusSquared) {
-                    for (y in 0..height) {
-                        val loc = location.clone().block.getRelative(x, y, z).location
-                        setBlock(loc, materialData.itemType, materialData.data, blockQueue)
-                    }
-                }
-            }
-        }
-    }
-
-    fun makeCircle(loc: Location, r: Int, h: Int, hollow: Boolean, sphere: Boolean,  blockQueue: BlockQueue = defaultQueue): HashSet<Location> {
+    fun makeCircle(loc: Location, r: Int, h: Int, hollow: Boolean, sphere: Boolean): HashSet<Location> {
         val surroundingBlocks = HashSet<Location>()
         val cx = loc.blockX
         val cy = loc.blockY

@@ -1,7 +1,6 @@
 package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.hungergames.player.hgPlayer
-import de.hglabor.plugins.hungergames.utils.BlockQueue
 import de.hglabor.plugins.hungergames.utils.WorldUtils
 import de.hglabor.plugins.hungergames.utils.hasMark
 import de.hglabor.plugins.hungergames.utils.mark
@@ -11,11 +10,9 @@ import de.hglabor.plugins.kitapi.cooldown.hasCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.isKitItem
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.actionBar
 import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.ChatColor
-import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -70,7 +67,7 @@ val Spider = Kit("Spider", ::SpiderProperties) {
     fun createSpiderNet(startLocation: Location): Set<Block> {
         val result: MutableSet<Block> = HashSet()
         val p = kit.properties
-        for (location in WorldUtils.makeCircle(startLocation, p.spidernetRadius, p.spidernetHeight, true, true, BlockQueue())) {
+        for (location in WorldUtils.makeCircle(startLocation, p.spidernetRadius, p.spidernetHeight, true, true)) {
             if (location.block.type != Material.AIR) {
                 continue
             }
