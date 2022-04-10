@@ -39,11 +39,11 @@ val Digger = Kit("Digger", ::DiggerProperties) {
         }
 
     placeableItem(ItemStack(Material.DRAGON_EGG)) {
+        it.isCancelled = true
         if (GameManager.phase == InvincibilityPhase) {
             it.player.sendMessage("${Prefix}You can't use this kit while during the grace period.")
             return@placeableItem
         }
-        it.isCancelled = true
         applyCooldown(it.player) {
             val radius = kit.properties.radius
             val eggLocation = it.block.location

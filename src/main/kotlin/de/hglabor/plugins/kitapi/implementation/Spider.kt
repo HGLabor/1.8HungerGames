@@ -1,5 +1,8 @@
 package de.hglabor.plugins.kitapi.implementation
 
+import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.utils.WorldUtils
 import de.hglabor.plugins.hungergames.utils.hasMark
@@ -56,6 +59,10 @@ val Spider = Kit("Spider", ::SpiderProperties) {
 
     // Spiderman abilities
     clickableItem(ItemStack(Material.WEB)) {
+        if (GameManager.phase == InvincibilityPhase) {
+            it.player.sendMessage("${Prefix}You can't use this kit while during the grace period.")
+            return@clickableItem
+        }
         applyCooldown(it) {
             val player = it.player
 
