@@ -20,6 +20,7 @@ object KitManager {
         Sponge,
         Squid,
         Stomper,
+        Viking,
         ZickZack,
     ).map { it.value }
 }
