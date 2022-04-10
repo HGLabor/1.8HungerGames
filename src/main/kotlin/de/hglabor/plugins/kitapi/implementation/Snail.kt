@@ -17,7 +17,7 @@ class SnailProperties : KitProperties() {
 }
 
 val Snail = Kit("Snail", ::SnailProperties) {
-    displayMaterial = Material.STRING
+    displayMaterial = Material.SLIME_BALL
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, damager ->
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
