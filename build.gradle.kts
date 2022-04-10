@@ -31,7 +31,7 @@ dependencies {
     compileOnly("org.spigotmc", "spigot-api", "$mcVersion-R0.1-SNAPSHOT")
 
     // KSpigot
-    implementation(files("/libs/KSpigot-1.8.0.jar"))
+    implementation(files("libs/KSpigot-1.8.0.jar"))
 
     // HGLaborUtils
     implementation("de.hglabor", "hglabor-utils", "1.17.1_v3") //We don't use any version specific code
