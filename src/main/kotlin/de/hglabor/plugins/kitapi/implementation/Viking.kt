@@ -18,18 +18,9 @@ val Viking = Kit("Viking", ::VikingProperties) {
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.entity as? Player }) { it, player ->
 
-        if (player.getItemInHand().getType() == (Material.DIAMOND_AXE)) {
-            it.damage += 1.5;
-        }
-        if (player.getItemInHand().getType() == (Material.IRON_AXE)) {
-            it.damage += 1.5;
-        }
-        if (player.getItemInHand().getType() == (Material.STONE_AXE)) {
-            it.damage += 1.5;
-        }
-
-        if (player.getItemInHand().getType() == (Material.WOOD_AXE)) {
-            it.damage += 1.5;
-        }
+    when (player.itemInHand.type) {
+        Material.DIAMOND_AXE, Material.WOOD_AXE, Material.IRON_AXE, Material.STONE_AXE
+            -> it.damage += 1.5
+        else -> Unit
     }
-}
+}}
