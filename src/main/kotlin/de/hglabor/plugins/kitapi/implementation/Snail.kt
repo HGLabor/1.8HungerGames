@@ -20,6 +20,10 @@ val Snail = Kit("Snail", ::SnailProperties) {
     displayMaterial = Material.SLIME_BALL
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, damager ->
+        if (damager.isSneaking) {
+            it.damage = it.finalDamage.coerceAtMost(1.0)
+        }
+
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
         if ((1..100).random() > this.kit.properties.probability) return@kitPlayerEvent
         target.addPotionEffect(
@@ -29,10 +33,6 @@ val Snail = Kit("Snail", ::SnailProperties) {
                 this.kit.properties.effectMultiplier
             )
         )
-
-        if (damager.isSneaking) {
-            it.damage = it.finalDamage.coerceAtMost(1.0)
-        }
     }
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.entity as? Player }, priority = EventPriority.HIGH) { it, player ->
