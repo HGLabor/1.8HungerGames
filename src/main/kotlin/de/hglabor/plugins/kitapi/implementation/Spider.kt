@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.hungergames.utils.WorldUtils
 import de.hglabor.plugins.hungergames.utils.hasMark
 import de.hglabor.plugins.hungergames.utils.mark
@@ -47,7 +48,7 @@ val Spider = Kit("Spider", ::SpiderProperties) {
     // Viper ability
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, damager ->
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
-        if ((1..100).random() > this.kit.properties.probability) return@kitPlayerEvent
+        if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
         target.addPotionEffect(
             PotionEffect(
                 PotionEffectType.POISON,

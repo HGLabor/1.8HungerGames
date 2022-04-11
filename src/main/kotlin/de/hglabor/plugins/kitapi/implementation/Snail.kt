@@ -1,5 +1,6 @@
 package de.hglabor.plugins.kitapi.implementation
 
+import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import org.bukkit.Material
@@ -24,7 +25,7 @@ val Snail = Kit("Snail", ::SnailProperties) {
             it.damage = it.finalDamage.coerceAtMost(1.0)
         }
 
-        if ((1..100).random() > this.kit.properties.probability) return@kitPlayerEvent
+        if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
 
         target.addPotionEffect(
