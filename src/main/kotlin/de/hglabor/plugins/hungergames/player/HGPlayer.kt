@@ -39,6 +39,11 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     var isKitEnabled = true
 
     fun login() {
+        OfflineTimer.stopTimer(this)
+        setScoreboard()
+    }
+
+    private fun setScoreboard() {
         val player = bukkitPlayer ?: return
         if (board != null) {
             board!!.setScoreboard(player)
@@ -55,12 +60,8 @@ open class HGPlayer(val uuid: UUID, val name: String) {
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Kills: ${ChatColor.WHITE}${kills.get()}" }
                 +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}: ${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
                 +" "
-                //grün, aqua, rot, gelb
-                // danke für die übersetzung taito, was hätte man nur ohne dich gemacht
             }
         }
-
-        OfflineTimer.stopTimer(this)
     }
 
     fun makeGameReady() {
