@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import org.bukkit.Effect
@@ -26,7 +27,7 @@ val ZickZack = Kit("ZickZack", ::ZickZackProperties) {
         comboMap.computeIfAbsent(damager.uniqueId) { AtomicInteger(0) }
         val combo = comboMap[damager.uniqueId]?.incrementAndGet() ?: 0
         if (combo < kit.properties.minCombo) return@kitPlayerEvent
-        if ((0..100).random() <= kit.properties.likelihood) {
+        if (ChanceUtils.roll(kit.properties.likelihood)) {
             shieldMap.computeIfAbsent(damager.uniqueId) { AtomicInteger(0) }.incrementAndGet()
         }
     }

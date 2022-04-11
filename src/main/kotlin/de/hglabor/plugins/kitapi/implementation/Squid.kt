@@ -1,5 +1,6 @@
 package de.hglabor.plugins.kitapi.implementation
 
+import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import org.bukkit.Material
@@ -20,7 +21,7 @@ val Squid = Kit("Tintenfisch", ::SquidProperties) {
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, damager ->
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
-        if ((1..100).random() > this.kit.properties.probability) return@kitPlayerEvent
+        if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
         target.addPotionEffect(
             PotionEffect(
                 PotionEffectType.BLINDNESS,

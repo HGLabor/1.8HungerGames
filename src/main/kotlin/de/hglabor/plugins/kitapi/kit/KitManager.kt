@@ -9,6 +9,7 @@ object KitManager {
         Blink,
         //Counter,
         Digger,
+        Domino,
         Magma,
         Ninja,
         None,
@@ -21,6 +22,7 @@ object KitManager {
         Sponge,
         Squid,
         Stomper,
+        Viking,
         ZickZack,
     ).map { it.value }
 }

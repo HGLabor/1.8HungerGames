@@ -58,6 +58,8 @@ object PlayerKits {
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is PlaceableKitItem) {
                     kitItem.onBlockPlace.invoke(event)
+                } else {
+                    event.isCancelled = true
                 }
             }
         }
