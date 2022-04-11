@@ -50,12 +50,12 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDu
             if (hgPlayer.status == PlayerStatus.LOBBY) {
                 hgPlayer.login()
                 hgPlayer.makeGameReady()
-                player.sendMessage("${Prefix}The game has already started. You should hurry now!")
+                player.sendMessage("${Prefix}Junge, die Runde hat schon angefangen xD. Beeile dich lieber, haha!")
             }
         } else if (GameManager.phase == PvPPhase) {
             if (hgPlayer.status == PlayerStatus.LOBBY) {
                 hgPlayer.status = PlayerStatus.SPECTATOR
-                player.sendMessage("${Prefix}The game has already started.")
+                player.sendMessage("${Prefix}Warst du in der Schule auch immer unpünktlich? ...")
                 player.gameMode = GameMode.SPECTATOR
             }
         }

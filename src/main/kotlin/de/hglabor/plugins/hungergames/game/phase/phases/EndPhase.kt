@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack
 
 
 object EndPhase : GamePhase(25, null) {
-    override fun getTimeString() = "Ended"
-    override val timeName = "Game"
+    override fun getTimeString() = "Ende"
+    override val timeName = "Spiel"
     var winner: HGPlayer? = null
 
     override fun onStart() {
@@ -39,13 +39,13 @@ object EndPhase : GamePhase(25, null) {
     override fun tick(tickCount: Int) {
         if (tickCount < 5) {
             broadcast(
-                if (winner != null) "${Prefix}${ChatColor.LIGHT_PURPLE}${winner?.name} ${ChatColor.GRAY}won."
-                else "${Prefix}${ChatColor.RED}Nobody ${ChatColor.GRAY}won."
+                if (winner != null) "${Prefix}${ChatColor.LIGHT_PURPLE}${winner?.name} ${ChatColor.GRAY}ist der KING"
+                else "${Prefix}${ChatColor.RED}Niemand hat ${ChatColor.GRAY}gewonnen (lol)."
             )
         }
 
         if (GameManager.elapsedTime.get() == 25L) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop")
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "Stopp")
         }
     }
 

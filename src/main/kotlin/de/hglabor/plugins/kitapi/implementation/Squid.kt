@@ -15,7 +15,7 @@ class SquidProperties : KitProperties() {
     val probability by int(30)
 }
 
-val Squid = Kit("Squid", ::SquidProperties) {
+val Squid = Kit("Tintenfisch", ::SquidProperties) {
     displayMaterial = Material.INK_SACK
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, damager ->

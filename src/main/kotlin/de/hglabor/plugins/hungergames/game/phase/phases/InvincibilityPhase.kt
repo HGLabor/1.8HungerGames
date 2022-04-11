@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
 object InvincibilityPhase: IngamePhase(120, PvPPhase) {
-    override val timeName = "Grace"
+    override val timeName = "Schutz"
     override fun getTimeString() = TimeConverter.stringify(remainingTime.toInt())
 
     override fun onStart() {
@@ -23,7 +23,7 @@ object InvincibilityPhase: IngamePhase(120, PvPPhase) {
 
     override fun tick(tickCount: Int) {
         when (remainingTime.toInt()) {
-            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The invincibility ends in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
+            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}Die Schutzzeit  ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
         }
     }
 

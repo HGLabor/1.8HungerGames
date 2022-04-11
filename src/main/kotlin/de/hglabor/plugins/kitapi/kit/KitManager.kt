@@ -12,6 +12,7 @@ object KitManager {
         Magma,
         Ninja,
         None,
+        Perfekt,
         Phantom,
         Redstoner,
         Revive,

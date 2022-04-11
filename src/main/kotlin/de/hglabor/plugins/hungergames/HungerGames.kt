@@ -50,13 +50,13 @@ class HungerGames: KSpigot() {
         GameManager.enable()
         SoupHealing.register()
         PlayerTracker.register()
-        WoodToInv.register()
         BuildHeightLimit.register()
         DamageNerf.register()
         OreNerf.register()
         LapisInEnchanter.register()
         KitSelector.register()
         RecraftRecipes.register()
+        BlocksToInv.register()
     }
 
     private fun whitelistManager() {
@@ -69,10 +69,13 @@ class HungerGames: KSpigot() {
         Bukkit.getOfflinePlayer(UUID.fromString("e4ccbe7c-45ef-4194-b645-851f2002de89")).apply { //MOOZIII
             isWhitelisted = true; isOp = true
         }
+        Bukkit.getOfflinePlayer(UUID.fromString("50bf6931-e149-4743-9210-92cd58d85c5d")).apply { //TAITO
+            isWhitelisted = true; isOp = true
+        }
     }
 }
 
 val Manager by lazy { HungerGames.INSTANCE }
-val PrimaryColor = ChatColor.DARK_PURPLE
-val SecondaryColor = ChatColor.LIGHT_PURPLE
+val PrimaryColor = ChatColor.AQUA
+val SecondaryColor = ChatColor.DARK_GRAY
 val Prefix = " ${KColors.DARKGRAY}| ${PrimaryColor}HGLabor ${KColors.DARKGRAY}» ${KColors.GRAY}"

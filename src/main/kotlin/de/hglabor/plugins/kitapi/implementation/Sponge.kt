@@ -38,7 +38,7 @@ class SpongeProperties : MultipleUsesCooldownProperties(15, 30000) {
     val spongeBoost by double(1.0)
 }
 
-val Sponge = Kit("Sponge", ::SpongeProperties) {
+val Sponge = Kit("Schwamm", ::SpongeProperties) {
     displayMaterial = Material.SPONGE
 
     val waterBlocks = ArrayList<Block>()

@@ -17,10 +17,10 @@ object PlayerTracker {
             val target = findTarget(player)
 
             if (target == null) {
-                player.sendMessage("${Prefix}${ChatColor.RED}No target found.")
+                player.sendMessage("${Prefix}${ChatColor.RED}Kein Spieler gefunden")
                 return@listen
             }
-            player.sendMessage("${Prefix}You are now tracking ${ChatColor.LIGHT_PURPLE}${target.name}${ChatColor.GRAY}.")
+            player.sendMessage("${Prefix}Du verfolgst gerade ${ChatColor.LIGHT_PURPLE}${target.name}${ChatColor.GRAY}.")
             player.compassTarget = target.location
         }
     }

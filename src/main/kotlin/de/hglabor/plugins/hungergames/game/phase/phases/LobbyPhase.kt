@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
 object LobbyPhase : GamePhase(240, InvincibilityPhase) {
-    override val timeName = "Starting"
+    override val timeName = "Start"
     override fun getTimeString() = TimeConverter.stringify(remainingTime.toInt())
 
     override fun incrementElapsedTime() {
@@ -28,7 +28,7 @@ object LobbyPhase : GamePhase(240, InvincibilityPhase) {
 
     override fun tick(tickCount: Int) {
         when (remainingTime.toInt()) {
-            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The tournament starts in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
+            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}HG startet in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
         }
     }
 

@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.kit
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.event.PlayerSoupEvent
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.Cooldown
 import de.hglabor.plugins.kitapi.cooldown.CooldownManager

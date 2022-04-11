@@ -15,7 +15,7 @@ class SpiderProperties : KitProperties() {
     val probability by int(30)
 }
 
-val Spider = Kit("Spider", ::SpiderProperties) {
+val Spider = Kit("Spinne", ::SpiderProperties) {
     displayMaterial = Material.SPIDER_EYE
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, damager ->
