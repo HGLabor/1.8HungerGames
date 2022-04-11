@@ -20,7 +20,7 @@ object PlayerTracker {
                 player.sendMessage("${Prefix}${ChatColor.RED}Kein Spieler gefunden")
                 return@listen
             }
-            player.sendMessage("${Prefix}Du verfolgst gerade ${ChatColor.LIGHT_PURPLE}${target.name}${ChatColor.GRAY}.")
+            player.sendMessage("${Prefix}Der Kompass zeigt gerade auf ${ChatColor.LIGHT_PURPLE}${target.name}${ChatColor.GRAY}.")
             player.compassTarget = target.location
         }
     }

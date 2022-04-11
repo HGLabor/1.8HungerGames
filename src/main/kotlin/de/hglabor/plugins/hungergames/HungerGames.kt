@@ -57,6 +57,7 @@ class HungerGames: KSpigot() {
         KitSelector.register()
         RecraftRecipes.register()
         BlocksToInv.register()
+        RemoveFishingRod.register()
     }
 
     private fun whitelistManager() {
