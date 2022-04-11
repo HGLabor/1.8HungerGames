@@ -39,7 +39,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
         }
 
         when (remainingTime.toInt()) {
-            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}Der Spieler mit den meisten Eliminierungen gewinnt in${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}Der Spieler mit den meisten Eliminierungen gewinnt in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
         }
         // Winner
         if (PlayerList.alivePlayers.size == 1) {
