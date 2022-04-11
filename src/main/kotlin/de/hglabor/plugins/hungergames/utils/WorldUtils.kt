@@ -54,21 +54,23 @@ object WorldUtils {
     }
 }
 
-class BlockQueue {
+class BlockQueue(private val delay: Long = 2, private val blocksPerInterval: Int = 75) {
     var queueTask: KSpigotRunnable? = null
     val queuedBlocks: MutableMap<Location, Pair<Material, Byte>> = mutableMapOf()
+    var shouldPlace = true
 
     fun startPlacingBlocksInQueue() {
+        shouldPlace = true
         if (queueTask != null) return
 
-        queueTask = task(false, 2, 2) {
-            if (queuedBlocks.isEmpty()) {
+        queueTask = task(false, 2, delay) {
+            if (queuedBlocks.isEmpty() || !shouldPlace) {
                 it.cancel()
                 queueTask = null
                 return@task
             }
 
-            queuedBlocks.toList().take(75).forEach { (loc, pair) ->
+            queuedBlocks.toList().take(blocksPerInterval).forEach { (loc, pair) ->
                 val (material, data) = pair
                 sync {
                     val block = loc.block
@@ -78,5 +80,9 @@ class BlockQueue {
                 }
             }
         }
+    }
+
+    fun cancel() {
+        shouldPlace = false
     }
 }
