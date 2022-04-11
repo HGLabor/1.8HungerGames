@@ -169,7 +169,7 @@ class Feast(val world: World) : Listener {
     }
 
     private fun announceFeast() {
-        broadcast("${Prefix}Feast will spawn at ${getCenterString()} ${ChatColor.GRAY}in ${getTimeString()}${ChatColor.GRAY}.")
+        broadcast("${Prefix}Jo Jungs, das Feast spawned bei${getCenterString()} ${ChatColor.GRAY}in ${getTimeString()}${ChatColor.GRAY}.")
     }
 
     private fun getCenterString(): String? {

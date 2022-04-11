@@ -29,25 +29,25 @@ object DeathMessages {
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
         val deadText = "${ChatColor.RED}${dead.name} ${ChatColor.GRAY}(${ChatColor.DARK_RED}${dead.kit.properties.kitname}${ChatColor.GRAY})"
         val killerText = "${ChatColor.GREEN}${killer.name} ${ChatColor.GRAY}(${ChatColor.DARK_GREEN}${killer.kit.properties.kitname}${ChatColor.GRAY})"
-        val slainText = " ${KColors.GRAY}was eliminated by "
+        val slainText = " ${KColors.GRAY}wurde von "
         broadcast(Prefix + deadText + slainText + killerText)
     }
 
     private fun announce(dead: HGPlayer) {
         val deadText = "${ChatColor.RED}${dead.name}"
-        broadcast(Prefix + deadText + ChatColor.GRAY + " was eliminated")
+        broadcast(Prefix + deadText + ChatColor.GRAY + " wurde eliminiert")
     }
 
     private fun announce(dead: HGPlayer, deathMessage: String) {
         val deadText = "${ChatColor.RED}${dead.name}${KColors.GRAY}"
         var message = deathMessage
-        if (message.contains("was slain by")) {
-            message = message.replace("was slain by", "was eliminated by${ChatColor.GREEN}")
+        if (message.contains("wurde eliminiert von")) {
+            message = message.replace("wurde eliminiert von", "wurde eliminiert von${ChatColor.GREEN}")
         }
         broadcast(Prefix + message.replace(dead.name.toRegex(), deadText))
     }
 
     private fun announcePlayerCount() {
-        broadcast("${Prefix}There are ${ChatColor.WHITE}${PlayerList.alivePlayers.size} ${ChatColor.GRAY}players left.")
+        broadcast("${Prefix}Es sind noch ${ChatColor.WHITE}${PlayerList.alivePlayers.size} ${ChatColor.GRAY}Laborraten dabei.")
     }
 }
