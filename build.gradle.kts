@@ -31,7 +31,7 @@ dependencies {
     compileOnly("org.spigotmc", "spigot-api", "$mcVersion-R0.1-SNAPSHOT")
 
     // KSpigot
-    implementation(files("/libs/KSpigot-1.8.0.jar"))
+    implementation(files("libs/KSpigot-1.8.0.jar"))
 
     // KMONGO
     implementation("org.litote.kmongo", "kmongo", "4.5.1")
