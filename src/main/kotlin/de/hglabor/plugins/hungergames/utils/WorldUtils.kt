@@ -56,7 +56,7 @@ object WorldUtils {
 
 class BlockQueue(private val delay: Long = 2, private val blocksPerInterval: Int = 75) {
     var queueTask: KSpigotRunnable? = null
-    val queuedBlocks: MutableMap<Location, Pair<Material, Byte>> = mutableMapOf()
+    var queuedBlocks: MutableMap<Location, Pair<Material, Byte>> = mutableMapOf()
     var shouldPlace = true
 
     fun startPlacingBlocksInQueue() {
@@ -70,19 +70,32 @@ class BlockQueue(private val delay: Long = 2, private val blocksPerInterval: Int
                 return@task
             }
 
-            queuedBlocks.toList().take(blocksPerInterval).forEach { (loc, pair) ->
-                val (material, data) = pair
-                sync {
-                    val block = loc.block
-                    if (block.type != material || block.data != data)
-                        setBlockInstantly(loc, material, data)
-                    queuedBlocks -= loc
+            sync {
+                val newQueue = queuedBlocks.toMutableMap()
+                queuedBlocks.toList().take(blocksPerInterval).forEach { (loc, pair) ->
+                    if (shouldPlace) {
+                        val (material, data) = pair
+                        val block = loc.block
+                        if (block.type != material || block.data != data)
+                            setBlockInstantly(loc, material, data)
+                        newQueue -= loc
+                    }
                 }
+                queuedBlocks = newQueue
             }
         }
     }
 
     fun cancel() {
         shouldPlace = false
+    }
+
+    fun flush() {
+        queuedBlocks.clear()
+    }
+
+    fun cancelAndFlush() {
+        cancel()
+        flush()
     }
 }
