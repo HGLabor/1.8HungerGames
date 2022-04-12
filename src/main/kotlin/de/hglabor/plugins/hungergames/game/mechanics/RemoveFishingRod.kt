@@ -1,19 +1,25 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
+import net.axay.kspigot.event.listen
 import org.bukkit.inventory.Recipe
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.inventory.CraftItemEvent
 
 object RemoveFishingRod {
-
-    var it = Bukkit.getServer().recipeIterator()
-    var recipe: Recipe? = null
-
     fun register() {
-        recipe = it.next()
-        if (recipe != null && recipe!!.result.type == Material.FISHING_ROD) {
-            it.remove()
-
+        listen<CraftItemEvent> {
+            if (it.getRecipe().getResult().getType() == Material.FISHING_ROD) it.isCancelled;
         }
     }
 }
+
+
+//@EventHandler
+//Player player = (Player) event.getWhoClicked();
+//
+//if(event.getRecipe().getResult().getType() == Material.FISHING_ROD)
+//event.setCancelled(true);
