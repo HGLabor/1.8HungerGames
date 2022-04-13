@@ -17,10 +17,6 @@ import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.SkullMeta
-import org.bukkit.material.MaterialData
-import java.lang.reflect.Field
-import java.util.*
 
 object KitSelector {
     val kitSelectorItem = itemStack(Material.CHEST) { meta { name = "${SecondaryColor}Kit Selector" } }
@@ -43,18 +39,16 @@ object KitSelector {
                 })
             compound.sortContentBy { kit -> kit.properties.kitname }
             compoundScroll(
-                Slots.RowFiveSlotFive,
-                itemStack(Material.STAINED_GLASS_PANE) {
-                    data = MaterialData(Material.STAINED_GLASS_PANE, 5)
+                Slots.RowThreeSlotNine,
+                ItemStack(Material.STAINED_GLASS_PANE, 1, 5).apply {
                     meta {
                         name = "${PrimaryColor}Next"
                     }
                 }, compound, 7 * 4, reverse = true
             )
             compoundScroll(
-                Slots.RowOneSlotFive,
-                itemStack(Material.STAINED_GLASS_PANE) {
-                    data = MaterialData(Material.STAINED_GLASS_PANE, 14)
+                Slots.RowThreeSlotOne,
+                ItemStack(Material.STAINED_GLASS_PANE, 1, 14).apply {
                     meta {
                         name = "${PrimaryColor}Previous"
                     }
