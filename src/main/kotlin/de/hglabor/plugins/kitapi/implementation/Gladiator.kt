@@ -4,16 +4,13 @@ import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.hgPlayer
-import de.hglabor.plugins.hungergames.utils.BlockQueue
+import de.hglabor.plugins.hungergames.utils.*
 import de.hglabor.plugins.hungergames.utils.LocationUtils.setDirectionTo
-import de.hglabor.plugins.hungergames.utils.WorldUtils
-import de.hglabor.plugins.hungergames.utils.mark
-import de.hglabor.plugins.hungergames.utils.unmark
 import de.hglabor.plugins.kitapi.cooldown.CooldownManager
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
+import de.hglabor.plugins.kitapi.cooldown.hasCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.extensions.geometry.subtract
 import net.axay.kspigot.runnables.KSpigotRunnable
@@ -22,8 +19,11 @@ import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
@@ -33,25 +33,25 @@ import org.bukkit.potion.PotionEffectType
 import java.util.*
 import kotlin.random.Random
 
-class GladiatorProperties : CooldownProperties(15000) {
-    val radius by int(12)
+class GladiatorProperties : CooldownProperties(7500) {
+    val radius by int(13)
     val height by int(10)
     val duration by int(240)
     val material by material(Material.GLASS)
     val materialData by int(0)
 }
 
-class GladiatorInstance(val gladiator: Player, playerTwo: Player) {
+class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
     val players = arrayOf(gladiator, playerTwo)
-    var isFinished = false
+    private var isFinished = false
     val properties = Gladiator.value.properties
-    var oldLocations: Array<Location> = Array(2) { players[it].location.clone() }
-    lateinit var spawnLocations: Array<Location>
-    lateinit var allLocations: HashSet<Location>
-    var centerLocation: Location = getGladiatorLocation(players.first().location.clone().apply { y = 95.0 }, properties.radius, properties.height)
-    var lowestY = 0
+    private var oldLocations: Array<Location> = Array(2) { players[it].location.clone() }
+    private lateinit var spawnLocations: Array<Location>
+    private lateinit var allLocations: HashSet<Location>
+    private var centerLocation: Location = getGladiatorLocation(players.first().location.block.location.clone().apply { y = 95.0 }, properties.radius, properties.height)
+    private var lowestY = 0
     var task: KSpigotRunnable? = null
-    val blockQueue = BlockQueue()
+    private val blockQueue = BlockQueue(2, 150)
 
     init {
         createArena()
@@ -68,12 +68,12 @@ class GladiatorInstance(val gladiator: Player, playerTwo: Player) {
         }
         task = task(true, 20, 10) {
             if (players.any { p ->
-                    p.location.blockY < lowestY || p.location.blockY > centerLocation.blockY + 1
+                    p.location.blockY < lowestY || p.location.blockY > centerLocation.blockY + 0.2
             }) {
                 endFight()
                 return@task
             }
-            
+
             // damage people who are not supposed to be in the gladiator box
             PlayerList.alivePlayers.forEach { intruder ->
                 val intruderPlayer = intruder.bukkitPlayer ?: return@forEach
@@ -93,13 +93,10 @@ class GladiatorInstance(val gladiator: Player, playerTwo: Player) {
 
         fun setSpawnLocations() {
             spawnLocations = arrayOf(
-                centerLocation.clone().add(3, 1, 0),
-                centerLocation.clone().add(radius - 3, 1, 0)
+                centerLocation.clone().add(radius-3.5, 1, 0.5),
+                centerLocation.clone().add( -radius+4.5, 1, 0.5)
             )
-
-            spawnLocations.forEach {
-                it.clone().subtract(0, 1, 0).block.type = material
-            }
+            spawnLocations.forEach { it.clone().subtract(0, 1, 0).block.type = material }
         }
 
         setSpawnLocations()
@@ -138,7 +135,7 @@ class GladiatorInstance(val gladiator: Player, playerTwo: Player) {
         }
         players.forEachIndexed { index, player ->
             player.fallDistance = 0f
-            if (!player.hgPlayer.isAlive)
+            if (player.hgPlayer.isAlive)
                 player.teleport(oldLocations[index])
             player.unmark("inGladi")
             player.addPotionEffect(PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 10))
@@ -157,7 +154,7 @@ class GladiatorInstance(val gladiator: Player, playerTwo: Player) {
         val cylinder = WorldUtils.makeCircle(location, radius, height + 1, false, false)
         return if (hasEnoughSpace(cylinder)) {
             allLocations = cylinder
-            lowestY = location.blockY-height-1
+            lowestY = location.clone().blockY
             location
         } else {
             getGladiatorLocation(
@@ -176,22 +173,21 @@ class GladiatorInstance(val gladiator: Player, playerTwo: Player) {
 
         for (loc in locations) {
             if (!(loc.blockX < world.worldBorder.size + 1 && loc.blockX > -world.worldBorder.size - 1)) {
-                broadcast("x not in border")
                 return false
             }
             if (!(loc.blockY < world.worldBorder.size + 1 && loc.blockY > -world.worldBorder.size - 1)) {
-                broadcast("y not in border")
                 return false
             }
 
             if (loc.block.type != Material.AIR) {
-                broadcast("not air :I")
                 return false
             }
         }
         return true
     }
 }
+
+
 
 val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
     displayMaterial = Material.IRON_FENCE
@@ -208,25 +204,19 @@ val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
     clickOnEntityItem(ItemStack(Material.IRON_FENCE)) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem
         if (!rightClicked.hgPlayer.isAlive) return@clickOnEntityItem
-
-        GladiatorInstance(it.player, rightClicked)
+        if (it.player.hasMark("inGladi") || rightClicked.hasMark("inGladi")) return@clickOnEntityItem
+        if (!hasCooldown(it.player)) {
+            GladiatorInstance(it.player, rightClicked)
+        }
     }
 
-    /*kitPlayerEvent<PlayerToggleSneakEvent> {
-        if (it.player.isSneaking)
-            GladiatorInstance(it.player, it.player)
-    }*/
-
-    listen<BlockBreakEvent> {
-        val block = it.block
-        if (!block.hasMetadata("gladiBlock")) return@listen
-        it.isCancelled = true
+    fun breakGladiatorBlock(block: Block) {
         val type = block.type
         val id = block.data
 
         if (type == kit.properties.material) {
             block.setTypeIdAndData(Material.STAINED_GLASS.id, 14, false)
-            return@listen
+            return
         }
 
         when (id) {
@@ -236,6 +226,24 @@ val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
                 block.setType(Material.AIR, false)
                 block.removeMetadata("gladiBlock", Manager)
             }
+        }
+    }
+
+    listen<BlockBreakEvent> {
+        if (!it.block.hasMetadata("gladiBlock")) return@listen
+        it.isCancelled = true
+        breakGladiatorBlock(it.block)
+    }
+
+    listen<EntityExplodeEvent> {
+        it.blockList().filter { it.hasMetadata("gladiBlock") }.forEach { block ->
+            breakGladiatorBlock(block)
+        }
+    }
+
+    listen<BlockExplodeEvent> {
+        it.blockList().filter { it.hasMetadata("gladiBlock") }.forEach { block ->
+            breakGladiatorBlock(block)
         }
     }
 
