@@ -20,7 +20,7 @@ class NinjaProperties : CooldownProperties(10000) {
 }
 
 val Ninja = Kit("Ninja", ::NinjaProperties) {
-    displayMaterial = Material.INK_SACK
+    displayMaterial = Material.EMERALD
 
     val lastDamaged = OnlinePlayerMap<Player?>()
     val lastDamagedTask = OnlinePlayerMap<KSpigotRunnable?>()

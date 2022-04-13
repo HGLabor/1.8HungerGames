@@ -15,7 +15,7 @@ import org.bukkit.ChatColor
 
 object PvPPhase : IngamePhase(1800, EndPhase) {
     private val recraftInspector: RecraftInspector = RecraftInspector()
-    override val timeName = "Ingame"
+    override val timeName = "Time"
     override fun getTimeString() = TimeConverter.stringify((GameManager.elapsedTime.get()).toInt())
 
     override fun tick(tickCount: Int) {
@@ -39,7 +39,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
         }
 
         when (remainingTime.toInt()) {
-            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most kills wins in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most eliminations wins in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
         }
         // Winner
         if (PlayerList.alivePlayers.size == 1) {
