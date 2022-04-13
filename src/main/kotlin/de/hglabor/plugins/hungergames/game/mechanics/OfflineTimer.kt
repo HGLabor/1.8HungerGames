@@ -1,6 +1,7 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import net.axay.kspigot.extensions.broadcast
@@ -31,7 +32,7 @@ object OfflineTimer {
     }
 
     private fun eliminate(hgPlayer: HGPlayer) {
-        broadcast("${Prefix}${ChatColor.LIGHT_PURPLE}${hgPlayer.name} ${ChatColor.GRAY}has been offline for too long.")
+        broadcast("${Prefix}${SecondaryColor}${hgPlayer.name} ${ChatColor.GRAY}has been offline for too long.")
         hgPlayer.status = PlayerStatus.ELIMINATED
         offlinePlayers[hgPlayer.uuid]?.cancel()
         offlinePlayers.remove(hgPlayer.uuid)

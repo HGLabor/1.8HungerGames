@@ -1,6 +1,7 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
@@ -39,13 +40,13 @@ object EndPhase : GamePhase(25, null) {
     override fun tick(tickCount: Int) {
         if (tickCount < 5) {
             broadcast(
-                if (winner != null) "${Prefix}${ChatColor.LIGHT_PURPLE}${winner?.name} ${ChatColor.GRAY}won."
+                if (winner != null) "${Prefix}${SecondaryColor}${winner?.name} ${ChatColor.GRAY}won"
                 else "${Prefix}${ChatColor.RED}Nobody ${ChatColor.GRAY}won."
             )
         }
 
         if (GameManager.elapsedTime.get() == 25L) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop")
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "Stop")
         }
     }
 

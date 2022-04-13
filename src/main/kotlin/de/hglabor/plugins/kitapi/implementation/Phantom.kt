@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
@@ -20,7 +21,7 @@ val Phantom = Kit("Phantom", ::PhantomProperties) {
 
     displayMaterial = Material.FEATHER
 
-    clickableItem(itemStack(Material.FEATHER) { meta { name = "${ChatColor.LIGHT_PURPLE}Phantom" } }) {
+    clickableItem(itemStack(Material.FEATHER) { meta { name = "${SecondaryColor}Phantom" } }) {
         applyCooldown(it) {
             it.player.apply {
                 allowFlight = true
@@ -36,7 +37,7 @@ val Phantom = Kit("Phantom", ::PhantomProperties) {
                         player.sendMessage("${Prefix}You are no longer able to fly.")
                         return@task
                     }
-                    player.sendMessage("${Prefix}Your flight has ${ChatColor.LIGHT_PURPLE}$t ${ChatColor.GRAY}seconds remaining.")
+                    player.sendMessage("${Prefix}Your flight has ${SecondaryColor}$t ${ChatColor.GRAY}seconds remaining.")
                 }
             }
         }
