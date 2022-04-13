@@ -11,6 +11,7 @@ object KitManager {
         Digger,
         Domino,
         Gladiator,
+        Lumberjack,
         Magma,
         Ninja,
         None,
