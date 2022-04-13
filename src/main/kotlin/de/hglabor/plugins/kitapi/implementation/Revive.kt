@@ -3,6 +3,7 @@ package de.hglabor.plugins.kitapi.implementation
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
+import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Effect
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -21,20 +22,18 @@ val Revive = Kit("Revive", ::ReviveProperties) {
             applyCooldown(player) {
                 it.isCancelled = true
                 // TODO cool animation or sound?
+                player.addPotionEffects(
+                    listOf(
+                        PotionEffect(PotionEffectType.ABSORPTION, 100, 2),
+                        PotionEffect(PotionEffectType.REGENERATION, 10, 4),
+                        PotionEffect(PotionEffectType.FIRE_RESISTANCE, 800, 0)
+                    )
+                )
+                taskRunLater(10) {
+                    PotionEffect(PotionEffectType.REGENERATION, 900, 1)
+                }
             }
         }
-        player.addPotionEffects(
-            listOf(
-                PotionEffect(
-                    PotionEffectType.ABSORPTION,
-                    100, 2
-                ),
-                PotionEffect(PotionEffectType.REGENERATION, 900, 2),
-                PotionEffect(PotionEffectType.FIRE_RESISTANCE, 800, 1)
-
-
-            )
-        )
     }
 }
 
