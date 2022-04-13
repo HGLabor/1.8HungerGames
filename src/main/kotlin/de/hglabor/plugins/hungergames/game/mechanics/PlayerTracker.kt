@@ -1,8 +1,8 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.player.hgPlayer
-import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.event.listen
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -17,10 +17,10 @@ object PlayerTracker {
             val target = findTarget(player)
 
             if (target == null) {
-                player.sendMessage("${Prefix}${ChatColor.RED}Kein Spieler gefunden")
+                player.sendMessage("${Prefix}${ChatColor.RED}No target found.")
                 return@listen
             }
-            player.sendMessage("${Prefix}Der Kompass zeigt gerade auf ${ChatColor.LIGHT_PURPLE}${target.name}${ChatColor.GRAY}.")
+            player.sendMessage("${Prefix}You compass is pointing at ${SecondaryColor}${target.name}${ChatColor.GRAY}.")
             player.compassTarget = target.location
         }
     }

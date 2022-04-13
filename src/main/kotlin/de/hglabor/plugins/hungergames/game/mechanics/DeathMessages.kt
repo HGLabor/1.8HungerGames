@@ -29,7 +29,7 @@ object DeathMessages {
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
         val deadText = "${ChatColor.RED}${dead.name} ${ChatColor.GRAY}(${ChatColor.DARK_RED}${dead.kit.properties.kitname}${ChatColor.GRAY})"
         val killerText = "${ChatColor.GREEN}${killer.name} ${ChatColor.GRAY}(${ChatColor.DARK_GREEN}${killer.kit.properties.kitname}${ChatColor.GRAY})"
-        val slainText = " ${KColors.GRAY}wurde von "
+        val slainText = " ${KColors.GRAY}was eliminated by "
         broadcast(Prefix + deadText + slainText + killerText)
     }
 
@@ -41,8 +41,8 @@ object DeathMessages {
     private fun announce(dead: HGPlayer, deathMessage: String) {
         val deadText = "${ChatColor.RED}${dead.name}${KColors.GRAY}"
         var message = deathMessage
-        if (message.contains("was eliminated by")) {
-            message = message.replace("was eliminated by", "was eliminated by${ChatColor.GREEN}")
+        if (message.contains("was slain by")) {
+            message = message.replace("was slain by", "was eliminated by${ChatColor.GREEN}")
         }
         broadcast(Prefix + message.replace(dead.name.toRegex(), deadText))
     }

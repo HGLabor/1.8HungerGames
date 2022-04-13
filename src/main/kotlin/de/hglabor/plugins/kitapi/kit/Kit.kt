@@ -1,5 +1,6 @@
 package de.hglabor.plugins.kitapi.kit
 
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.CooldownManager
@@ -75,7 +76,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
             val board = player.hgPlayer.board ?: return
             if (properties is CooldownProperties) {
                 board.apply {
-                    addLineBelow { "${ChatColor.LIGHT_PURPLE}${ChatColor.BOLD}Cooldown: ${ChatColor.WHITE}${CooldownManager.getRemainingCooldown(properties.cooldownInstance, player)}" }
+                    addLineBelow { "${SecondaryColor}${ChatColor.BOLD}Cooldown: ${ChatColor.WHITE}${CooldownManager.getRemainingCooldown(properties.cooldownInstance, player)}" }
                     if (properties is MultipleUsesCooldownProperties) {
                         addLineBelow { "${ChatColor.GRAY}${ChatColor.BOLD}Uses: ${ChatColor.WHITE}${properties.usesMap[player.uniqueId]}/${properties.uses}" }
                     }
