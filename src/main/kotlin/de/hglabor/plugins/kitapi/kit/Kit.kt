@@ -14,6 +14,7 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -68,6 +69,8 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
                         setLore {
                             + "${ChatColor.DARK_PURPLE}Kititem"
                         }
+                        addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+                        addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                     }
                 }
                 if (!player.inventory.contains(kitItemStack))

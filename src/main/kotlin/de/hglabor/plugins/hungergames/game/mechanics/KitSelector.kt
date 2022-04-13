@@ -14,6 +14,7 @@ import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.ItemFlag
 
 object KitSelector {
     val kitSelectorItem = itemStack(Material.CHEST) { meta { name = "${SecondaryColor}Kit Selector" } }
@@ -22,9 +23,10 @@ object KitSelector {
         page(1) {
             val compound = createRectCompound<Kit<*>>(Slots.RowTwoSlotTwo, Slots.RowFourSlotEight,
                 iconGenerator = { kit ->
-                    kit.internal.displayItem.apply {
+                    kit.internal.displayItem.clone().apply {
                         meta {
                             name = "${SecondaryColor}${kit.properties.kitname}"
+                            addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                         }
                     }
                 },
