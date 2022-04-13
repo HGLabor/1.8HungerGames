@@ -30,7 +30,7 @@ val Revive = Kit("Revive", ::ReviveProperties) {
                     )
                 )
                 taskRunLater(10) {
-                    PotionEffect(PotionEffectType.REGENERATION, 900, 1)
+                    PotionEffect(PotionEffectType.REGENERATION, 900, 2)
                 }
             }
         }
