@@ -52,7 +52,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
 
         board = player.setScoreboard {
             title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
-            period = 20
+            period = 4
             content {
                 +" "
                 +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players: ${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }

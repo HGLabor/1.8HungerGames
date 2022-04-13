@@ -1,5 +1,6 @@
 package de.hglabor.plugins.kitapi.implementation
 
+import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.event.PlayerKilledEntityEvent
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
@@ -44,17 +45,6 @@ val Sponge = Kit("Sponge", ::SpongeProperties) {
     val waterBlocks = ArrayList<Block>()
     val waterTasks = OnlinePlayerMap<KSpigotRunnable?>()
     val fallDamageTasks = OnlinePlayerMap<KSpigotRunnable?>()
-
-    val spongeItem = ItemStack(Material.SPONGE).apply {
-        meta {
-            displayName = "${ChatColor.DARK_PURPLE}${kit.properties.kitname}"
-            setLore {
-                +"${ChatColor.DARK_PURPLE}Kititem"
-            }
-        }
-    }
-
-    simpleItem(spongeItem.apply { amount = kit.properties.spongesOnStart })
 
     listen<BlockFromToEvent> {
         if (it.block.type == Material.WATER || it.block.type == Material.STATIONARY_WATER) {
@@ -146,7 +136,12 @@ val Sponge = Kit("Sponge", ::SpongeProperties) {
         }
     }
 
+    kitPlayerEvent<KitEnableEvent> {
+        if (it.player.inventory.contains(Material.SPONGE)) return@kitPlayerEvent
+        it.player.inventory.addItem(ItemStack(Material.SPONGE, kit.properties.spongesOnStart))
+    }
+
     kitPlayerEvent<PlayerKilledEntityEvent>({ it.killer }) { event, player ->
-        player.inventory.addItem(spongeItem.apply { amount = kit.properties.spongesOnKill })
+        player.inventory.addItem(ItemStack(Material.SPONGE, kit.properties.spongesOnKill))
     }
 }

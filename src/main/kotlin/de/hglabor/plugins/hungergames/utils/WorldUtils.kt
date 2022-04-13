@@ -54,29 +54,48 @@ object WorldUtils {
     }
 }
 
-class BlockQueue {
+class BlockQueue(private val delay: Long = 2, private val blocksPerInterval: Int = 75) {
     var queueTask: KSpigotRunnable? = null
-    val queuedBlocks: MutableMap<Location, Pair<Material, Byte>> = mutableMapOf()
+    var queuedBlocks: MutableMap<Location, Pair<Material, Byte>> = mutableMapOf()
+    var shouldPlace = true
 
     fun startPlacingBlocksInQueue() {
+        shouldPlace = true
         if (queueTask != null) return
 
-        queueTask = task(false, 2, 2) {
-            if (queuedBlocks.isEmpty()) {
+        queueTask = task(false, 2, delay) {
+            if (queuedBlocks.isEmpty() || !shouldPlace) {
                 it.cancel()
                 queueTask = null
                 return@task
             }
 
-            queuedBlocks.toList().take(75).forEach { (loc, pair) ->
-                val (material, data) = pair
-                sync {
-                    val block = loc.block
-                    if (block.type != material || block.data != data)
-                        setBlockInstantly(loc, material, data)
-                    queuedBlocks -= loc
+            sync {
+                val newQueue = queuedBlocks.toMutableMap()
+                queuedBlocks.toList().take(blocksPerInterval).forEach { (loc, pair) ->
+                    if (shouldPlace) {
+                        val (material, data) = pair
+                        val block = loc.block
+                        if (block.type != material || block.data != data)
+                            setBlockInstantly(loc, material, data)
+                        newQueue -= loc
+                    }
                 }
+                queuedBlocks = newQueue
             }
         }
+    }
+
+    fun cancel() {
+        shouldPlace = false
+    }
+
+    fun flush() {
+        queuedBlocks.clear()
+    }
+
+    fun cancelAndFlush() {
+        cancel()
+        flush()
     }
 }

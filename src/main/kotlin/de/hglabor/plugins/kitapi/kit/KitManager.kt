@@ -10,7 +10,7 @@ object KitManager {
         //Counter,
         Digger,
         Domino,
-        //Lumberjack
+        Gladiator,
         Magma,
         Ninja,
         None,
@@ -23,6 +23,7 @@ object KitManager {
         Sponge,
         Squid,
         Stomper,
+        Ultimato,
         Viking,
         ZickZack,
     ).map { it.value }
