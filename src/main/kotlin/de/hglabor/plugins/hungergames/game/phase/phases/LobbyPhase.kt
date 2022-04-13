@@ -24,6 +24,7 @@ object LobbyPhase : GamePhase(240, InvincibilityPhase) {
 
     override fun incrementElapsedTime() {
         if (PlayerList.allPlayers.size >= 2) GameManager.elapsedTime.getAndIncrement()
+        else GameManager.elapsedTime.set(0)
     }
 
     override fun tick(tickCount: Int) {
