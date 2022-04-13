@@ -3,19 +3,25 @@ package de.hglabor.plugins.hungergames.game.phase
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.event.PlayerKilledEntityEvent
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.DeathMessages
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
+import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import java.util.concurrent.atomic.AtomicLong
 
 open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDuration, nextPhase) {
     override fun getTimeString(): String = ""
@@ -24,15 +30,23 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDu
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
-        player.hgPlayer.status = PlayerStatus.ELIMINATED
-        taskRunLater(1) { player.spigot().respawn() }
-        player.gameMode = GameMode.SPECTATOR
-        DeathMessages.announce(event)
 
         if (player.killer != null) {
+            val gulag = buildList<Player>{}.toMutableList()
             val killer = player.killer ?: return
-            killer.hgPlayer.kills.incrementAndGet()
-            Bukkit.getPluginManager().callEvent(PlayerKilledEntityEvent(killer, player))
+            if(!gulag.contains(player) && GameManager.elapsedTime.toInt() < 900) {
+                gulag.add(player)
+                Agnikai.queuePlayer(player)
+                player.hgPlayer.status = PlayerStatus.GULAG
+            }
+            else {
+                player.hgPlayer.status = PlayerStatus.ELIMINATED
+                taskRunLater(1) { player.spigot().respawn() }
+                player.gameMode = GameMode.SPECTATOR
+                DeathMessages.announce(event)
+                Bukkit.getPluginManager().callEvent(PlayerKilledEntityEvent(killer, player))
+            }
+
         }
     }
 

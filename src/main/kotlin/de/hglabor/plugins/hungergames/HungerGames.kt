@@ -2,15 +2,19 @@ package de.hglabor.plugins.hungergames
 
 import de.hglabor.plugins.hungergames.commands.FeastCommand
 import de.hglabor.plugins.hungergames.commands.KitCommand
+import de.hglabor.plugins.hungergames.commands.Queue
 import de.hglabor.plugins.hungergames.commands.StartCommand
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.*
 import de.hglabor.plugins.hungergames.game.mechanics.SoupHealing.register
 import net.axay.kspigot.chat.KColors
+import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.register
 import net.axay.kspigot.main.KSpigot
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.WorldCreator
 import java.util.*
 
 class HungerGames: KSpigot() {
@@ -23,6 +27,8 @@ class HungerGames: KSpigot() {
     }
 
     override fun startup() {
+        registerListeners()
+        this.getServer().createWorld(WorldCreator("arena"))
         registerMechanics()
         registerCommands()
         whitelistManager()
@@ -36,6 +42,7 @@ class HungerGames: KSpigot() {
         StartCommand.register("start")
         FeastCommand.register("feast")
         KitCommand.register("kit")
+        Queue.register("tpw")
         getCommand("kit").apply {
             executor = KitCommand
             tabCompleter = KitCommand
@@ -47,6 +54,7 @@ class HungerGames: KSpigot() {
     }
 
     private fun registerMechanics() {
+        Agnikai.register()
         GameManager.enable()
         SoupHealing.register()
         PlayerTracker.register()
