@@ -26,13 +26,13 @@ import java.util.concurrent.atomic.AtomicLong
 open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDuration, nextPhase) {
     override fun getTimeString(): String = ""
     override val timeName: String = ""
+    val gulag = buildList<Player>{}.toMutableList()
 
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
 
         if (player.killer != null) {
-            val gulag = buildList<Player>{}.toMutableList()
             val killer = player.killer ?: return
             //if(!gulag.contains(player) && GameManager.elapsedTime.toInt() < 900) {
             if(!gulag.contains(player)) {
