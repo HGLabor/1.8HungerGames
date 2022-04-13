@@ -1,7 +1,5 @@
 package de.hglabor.plugins.kitapi.implementation
 
-import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
