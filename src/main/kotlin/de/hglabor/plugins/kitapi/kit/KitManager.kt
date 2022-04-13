@@ -17,6 +17,7 @@ object KitManager {
         None,
         Perfect,
         Phantom,
+        Reaper,
         Redstoner,
         Revive,
         Snail,
