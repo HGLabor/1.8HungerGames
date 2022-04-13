@@ -41,7 +41,7 @@ class SpiderProperties : CooldownProperties(20000) {
     val climbVelocity by double(0.3)
 }
 
-val Spider = Kit("Spinne", ::SpiderProperties) {
+val Spider = Kit("Spider", ::SpiderProperties) {
     displayMaterial = Material.SPIDER_EYE
     val spiderSnowball = "spidersb"
 

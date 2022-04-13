@@ -78,5 +78,5 @@ class HungerGames: KSpigot() {
 
 val Manager by lazy { HungerGames.INSTANCE }
 val PrimaryColor = ChatColor.AQUA
-val SecondaryColor = ChatColor.DARK_GRAY
+val SecondaryColor = ChatColor.WHITE
 val Prefix = " ${KColors.DARKGRAY}| ${PrimaryColor}HGLabor ${KColors.DARKGRAY}» ${KColors.GRAY}"

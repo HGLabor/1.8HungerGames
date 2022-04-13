@@ -12,7 +12,7 @@ import org.bukkit.event.inventory.CraftItemEvent
 object RemoveFishingRod {
     fun register() {
         listen<CraftItemEvent> {
-            if (it.getRecipe().getResult().getType() == Material.FISHING_ROD) it.isCancelled;
+            if (it.getRecipe().getResult().getType() == Material.FISHING_ROD) it.isCancelled = true;
         }
     }
 }
