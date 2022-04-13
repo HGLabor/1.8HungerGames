@@ -69,6 +69,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
                         setLore {
                             + "${ChatColor.DARK_PURPLE}Kititem"
                         }
+                        spigot().isUnbreakable = true
                         addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
                         addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                     }
