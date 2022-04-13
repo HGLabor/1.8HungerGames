@@ -205,6 +205,7 @@ val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem
         if (!rightClicked.hgPlayer.isAlive) return@clickOnEntityItem
         if (it.player.hasMark("inGladi") || rightClicked.hasMark("inGladi")) return@clickOnEntityItem
+        if (it.player.hasMark("inUltimato") || rightClicked.hasMark("inUltimato")) return@clickOnEntityItem
         if (!hasCooldown(it.player)) {
             GladiatorInstance(it.player, rightClicked)
         }
