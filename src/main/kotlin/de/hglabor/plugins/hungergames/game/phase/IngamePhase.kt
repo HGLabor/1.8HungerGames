@@ -34,7 +34,8 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDu
         if (player.killer != null) {
             val gulag = buildList<Player>{}.toMutableList()
             val killer = player.killer ?: return
-            if(!gulag.contains(player) && GameManager.elapsedTime.toInt() < 900) {
+            //if(!gulag.contains(player) && GameManager.elapsedTime.toInt() < 900) {
+            if(!gulag.contains(player)) {
                 gulag.add(player)
                 Agnikai.queuePlayer(player)
                 player.hgPlayer.status = PlayerStatus.GULAG
