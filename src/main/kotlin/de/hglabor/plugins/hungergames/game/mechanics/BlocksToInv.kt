@@ -12,6 +12,8 @@ object BlocksToInv {
                 Material.LOG,
                 Material.LOG_2,
                 Material.COBBLESTONE,
+                Material.RED_MUSHROOM,
+                Material.BROWN_MUSHROOM,
                 Material.STONE -> {
                     val player = it.player
                     if (player.inventory.contents.any { block -> block == null || block.type == Material.AIR }) {

@@ -10,10 +10,11 @@ object KitManager {
         //Counter,
         Digger,
         Domino,
+        //Lumberjack
         Magma,
         Ninja,
         None,
-        Perfect,
+        //Perfect,
         Phantom,
         Redstoner,
         Revive,

@@ -3,9 +3,12 @@ package de.hglabor.plugins.kitapi.implementation
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
+import org.bukkit.Effect
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 
 class ReviveProperties : CooldownProperties(50000)
@@ -20,6 +23,18 @@ val Revive = Kit("Revive", ::ReviveProperties) {
                 // TODO cool animation or sound?
             }
         }
+        player.addPotionEffects(
+            listOf(
+                PotionEffect(
+                    PotionEffectType.ABSORPTION,
+                    100, 2
+                ),
+                PotionEffect(PotionEffectType.REGENERATION, 900, 2),
+                PotionEffect(PotionEffectType.FIRE_RESISTANCE, 800, 1)
+
+
+            )
+        )
     }
 }
 
