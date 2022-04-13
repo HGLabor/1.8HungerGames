@@ -2,6 +2,7 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.RecraftInspector
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
@@ -42,7 +43,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
             60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most kills wins in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
         }
         // Winner
-        if (PlayerList.alivePlayers.size == 1) {
+        if (PlayerList.alivePlayers.size == 1 && Agnikai.queuedPlayers.size <= 1) {
             GameManager.startNextPhase()
         }
     }
