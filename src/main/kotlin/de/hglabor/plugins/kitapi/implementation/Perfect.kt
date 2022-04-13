@@ -14,7 +14,7 @@ class PerfectProperties : KitProperties() {
 }
 
 val Perfect = Kit("Perfect", ::PerfectProperties)  {
-    var displayMaterial = Material.RABBIT_STEW
+    displayMaterial = Material.RABBIT_STEW
 
     val perfectSoupHolder = HashMap<UUID, Int>()
     kitPlayerEvent<PlayerSoupEvent>({ it.player }) { it, player ->
