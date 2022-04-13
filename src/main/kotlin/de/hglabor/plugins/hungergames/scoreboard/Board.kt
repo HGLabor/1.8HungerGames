@@ -26,7 +26,7 @@ class Board(var updatingPeriod: Long = 20L) {
     }
 
     private fun startRunnable() {
-        task(false, 20L, updatingPeriod) {
+        task(true, 20L, updatingPeriod) {
             updateBoard()
         }
     }
