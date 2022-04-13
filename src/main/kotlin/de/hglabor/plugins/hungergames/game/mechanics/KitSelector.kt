@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
+import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitManager
@@ -15,13 +16,18 @@ import net.axay.kspigot.items.name
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.material.MaterialData
+import java.lang.reflect.Field
+import java.util.*
 
 object KitSelector {
     val kitSelectorItem = itemStack(Material.CHEST) { meta { name = "${SecondaryColor}Kit Selector" } }
     val gui = kSpigotGUI(GUIType.FIVE_BY_NINE) {
         title = "${SecondaryColor}Kitselector"
         page(1) {
-            val compound = createRectCompound<Kit<*>>(Slots.RowTwoSlotTwo, Slots.RowFourSlotEight,
+            val compound = createRectCompound<Kit<*>>(Slots.RowOneSlotTwo, Slots.RowFiveSlotEight,
                 iconGenerator = { kit ->
                     kit.internal.displayItem.clone().apply {
                         meta {
@@ -36,6 +42,24 @@ object KitSelector {
                     clickEvent.player.closeInventory()
                 })
             compound.sortContentBy { kit -> kit.properties.kitname }
+            compoundScroll(
+                Slots.RowFiveSlotFive,
+                itemStack(Material.STAINED_GLASS_PANE) {
+                    data = MaterialData(Material.STAINED_GLASS_PANE, 5)
+                    meta {
+                        name = "${PrimaryColor}Next"
+                    }
+                }, compound, 7 * 4, reverse = true
+            )
+            compoundScroll(
+                Slots.RowOneSlotFive,
+                itemStack(Material.STAINED_GLASS_PANE) {
+                    data = MaterialData(Material.STAINED_GLASS_PANE, 14)
+                    meta {
+                        name = "${PrimaryColor}Previous"
+                    }
+                }, compound, 7 * 4
+            )
             compound.setContent(KitManager.kits)
         }
     }
