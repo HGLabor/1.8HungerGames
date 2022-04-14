@@ -22,8 +22,10 @@ val Perfect = Kit("Perfect", ::PerfectProperties)  {
             var perfectSoups = perfectSoupHolder.getOrPut(player.uniqueId) { 0 } + 1
 
             if (perfectSoups == this.kit.properties.soupsForReward) {
-                player.inventory.addItem(ItemStack(Material.MUSHROOM_SOUP, this.kit.properties.soupsAsReward))
-                perfectSoups = 0;
+                repeat(kit.properties.soupsAsReward) {
+                    player.inventory.addItem(ItemStack(Material.MUSHROOM_SOUP))
+                }
+                perfectSoups = 0
             }
             perfectSoupHolder[player.uniqueId] = perfectSoups
         } else {
