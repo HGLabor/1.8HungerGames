@@ -72,6 +72,9 @@ class HungerGames: KSpigot() {
         Bukkit.getOfflinePlayer(UUID.fromString("50bf6931-e149-4743-9210-92cd58d85c5d")).apply { //TAITO
             isWhitelisted = true; isOp = true
         }
+        Bukkit.getOfflinePlayer(UUID.fromString("c5346b93-d9de-4600-8b37-83b62faa5cbc")).apply { //QOCH
+            isWhitelisted = true; isOp = true
+        }
     }
 }
 
