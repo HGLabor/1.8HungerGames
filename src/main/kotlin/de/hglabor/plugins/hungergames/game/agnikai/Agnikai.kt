@@ -16,12 +16,12 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 
 
 object Agnikai {
     var isOpen = true
-    val wasInAgnikai = mutableListOf<HGPlayer>()
     val queuedPlayers = mutableListOf<HGPlayer>()
     val currentlyFighting = mutableListOf<HGPlayer>()
     var task: KSpigotRunnable? = null
@@ -31,7 +31,7 @@ object Agnikai {
         player.teleport(Location(Bukkit.getWorld("arena"), 0.0, 0.0, 0.0))
         player.hgPlayer.status = PlayerStatus.GULAG
         queuedPlayers += player.hgPlayer
-        wasInAgnikai += player.hgPlayer
+        player.hgPlayer.wasInAgnikai = true
     }
 
     private fun startNewMatch() {
@@ -40,7 +40,7 @@ object Agnikai {
             currentlyFighting.addAll(queuedPlayers.take(2))
             queuedPlayers.removeAll(currentlyFighting)
 
-            broadcast("Now fighting: ${currentlyFighting.joinToString()}")
+            broadcast("Now fighting: ${currentlyFighting.joinToString { it.name } }")
 
             currentlyFighting.forEach { fighting ->
                 fighting.bukkitPlayer?.give(ItemStack(Material.STONE_SWORD))
@@ -62,10 +62,7 @@ object Agnikai {
         listen<PlayerDeathEvent> {
             if (it.entity.world != Bukkit.getWorld("arena")) return@listen
             if (it.entity.hgPlayer !in currentlyFighting) return@listen
-            val winner = currentlyFighting.first { op -> op != it.entity.hgPlayer }
-            currentlyFighting.clear()
-            broadcast("${ChatColor.GREEN}${it.entity.name} lost against ${winner.name}")
-            winner.makeGameReady()
+            endFight(it.entity)
         }
 
         listen<EntityDamageByEntityEvent> {
@@ -82,5 +79,25 @@ object Agnikai {
                 return@listen
             }
         }
+
+        listen<PlayerQuitEvent> {
+            val player = it.player
+            if(player.world != Bukkit.getWorld("arena")) return@listen
+            if (player.hgPlayer in queuedPlayers) {
+                player.hgPlayer.status = PlayerStatus.ELIMINATED
+                queuedPlayers.remove(player.hgPlayer)
+            }
+
+            if (player.hgPlayer in currentlyFighting) {
+                endFight(player)
+            }
+        }
+    }
+
+    private fun endFight(loser: Player) {
+        val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
+        currentlyFighting.clear()
+        broadcast("${ChatColor.GREEN}${loser.name} lost against ${winner.name}")
+        winner.makeGameReady()
     }
 }

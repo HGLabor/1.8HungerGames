@@ -31,7 +31,7 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
 
-        if (player.hgPlayer.status == PlayerStatus.INGAME && Agnikai.isOpen && player.hgPlayer !in Agnikai.wasInAgnikai) {
+        if (player.hgPlayer.status == PlayerStatus.INGAME && Agnikai.isOpen && !player.hgPlayer.wasInAgnikai) {
             Agnikai.queuePlayer(player)
         } else {
             player.hgPlayer.status = PlayerStatus.ELIMINATED

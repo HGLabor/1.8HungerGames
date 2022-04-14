@@ -30,13 +30,13 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     //TODO var combatLogMob: UUID? = null
     var offlineTime: AtomicInteger = AtomicInteger(120)
 
-    //var hasBeenRevived: Boolean = false
     var kills: AtomicInteger = AtomicInteger(0)
     var isInCombat = false
     val recraft = Recraft()
     var board: Board? = null
     var kit: Kit<*> = None.value
     var isKitEnabled = true
+    var wasInAgnikai: Boolean = false
 
     fun login() {
         OfflineTimer.stopTimer(this)
