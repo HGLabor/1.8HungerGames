@@ -7,6 +7,7 @@ import de.hglabor.plugins.hungergames.player.hgPlayer
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.give
+import net.axay.kspigot.extensions.bukkit.title
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import org.bukkit.Bukkit
@@ -19,11 +20,11 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 
-
 object Agnikai {
     var isOpen = true
     val queuedPlayers = mutableListOf<HGPlayer>()
     val currentlyFighting = mutableListOf<HGPlayer>()
+    var timer = -3
     var task: KSpigotRunnable? = null
 
     fun queuePlayer(player: Player) {
@@ -39,18 +40,45 @@ object Agnikai {
         if (queuedPlayers.size >= 2) {
             currentlyFighting.addAll(queuedPlayers.take(2))
             queuedPlayers.removeAll(currentlyFighting)
+            broadcast("Now fighting: ${currentlyFighting.joinToString { it.name }}")
+            giveKits()
+            timer = -3
+        }
+    }
 
-            broadcast("Now fighting: ${currentlyFighting.joinToString { it.name } }")
-
-            currentlyFighting.forEach { fighting ->
-                fighting.bukkitPlayer?.give(ItemStack(Material.STONE_SWORD))
+    private fun giveKits() {
+        currentlyFighting.forEach { fighting ->
+            fighting.bukkitPlayer?.give(ItemStack(Material.STONE_SWORD))
+            repeat(8) {
+                fighting.bukkitPlayer?.give(ItemStack(Material.MUSHROOM_SOUP))
             }
         }
     }
 
     fun register() {
         task = task(true, 20, 20) {
-            startNewMatch()
+            if (currentlyFighting.isEmpty()) {
+                startNewMatch()
+            } else {
+                if (timer < 0) {
+                    currentlyFighting.forEach { fighting ->
+                        fighting.bukkitPlayer?.title(
+                            when (-timer) {
+                                3 -> "${ChatColor.RED}3"
+                                2 -> "${ChatColor.YELLOW}2"
+                                1 -> "${ChatColor.DARK_GREEN}1"
+                                else -> "${ChatColor.GREEN}Go!"
+                            }
+                        )
+                    }
+                }
+
+                if (timer == 60) {
+                    endFight(null)
+                } else {
+                    timer.inc()
+                }
+            }
 
             if (isOpen && GameManager.elapsedTime.toInt() > 900) {
                 isOpen = false
@@ -66,7 +94,7 @@ object Agnikai {
         }
 
         listen<EntityDamageByEntityEvent> {
-            if(it.entity.world != Bukkit.getWorld("arena")) return@listen
+            if (it.entity.world != Bukkit.getWorld("arena")) return@listen
             val entity = it.entity
             val damager = it.damager
             if (entity !is Player || damager !is Player) {
@@ -74,7 +102,7 @@ object Agnikai {
                 return@listen
             }
 
-            if (entity.hgPlayer !in currentlyFighting || damager.hgPlayer !in currentlyFighting) {
+            if (entity.hgPlayer !in currentlyFighting || damager.hgPlayer !in currentlyFighting || timer < 0) {
                 it.isCancelled = true
                 return@listen
             }
@@ -82,7 +110,7 @@ object Agnikai {
 
         listen<PlayerQuitEvent> {
             val player = it.player
-            if(player.world != Bukkit.getWorld("arena")) return@listen
+            if (player.world != Bukkit.getWorld("arena")) return@listen
             if (player.hgPlayer in queuedPlayers) {
                 player.hgPlayer.status = PlayerStatus.ELIMINATED
                 queuedPlayers.remove(player.hgPlayer)
@@ -94,10 +122,14 @@ object Agnikai {
         }
     }
 
-    private fun endFight(loser: Player) {
-        val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
+    private fun endFight(loser: Player?) {
+        if (loser != null) {
+            val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
+            broadcast("${ChatColor.GREEN}${loser.name} lost against ${winner.name}")
+            winner.makeGameReady()
+        } else {
+            broadcast("${ChatColor.RED}Current Agnikai fight timed out. Removing ${currentlyFighting.joinToString { it.name }}")
+        }
         currentlyFighting.clear()
-        broadcast("${ChatColor.GREEN}${loser.name} lost against ${winner.name}")
-        winner.makeGameReady()
     }
 }
