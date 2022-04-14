@@ -13,6 +13,7 @@ import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
 
@@ -29,9 +30,14 @@ object Agnikai {
 
     fun register() {
         listen<PlayerDeathEvent> {
-            if(!queuedPlayers.contains(it.entity.killer) || it.entity.killer !is Player || it.entity !is Player) return@listen
+            if(!queuedPlayers.contains(it.entity.killer) || it.entity.killer !is Player) return@listen
             queuedPlayers.remove(it.entity.killer)
             it.entity.killer.hgPlayer.makeGameReady()
+        }
+        listen<EntityDamageByEntityEvent> {
+            if(it.entity !is Player) return@listen
+            if(it.entity.world != Bukkit.getWorld("arena")) return@listen
+            it.isCancelled = true
         }
     }
 
