@@ -23,6 +23,9 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 
 object Agnikai {
+    val world = Bukkit.getWorld("arena").apply {
+        setGameRuleValue("doMobSpawnIng", "false")
+    }
     var isOpen = true
     val queuedPlayers = mutableListOf<HGPlayer>()
     val currentlyFighting = mutableListOf<HGPlayer>()
@@ -31,7 +34,7 @@ object Agnikai {
 
     fun queuePlayer(player: Player) {
         player.spigot().respawn()
-        player.teleport(Location(Bukkit.getWorld("arena"), 0.0, 0.0, 0.0))
+        player.teleport(Location(world, 20.0, 0.0, 0.0))
         player.hgPlayer.status = PlayerStatus.GULAG
         queuedPlayers += player.hgPlayer
         player.hgPlayer.wasInAgnikai = true
@@ -66,9 +69,12 @@ object Agnikai {
 
     private fun giveKits() {
         currentlyFighting.forEach { fighting ->
-            fighting.bukkitPlayer?.give(ItemStack(Material.STONE_SWORD))
-            repeat(8) {
-                fighting.bukkitPlayer?.give(ItemStack(Material.MUSHROOM_SOUP))
+            fighting.bukkitPlayer?.let { player ->
+                player.teleport(Location(world, 0.0, 0.0, 0.0))
+                player.give(ItemStack(Material.STONE_SWORD))
+                repeat(8) {
+                    player.give(ItemStack(Material.MUSHROOM_SOUP))
+                }
             }
         }
     }
