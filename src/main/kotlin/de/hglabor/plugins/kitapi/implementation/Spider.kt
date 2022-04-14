@@ -59,11 +59,7 @@ val Spider = Kit("Spider", ::SpiderProperties) {
     }
 
     // Spiderman abilities
-    clickableItem(ItemStack(Material.WEB)) {
-        if (GameManager.phase == InvincibilityPhase) {
-            it.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
-            return@clickableItem
-        }
+    clickableItem(ItemStack(Material.WEB), useInInvincibility = false) {
         applyCooldown(it) {
             val player = it.player
 

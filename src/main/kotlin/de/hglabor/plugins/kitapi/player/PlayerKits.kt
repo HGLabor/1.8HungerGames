@@ -3,6 +3,7 @@ package de.hglabor.plugins.kitapi.player
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.kit.*
@@ -27,7 +28,11 @@ object PlayerKits {
                 if (playerKit.properties.kitname != kitKey) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is ClickableKitItem) {
-                    kitItem.onClick.invoke(event)
+                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
+                        kitItem.onClick.invoke(event)
+                    } else {
+                        event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
+                    }
                 }
             }
         }
@@ -41,7 +46,11 @@ object PlayerKits {
                 if (playerKit.properties.kitname != kitKey) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is ClickOnEntityKitItem) {
-                    kitItem.onClick.invoke(event)
+                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
+                        kitItem.onClick.invoke(event)
+                    } else {
+                        event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
+                    }
                 }
             }
         }
@@ -55,7 +64,11 @@ object PlayerKits {
                 if (playerKit.properties.kitname != kitKey) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is PlaceableKitItem) {
-                    kitItem.onBlockPlace.invoke(event)
+                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
+                        kitItem.onBlockPlace.invoke(event)
+                    } else {
+                        event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
+                    }
                 } else {
                     event.isCancelled = true
                 }

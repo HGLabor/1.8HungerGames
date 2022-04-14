@@ -43,8 +43,8 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      * and executed the [onClick] callback when the player
      * interacts using the item.
      */
-    fun clickableItem(stack: ItemStack, onClick: (PlayerInteractEvent) -> Unit) {
-        kit.internal.items[currentItemId++] = ClickableKitItem(stack, onClick)
+    fun clickableItem(stack: ItemStack, useInInvincibility: Boolean = true, onClick: (PlayerInteractEvent) -> Unit) {
+        kit.internal.items[currentItemId++] = ClickableKitItem(stack, useInInvincibility, onClick)
     }
 
     /**
@@ -52,8 +52,8 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      * and executed the [onClick] callback when the player
      * interacts with another entity using the item.
      */
-    fun clickOnEntityItem(stack: ItemStack, onClick: (PlayerInteractAtEntityEvent) -> Unit) {
-        kit.internal.items[currentItemId++] = ClickOnEntityKitItem(stack, onClick)
+    fun clickOnEntityItem(stack: ItemStack, useInInvincibility: Boolean = true, onClick: (PlayerInteractAtEntityEvent) -> Unit) {
+        kit.internal.items[currentItemId++] = ClickOnEntityKitItem(stack, useInInvincibility, onClick)
     }
 
     /**
@@ -61,8 +61,8 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
      * and executed the [onClick] callback when the player
      * places the item.
      */
-    fun placeableItem(stack: ItemStack, onBuild: (BlockPlaceEvent) -> Unit) {
-        kit.internal.items[currentItemId++] = PlaceableKitItem(stack, onBuild)
+    fun placeableItem(stack: ItemStack, useInInvincibility: Boolean = true, onBuild: (BlockPlaceEvent) -> Unit) {
+        kit.internal.items[currentItemId++] = PlaceableKitItem(stack, useInInvincibility, onBuild)
     }
 
     /**

@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
-sealed class KitItem {
+sealed class KitItem(open val useInInvincibility: Boolean = true) {
     abstract val stack: ItemStack
 }
 
@@ -15,16 +15,19 @@ class SimpleKitItem(override val stack: ItemStack) : KitItem()
 
 class ClickableKitItem(
     override val stack: ItemStack,
+    override val useInInvincibility: Boolean = true,
     val onClick: (PlayerInteractEvent) -> Unit,
 ) : KitItem()
 
 class ClickOnEntityKitItem(
     override val stack: ItemStack,
+    override val useInInvincibility: Boolean = true,
     val onClick: (PlayerInteractAtEntityEvent) -> Unit,
 ) : KitItem()
 
 class PlaceableKitItem(
     override val stack: ItemStack,
+    override val useInInvincibility: Boolean = true,
     val onBlockPlace: (BlockPlaceEvent) -> Unit,
 ) : KitItem()
 
