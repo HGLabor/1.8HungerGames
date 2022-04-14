@@ -9,6 +9,7 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.feedSaturate
 import net.axay.kspigot.extensions.bukkit.heal
+import net.axay.kspigot.extensions.onlinePlayers
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -23,9 +24,15 @@ object Agnikai {
     val queuedPlayers = buildList<Player>{}.toMutableList()
 
     fun queuePlayer(player: Player) {
-        queuedPlayers.add(player)
         player.spigot().respawn()
         player.teleport(Location(Bukkit.getWorld("arena"), 0.0, 0.0, 0.0))
+        while(queuedPlayers.size <= 2) {
+            val players = onlinePlayers.sortedBy { (it.hgPlayer.status == PlayerStatus.GULAG)}.toMutableList()
+            val randomPlayer = players.random()
+            queuedPlayers.add(randomPlayer)
+            randomPlayer.teleport(Location(Bukkit.getWorld("arena"), 0.0, 5.0, 0.0))
+            broadcast("${queuedPlayers[0]} vs ${queuedPlayers[1]}")
+        }
     }
 
     fun register() {
@@ -35,7 +42,7 @@ object Agnikai {
             it.entity.killer.hgPlayer.makeGameReady()
         }
         listen<EntityDamageByEntityEvent> {
-            if(it.damager is Player) return@listen
+            if(it.damager !is Player) return@listen
             if(it.entity.world != Bukkit.getWorld("arena")) return@listen
             it.isCancelled = true
         }
