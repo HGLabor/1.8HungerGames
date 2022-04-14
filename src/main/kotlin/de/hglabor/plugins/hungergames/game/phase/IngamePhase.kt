@@ -23,31 +23,25 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.concurrent.atomic.AtomicLong
 
-open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDuration, nextPhase) {
+open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxDuration, nextPhase) {
     override fun getTimeString(): String = ""
     override val timeName: String = ""
-    val gulag = buildList<Player>{}.toMutableList()
 
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
 
-        if (player.killer != null) {
-            val killer = player.killer ?: return
-            //if(!gulag.contains(player) && GameManager.elapsedTime.toInt() < 900) {
-            if(!gulag.contains(player)) {
-                gulag.add(player)
-                Agnikai.queuePlayer(player)
-                player.hgPlayer.status = PlayerStatus.GULAG
-            }
-            else {
-                player.hgPlayer.status = PlayerStatus.ELIMINATED
-                taskRunLater(1) { player.spigot().respawn() }
-                player.gameMode = GameMode.SPECTATOR
-                DeathMessages.announce(event)
+        if (player.hgPlayer.status == PlayerStatus.INGAME && Agnikai.isOpen && player.hgPlayer !in Agnikai.wasInAgnikai) {
+            Agnikai.queuePlayer(player)
+        } else {
+            player.hgPlayer.status = PlayerStatus.ELIMINATED
+            taskRunLater(1) { player.spigot().respawn() }
+            player.gameMode = GameMode.SPECTATOR
+            DeathMessages.announce(event)
+            if (event.entity.killer != null) {
+                val killer = event.entity.killer
                 Bukkit.getPluginManager().callEvent(PlayerKilledEntityEvent(killer, player))
             }
-
         }
     }
 
