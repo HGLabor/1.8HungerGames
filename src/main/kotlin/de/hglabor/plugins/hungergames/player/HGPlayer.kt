@@ -40,10 +40,10 @@ open class HGPlayer(val uuid: UUID, val name: String) {
 
     fun login() {
         OfflineTimer.stopTimer(this)
-        setScoreboard()
+        setGameScoreboard()
     }
 
-    private fun setScoreboard(forceReset: Boolean = false) {
+    private fun setGameScoreboard(forceReset: Boolean = false) {
         val player = bukkitPlayer ?: return
         if (board != null && !forceReset) {
             board!!.setScoreboard(player)
@@ -55,10 +55,10 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             period = 4
             content {
                 +" "
-                +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players: ${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
-                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit: ${ChatColor.WHITE}${kit.properties.kitname}" }
-                +{ "${ChatColor.RED}${ChatColor.BOLD}Kills: ${ChatColor.WHITE}${kills.get()}" }
-                +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}: ${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
+                +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
+                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${ChatColor.WHITE}${kit.properties.kitname}" }
+                +{ "${ChatColor.RED}${ChatColor.BOLD}Kills:#${ChatColor.WHITE}${kills.get()}" }
+                +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
                 +" "
             }
         }
