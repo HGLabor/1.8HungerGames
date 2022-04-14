@@ -43,7 +43,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
             60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most kills wins in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
         }
         // Winner
-        if (PlayerList.alivePlayers.size == 1 && Agnikai.queuedPlayers.size <= 1) {
+        if (PlayerList.alivePlayers.size == 1) {
             GameManager.startNextPhase()
         }
     }
