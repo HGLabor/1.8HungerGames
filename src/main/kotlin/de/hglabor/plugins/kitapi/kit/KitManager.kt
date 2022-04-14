@@ -20,7 +20,7 @@ object KitManager {
         Sponge,
         Squid,
         Stomper,
-        TobleroneKit,
+        Toblerone,
         ZickZack,
     ).map { it.value }
 }
