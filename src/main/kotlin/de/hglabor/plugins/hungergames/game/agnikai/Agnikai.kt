@@ -2,8 +2,10 @@ package de.hglabor.plugins.hungergames.game.agnikai
 
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.player.HGPlayer
+import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.give
@@ -33,6 +35,22 @@ object Agnikai {
         player.hgPlayer.status = PlayerStatus.GULAG
         queuedPlayers += player.hgPlayer
         player.hgPlayer.wasInAgnikai = true
+
+        player.setScoreboard {
+            title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
+            period = 4
+            content {
+                +" "
+                +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
+                +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
+                +" "
+                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Waiting:#${ChatColor.WHITE}${queuedPlayers.size}" }
+                +{ "${ChatColor.RED}${ChatColor.BOLD}Fighting:#" }
+                +{ "  - ${ChatColor.LIGHT_PURPLE}${ChatColor.BOLD}${currentlyFighting.getOrElse(0) { "None" }}" }
+                +{ "  - ${ChatColor.DARK_PURPLE}${ChatColor.BOLD}${currentlyFighting.getOrElse(1) { "None" }}" }
+                +" "
+            }
+        }
     }
 
     private fun startNewMatch() {
@@ -123,6 +141,7 @@ object Agnikai {
     }
 
     private fun endFight(loser: Player?) {
+        currentlyFighting.forEach { it.setGameScoreboard(true) }
         if (loser != null) {
             val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
             broadcast("${ChatColor.GREEN}${loser.name} lost against ${winner.name}")
