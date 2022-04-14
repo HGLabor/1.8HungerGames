@@ -20,6 +20,7 @@ object KitManager {
         Reaper,
         Redstoner,
         Revive,
+        Smoothyy,
         Snail,
         Spider,
         Sponge,
