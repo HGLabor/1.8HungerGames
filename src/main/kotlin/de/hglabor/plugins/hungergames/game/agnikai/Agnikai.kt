@@ -17,7 +17,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
 
 
-object Agnikai  {
+object Agnikai {
     private val plugin: HungerGames? = null
     val queuedPlayers = buildList<Player>{}.toMutableList()
 
@@ -29,7 +29,7 @@ object Agnikai  {
 
     fun register() {
         listen<PlayerDeathEvent> {
-            //if(!queuedPlayers.contains(it.entity.killer) || it.entity !is Player) return@listen
+            if(!queuedPlayers.contains(it.entity.killer) && it.entity !is Player) return@listen
             queuedPlayers.remove(it.entity.killer)
             it.entity.killer.hgPlayer.makeGameReady()
         }
