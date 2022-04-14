@@ -67,6 +67,7 @@ object PlayerKits {
                     if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
                         kitItem.onBlockPlace.invoke(event)
                     } else {
+                        event.isCancelled = true
                         event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
                     }
                 } else {
