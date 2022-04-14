@@ -24,11 +24,12 @@ object LobbyPhase : GamePhase(240, InvincibilityPhase) {
 
     override fun incrementElapsedTime() {
         if (PlayerList.allPlayers.size >= 2) GameManager.elapsedTime.getAndIncrement()
+        else GameManager.elapsedTime.set(0)
     }
 
     override fun tick(tickCount: Int) {
         when (remainingTime.toInt()) {
-            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The tournament starts in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
+            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The HungerGames are starting in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
         }
     }
 

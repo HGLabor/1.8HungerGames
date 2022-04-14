@@ -19,3 +19,5 @@ inline fun <P : CooldownProperties> KitBuilder<P>.applyCooldown(player: Player, 
 
 inline fun <P : CooldownProperties> KitBuilder<P>.applyCooldown(event: PlayerEvent, block: CooldownScope.() -> Unit) =
     event.applyCooldown(kit.properties.cooldownInstance, block)
+
+inline fun <P : CooldownProperties> KitBuilder<P>.hasCooldown(player: Player) = CooldownManager.hasCooldown(kit.properties.cooldownInstance, player)

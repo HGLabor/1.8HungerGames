@@ -5,6 +5,7 @@ import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.extensions.events.isRightClick
+import net.axay.kspigot.extensions.geometry.add
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Material
@@ -37,7 +38,7 @@ val Blink = Kit("Blink", ::BlinkProperties) {
         if (!it.action.isRightClick) return@clickableItem
         applyCooldown(it) {
             val player = it.player
-            val toLocation = player.location.add(player.location.direction.normalize().multiply(kit.properties.distance))
+            val toLocation = player.location.add(player.location.direction.normalize().multiply(kit.properties.distance)).add(0.0, 0.5, 0.0)
             if (toLocation.isSafe()) {
                 player.teleport(toLocation)
                 player.playSound(player.location, Sound.FIREWORK_LAUNCH, 100f, 100f)

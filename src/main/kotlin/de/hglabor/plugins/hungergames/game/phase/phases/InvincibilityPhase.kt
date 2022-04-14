@@ -23,7 +23,7 @@ object InvincibilityPhase: IngamePhase(120, PvPPhase) {
 
     override fun tick(tickCount: Int) {
         when (remainingTime.toInt()) {
-            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The invincibility ends in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
+            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The invincibility period ends in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
         }
     }
 

@@ -2,6 +2,7 @@ package de.hglabor.plugins.hungergames.game.mechanics.feast
 
 import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.utils.BlockQueue
 import de.hglabor.plugins.hungergames.utils.RandomCollection
 import de.hglabor.plugins.hungergames.utils.TimeConverter
@@ -174,7 +175,7 @@ class Feast(val world: World) : Listener {
 
     private fun getCenterString(): String? {
         val loc = feastCenter ?: return null
-        return "${ChatColor.WHITE}${loc.blockX}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.blockY}${ChatColor.DARK_GRAY}, ${ChatColor.WHITE}${loc.blockZ}${ChatColor.DARK_GRAY}"
+        return "${SecondaryColor}${loc.blockX}${ChatColor.DARK_GRAY}, ${SecondaryColor}${loc.blockY}${ChatColor.DARK_GRAY}, ${SecondaryColor}${loc.blockZ}${ChatColor.DARK_GRAY}"
     }
 
     private fun getTimeString(): String {

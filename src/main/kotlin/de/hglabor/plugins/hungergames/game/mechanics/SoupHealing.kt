@@ -1,6 +1,5 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
-import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.event.PlayerSoupEvent
 import net.axay.kspigot.event.listen
 import org.bukkit.Bukkit
@@ -18,7 +17,7 @@ object SoupHealing {
                 if (health >= maxHealth - 0.4 && foodLevel == 20) return@listen
                 Bukkit.getPluginManager().callEvent(PlayerSoupEvent(this))
                 health = min(maxHealth, health + 7)
-                foodLevel += 6
+                foodLevel = min(foodLevel, foodLevel + 6)
                 itemInHand.type = Material.BOWL
             }
         }

@@ -1,8 +1,7 @@
 package de.hglabor.plugins.kitapi.implementation
 
-import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import org.bukkit.Material
@@ -35,7 +34,7 @@ val Magma = Kit("Magma", ::MagmaProperties) {
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, EventPriority.HIGH, false) { it, damager ->
         if (it.isCancelled) return@kitPlayerEvent
         val entity = it.entity
-        if ((0..100).random() <= kit.properties.likelihood) {
+        if (ChanceUtils.roll(kit.properties.likelihood)) {
             if (entity is Player) {
                 if (!entity.hgPlayer.isAlive) return@kitPlayerEvent
             }

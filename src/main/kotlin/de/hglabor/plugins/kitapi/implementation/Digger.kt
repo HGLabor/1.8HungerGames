@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack
 import java.awt.Container
 
 class DiggerProperties : CooldownProperties(12000) {
-    val radius by int(6)
+    val radius by int(3)
 }
 
 val Digger = Kit("Digger", ::DiggerProperties) {
@@ -38,11 +38,7 @@ val Digger = Kit("Digger", ::DiggerProperties) {
             }
         }
 
-    placeableItem(ItemStack(Material.DRAGON_EGG)) {
-        if (GameManager.phase == InvincibilityPhase) {
-            it.player.sendMessage("${Prefix}You can't use this kit while during the grace period.")
-            return@placeableItem
-        }
+    placeableItem(ItemStack(Material.DRAGON_EGG), useInInvincibility = false) {
         it.isCancelled = true
         applyCooldown(it.player) {
             val radius = kit.properties.radius

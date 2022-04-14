@@ -1,7 +1,10 @@
 package de.hglabor.plugins.kitapi.kit
 
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.kitapi.cooldown.CooldownManager
+import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
 import net.axay.kspigot.event.listen
@@ -11,9 +14,9 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.reflect.KFunction0
 
 open class Kit<P : KitProperties> private constructor(val key: String, val properties: P) {
 
@@ -66,10 +69,23 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
                         setLore {
                             + "${ChatColor.DARK_PURPLE}Kititem"
                         }
+                        spigot().isUnbreakable = true
+                        addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+                        addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                     }
                 }
                 if (!player.inventory.contains(kitItemStack))
                     player.inventory.addItem(kitItemStack)
+            }
+            val board = player.hgPlayer.board ?: return
+            if (properties is CooldownProperties) {
+                board.apply {
+                    addLineBelow { "${SecondaryColor}${ChatColor.BOLD}Cooldown: ${ChatColor.WHITE}${CooldownManager.getRemainingCooldown(properties.cooldownInstance, player)}" }
+                    if (properties is MultipleUsesCooldownProperties) {
+                        addLineBelow { "${ChatColor.GRAY}${ChatColor.BOLD}Uses: ${ChatColor.WHITE}${properties.usesMap[player.uniqueId]}/${properties.uses}" }
+                    }
+                    addLineBelow(" ")
+                }
             }
         }
     }

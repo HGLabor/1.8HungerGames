@@ -16,6 +16,7 @@ class PlayerSoupEvent(player: Player) : PlayerEvent(player) {
 
     override fun getHandlers(): HandlerList {
         return HANDLERS
-
     }
+
+    val overhealed: Boolean = player.health + 7 > player.maxHealth
 }
