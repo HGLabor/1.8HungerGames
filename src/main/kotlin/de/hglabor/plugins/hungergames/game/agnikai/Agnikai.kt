@@ -30,6 +30,7 @@ object Agnikai {
         player.spigot().respawn()
         player.teleport(Location(Bukkit.getWorld("arena"), 0.0, 0.0, 0.0))
         player.hgPlayer.status = PlayerStatus.GULAG
+        queuedPlayers += player.hgPlayer
         wasInAgnikai += player.hgPlayer
     }
 
