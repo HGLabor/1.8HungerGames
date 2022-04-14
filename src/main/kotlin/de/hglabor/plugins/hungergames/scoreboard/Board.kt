@@ -118,7 +118,7 @@ class Board(var updatingPeriod: Long = 20L) {
             team = scoreboard.getTeam("$index") ?: scoreboard.registerNewTeam("$index")
             entry = entry(index)
             team.addEntry(entry)
-            val (pre, suf) = text.split(" ")
+            val (pre, suf) = text.split("#")
             team.prefix = pre
             team.suffix = " $suf"
             objective.getScore(entry).score = index
@@ -129,7 +129,7 @@ class Board(var updatingPeriod: Long = 20L) {
         }
 
         fun update() {
-            val (pre, suf) = text.split(" ")
+            val (pre, suf) = text.split("#")
             team.prefix = pre
             team.suffix = " $suf"
         }

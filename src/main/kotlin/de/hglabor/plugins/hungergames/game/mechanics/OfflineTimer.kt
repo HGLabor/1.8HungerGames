@@ -39,7 +39,7 @@ object OfflineTimer {
     }
 
     fun stopTimer(hgPlayer: HGPlayer) {
-        if (hgPlayer.status == PlayerStatus.OFFLINE) {
+        if (hgPlayer.status == PlayerStatus.OFFLINE || hgPlayer.status == PlayerStatus.INGAME) {
             offlinePlayers[hgPlayer.uuid]?.cancel()
             offlinePlayers.remove(hgPlayer.uuid)
             hgPlayer.status = PlayerStatus.INGAME
