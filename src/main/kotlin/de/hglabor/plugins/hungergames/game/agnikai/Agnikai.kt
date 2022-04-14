@@ -29,7 +29,7 @@ object Agnikai {
 
     fun register() {
         listen<PlayerDeathEvent> {
-            if(!queuedPlayers.contains(it.entity.killer) || it.entity !is Player) return@listen
+            if(!queuedPlayers.contains(it.entity.killer) || it.entity.killer !is Player) return@listen
             queuedPlayers.remove(it.entity.killer)
             it.entity.killer.hgPlayer.makeGameReady()
         }
