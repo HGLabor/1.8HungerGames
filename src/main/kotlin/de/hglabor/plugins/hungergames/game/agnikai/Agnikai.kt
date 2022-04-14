@@ -26,13 +26,6 @@ object Agnikai {
     fun queuePlayer(player: Player) {
         player.spigot().respawn()
         player.teleport(Location(Bukkit.getWorld("arena"), 0.0, 0.0, 0.0))
-        while(queuedPlayers.size <= 2) {
-            val players = onlinePlayers.sortedBy { (it.hgPlayer.status == PlayerStatus.GULAG)}.toMutableList()
-            val randomPlayer = players.random()
-            queuedPlayers.add(randomPlayer)
-            randomPlayer.teleport(Location(Bukkit.getWorld("arena"), 0.0, 5.0, 0.0))
-            broadcast("${queuedPlayers[0]} vs ${queuedPlayers[1]}")
-        }
     }
 
     fun register() {
@@ -40,6 +33,14 @@ object Agnikai {
             if(!queuedPlayers.contains(it.entity.killer) || it.entity.killer !is Player) return@listen
             queuedPlayers.remove(it.entity.killer)
             it.entity.killer.hgPlayer.makeGameReady()
+            if(queuedPlayers.size/2 == 0) queuedPlayers.forEach{it.sendMessage("Waiting for player")}
+            while(queuedPlayers.size <= 2) {
+                val players = onlinePlayers.sortedBy { (it.hgPlayer.status == PlayerStatus.GULAG)}.toMutableList()
+                val randomPlayer = players.random()
+                queuedPlayers.add(randomPlayer)
+                randomPlayer.teleport(Location(Bukkit.getWorld("arena"), 0.0, 5.0, 0.0))
+                broadcast("${queuedPlayers[0]} vs ${queuedPlayers[1]}")
+            }
         }
         listen<EntityDamageByEntityEvent> {
             if(it.damager !is Player) return@listen
