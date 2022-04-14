@@ -35,7 +35,7 @@ object Agnikai {
             it.entity.killer.hgPlayer.makeGameReady()
         }
         listen<EntityDamageByEntityEvent> {
-            if(it.entity !is Player) return@listen
+            if(it.damager !is Player) return@listen
             if(it.entity.world != Bukkit.getWorld("arena")) return@listen
             it.isCancelled = true
         }
