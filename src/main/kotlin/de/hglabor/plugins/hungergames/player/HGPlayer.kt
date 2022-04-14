@@ -43,9 +43,9 @@ open class HGPlayer(val uuid: UUID, val name: String) {
         setScoreboard()
     }
 
-    private fun setScoreboard() {
+    private fun setScoreboard(forceReset: Boolean = false) {
         val player = bukkitPlayer ?: return
-        if (board != null) {
+        if (board != null && !forceReset) {
             board!!.setScoreboard(player)
             return
         }
