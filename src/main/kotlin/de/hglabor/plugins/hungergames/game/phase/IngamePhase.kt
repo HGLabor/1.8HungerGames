@@ -8,20 +8,15 @@ import de.hglabor.plugins.hungergames.game.mechanics.DeathMessages
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
-import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.Location
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import java.util.concurrent.atomic.AtomicLong
 
 open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxDuration, nextPhase) {
     override fun getTimeString(): String = ""
@@ -40,7 +35,8 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
             DeathMessages.announce(event)
         }
         if (event.entity.killer != null) {
-            val killer = event.entity.killer
+            val killer = event.entity.killer ?: return
+            killer.hgPlayer.kills.incrementAndGet()
             Bukkit.getPluginManager().callEvent(PlayerKilledEntityEvent(killer, player))
         }
     }
