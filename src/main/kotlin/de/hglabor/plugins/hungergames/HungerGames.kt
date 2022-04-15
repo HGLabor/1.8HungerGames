@@ -6,7 +6,6 @@ import de.hglabor.plugins.hungergames.commands.StartCommand
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.*
-import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.extensions.bukkit.register
 import net.axay.kspigot.main.KSpigot
 import org.bukkit.Bukkit
@@ -25,7 +24,7 @@ class HungerGames: KSpigot() {
 
     override fun startup() {
         registerListeners()
-        this.getServer().createWorld(WorldCreator("arena"))
+        this.server.createWorld(WorldCreator("arena"))
         registerMechanics()
         registerCommands()
         whitelistManager()
@@ -81,13 +80,10 @@ class HungerGames: KSpigot() {
         Bukkit.getOfflinePlayer(UUID.fromString("c5346b93-d9de-4600-8b37-83b62faa5cbc")).apply { //QOCH
             isWhitelisted = true; isOp = true
         }
-        Bukkit.getOfflinePlayer(UUID.fromString("c5346b93-d9de-4600-8b37-83b62faa5cbc")).apply { //QOCH
-            isWhitelisted = true; isOp = true
-        }
     }
 }
 
 val Manager by lazy { HungerGames.INSTANCE }
 val PrimaryColor = ChatColor.DARK_PURPLE
 val SecondaryColor = ChatColor.LIGHT_PURPLE
-val Prefix = " ${KColors.DARKGRAY}| ${PrimaryColor}HGLabor ${KColors.DARKGRAY}» ${KColors.GRAY}"
+val Prefix = " ${ChatColor.DARK_GRAY}| ${PrimaryColor}HGLabor ${ChatColor.DARK_GRAY}» ${ChatColor.GRAY}"

@@ -2,7 +2,6 @@ package de.hglabor.plugins.hungergames.game
 
 import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.Prefix
-import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
@@ -12,7 +11,6 @@ import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.title
@@ -76,20 +74,20 @@ object GameManager {
         when (phase) {
             LobbyPhase -> {
                 when (LobbyPhase.remainingTime.toInt()) {
-                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The HungerGames are starting in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The HungerGames are starting in ${ChatColor.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
                     0 -> onlinePlayers.forEach { it.title("${SecondaryColor}gl hf") }
                 }
             }
 
             InvincibilityPhase -> {
                 when (InvincibilityPhase.remainingTime.toInt()) {
-                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The invincibility period ends in ${KColors.WHITE}${InvincibilityPhase.getTimeString()}${ChatColor.GRAY}.")
+                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The invincibility period ends in ${ChatColor.WHITE}${InvincibilityPhase.getTimeString()}${ChatColor.GRAY}.")
                 }
             }
 
             PvPPhase -> {
                 when (PvPPhase.remainingTime.toInt()) {
-                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most eliminations wins in ${KColors.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most eliminations wins in ${ChatColor.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
                 }
             }
         }

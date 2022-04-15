@@ -4,7 +4,6 @@ import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.hgPlayer
-import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.extensions.broadcast
 import org.bukkit.ChatColor
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -29,7 +28,7 @@ object DeathMessages {
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
         val deadText = "${ChatColor.RED}${dead.name} ${ChatColor.GRAY}(${ChatColor.DARK_RED}${dead.kit.properties.kitname}${ChatColor.GRAY})"
         val killerText = "${ChatColor.GREEN}${killer.name} ${ChatColor.GRAY}(${ChatColor.DARK_GREEN}${killer.kit.properties.kitname}${ChatColor.GRAY})"
-        val slainText = " ${KColors.GRAY}was eliminated by "
+        val slainText = " ${ChatColor.GRAY}was eliminated by "
         broadcast(Prefix + deadText + slainText + killerText)
     }
 
@@ -39,7 +38,7 @@ object DeathMessages {
     }
 
     private fun announce(dead: HGPlayer, deathMessage: String) {
-        val deadText = "${ChatColor.RED}${dead.name}${KColors.GRAY}"
+        val deadText = "${ChatColor.RED}${dead.name}${ChatColor.GRAY}"
         var message = deathMessage
         if (message.contains("was slain by")) {
             message = message.replace("was slain by", "was eliminated by${ChatColor.GREEN}")
