@@ -72,5 +72,8 @@ bukkit {
         register("feast") {
             description = "Point your compass towards the feast"
         }
+        register("revive") {
+            description = "Revive a player"
+        }
     }
 }

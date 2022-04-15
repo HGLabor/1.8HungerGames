@@ -37,6 +37,7 @@ class HungerGames: KSpigot() {
     private fun registerCommands() {
         StartCommand.register("start")
         FeastCommand.register("feast")
+        FeastCommand.register("revive")
         KitCommand.register("kit")
         getCommand("kit").apply {
             executor = KitCommand
@@ -72,6 +73,9 @@ class HungerGames: KSpigot() {
             isWhitelisted = true; isOp = true
         }
         Bukkit.getOfflinePlayer(UUID.fromString("e4ccbe7c-45ef-4194-b645-851f2002de89")).apply { //MOOZIII
+            isWhitelisted = true; isOp = true
+        }
+        Bukkit.getOfflinePlayer(UUID.fromString("50bf6931-e149-4743-9210-92cd58d85c5d")).apply { //TAITO
             isWhitelisted = true; isOp = true
         }
         Bukkit.getOfflinePlayer(UUID.fromString("6bf9509e-d439-4460-ad35-f61cc052baee")).apply { //TOBACKE
