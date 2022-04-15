@@ -1,14 +1,10 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
-import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.utils.TimeConverter
-import net.axay.kspigot.chat.KColors
-import net.axay.kspigot.extensions.broadcast
-import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
@@ -25,12 +21,6 @@ object LobbyPhase : GamePhase(240, InvincibilityPhase) {
     override fun incrementElapsedTime() {
         if (PlayerList.allPlayers.size >= 2) GameManager.elapsedTime.getAndIncrement()
         else GameManager.elapsedTime.set(0)
-    }
-
-    override fun tick(tickCount: Int) {
-        when (remainingTime.toInt()) {
-            60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The HungerGames are starting in ${KColors.WHITE}${getTimeString()}${ChatColor.GRAY}.")
-        }
     }
 
     @EventHandler
