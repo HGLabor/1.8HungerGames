@@ -13,6 +13,7 @@ object KitManager {
         Gladiator,
         Lumberjack,
         Magma,
+        Nightshade,
         Ninja,
         None,
         Perfect,

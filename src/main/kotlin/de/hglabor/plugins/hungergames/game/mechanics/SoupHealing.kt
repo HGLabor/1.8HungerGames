@@ -15,7 +15,7 @@ object SoupHealing {
                 if (it.action == Action.LEFT_CLICK_AIR) return@listen
                 if (itemInHand.type != Material.MUSHROOM_SOUP) return@listen
                 if (health >= maxHealth - 0.4 && foodLevel == 20) return@listen
-                Bukkit.getPluginManager().callEvent(PlayerSoupEvent(this))
+                Bukkit.getPluginManager().callEvent(PlayerSoupEvent(this, itemInHand))
                 health = min(maxHealth, health + 7)
                 foodLevel = min(foodLevel, foodLevel + 6)
                 itemInHand.type = Material.BOWL
