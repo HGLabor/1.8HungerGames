@@ -38,10 +38,10 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
             taskRunLater(1) { player.spigot().respawn() }
             player.gameMode = GameMode.SPECTATOR
             DeathMessages.announce(event)
-            if (event.entity.killer != null) {
-                val killer = event.entity.killer
-                Bukkit.getPluginManager().callEvent(PlayerKilledEntityEvent(killer, player))
-            }
+        }
+        if (event.entity.killer != null) {
+            val killer = event.entity.killer
+            Bukkit.getPluginManager().callEvent(PlayerKilledEntityEvent(killer, player))
         }
     }
 
