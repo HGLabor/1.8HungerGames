@@ -18,7 +18,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
 
     override fun tick(tickCount: Int) {
         // recraft nerf
-        if (tickCount % 5 == 0) recraftInspector.tick()
+        // if (tickCount % 5 == 0) recraftInspector.tick()
 
         // Bordershrink
         if ((maxDuration - GameManager.elapsedTime.get()).toInt() == 10 * 60) {
