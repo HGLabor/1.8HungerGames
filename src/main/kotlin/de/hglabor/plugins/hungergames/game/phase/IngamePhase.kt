@@ -27,7 +27,9 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
         val player = event.entity
 
         if (player.hgPlayer.status == PlayerStatus.INGAME && Agnikai.isOpen && !player.hgPlayer.wasInAgnikai) {
-            Agnikai.queuePlayer(player)
+            taskRunLater(1) {
+                Agnikai.queuePlayer(player)
+            }
         } else {
             player.hgPlayer.status = PlayerStatus.ELIMINATED
             taskRunLater(1) { player.spigot().respawn() }
