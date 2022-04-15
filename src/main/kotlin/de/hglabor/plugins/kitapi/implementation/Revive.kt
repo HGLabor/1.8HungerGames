@@ -30,11 +30,11 @@ val Revive = Kit("Revive", ::ReviveProperties) {
                 player.addPotionEffects(
                     listOf(
                         PotionEffect(PotionEffectType.REGENERATION, 10, 9),
-                        PotionEffect(PotionEffectType.ABSORPTION, 100, 1),
+                        PotionEffect(PotionEffectType.ABSORPTION, 200, 2),
                         PotionEffect(PotionEffectType.FIRE_RESISTANCE, 800, 0)
                     )
                 )
-                taskRunLater(10) {
+                taskRunLater(12) {
                     PotionEffect(PotionEffectType.REGENERATION, 790, 2)
                 }
 
