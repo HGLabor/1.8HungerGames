@@ -82,9 +82,9 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
             if (properties is CooldownProperties) {
                 board.apply {
                     addLineBelow("$PrimaryColor${ChatColor.BOLD}${properties.kitname}")
-                    addLineBelow { "  ${SecondaryColor}${ChatColor.BOLD}Cooldown:#${ChatColor.WHITE}${CooldownManager.getRemainingCooldown(properties.cooldownInstance, player)}" }
+                    addLineBelow { " ${ChatColor.GRAY}${SecondaryColor}${ChatColor.BOLD}Cooldown:#${ChatColor.WHITE}${CooldownManager.getRemainingCooldown(properties.cooldownInstance, player)}" }
                     if (properties is MultipleUsesCooldownProperties) {
-                        addLineBelow { "  ${ChatColor.GRAY}${ChatColor.BOLD}Uses:#${ChatColor.WHITE}${properties.usesMap[player.uniqueId]}/${properties.uses}" }
+                        addLineBelow { " ${ChatColor.GRAY}${ChatColor.BOLD}Uses:#${ChatColor.WHITE}${properties.usesMap[player.uniqueId]}/${properties.uses}" }
                     }
                     addLineBelow(" ")
                 }

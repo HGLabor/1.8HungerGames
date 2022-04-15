@@ -1,6 +1,7 @@
 package de.hglabor.plugins.hungergames.game.agnikai
 
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.PlayerStatus
@@ -10,17 +11,16 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.give
 import net.axay.kspigot.extensions.bukkit.title
+import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.Location
-import org.bukkit.Material
+import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
+import java.util.concurrent.atomic.AtomicInteger
 
 object Agnikai {
     val world = Bukkit.getWorld("arena").apply {
@@ -29,7 +29,7 @@ object Agnikai {
     var isOpen = true
     val queuedPlayers = mutableListOf<HGPlayer>()
     val currentlyFighting = mutableListOf<HGPlayer>()
-    var timer = -3
+    var timer = AtomicInteger(-3)
     var task: KSpigotRunnable? = null
 
     fun queuePlayer(player: Player) {
@@ -48,9 +48,9 @@ object Agnikai {
                 +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
                 +" "
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Waiting:#${ChatColor.WHITE}${queuedPlayers.size}" }
-                +{ "${ChatColor.RED}${ChatColor.BOLD}Fighting:#" }
-                +{ "  - ${ChatColor.LIGHT_PURPLE}${ChatColor.BOLD}${currentlyFighting.getOrElse(0) { "None" }}" }
-                +{ "  - ${ChatColor.DARK_PURPLE}${ChatColor.BOLD}${currentlyFighting.getOrElse(1) { "None" }}" }
+                +{ "${ChatColor.RED}${ChatColor.BOLD}Fighting:" }
+                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(0)?.name ?: "None" }" }
+                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(1)?.name ?: "None" }" }
                 +" "
             }
         }
@@ -63,14 +63,14 @@ object Agnikai {
             queuedPlayers.removeAll(currentlyFighting)
             broadcast("Now fighting: ${currentlyFighting.joinToString { it.name }}")
             giveKits()
-            timer = -3
+            timer.set(-3)
         }
     }
 
     private fun giveKits() {
         currentlyFighting.forEach { fighting ->
             fighting.bukkitPlayer?.let { player ->
-                player.teleport(Location(world, 0.0, 0.0, 0.0))
+                player.teleport(world.getHighestBlockAt(0, 0).location.add(0, 1, 0))
                 player.give(ItemStack(Material.STONE_SWORD))
                 repeat(8) {
                     player.give(ItemStack(Material.MUSHROOM_SOUP))
@@ -81,26 +81,35 @@ object Agnikai {
 
     fun register() {
         task = task(true, 20, 20) {
+            if (GameManager.phase == EndPhase) {
+                it.cancel()
+                task = null
+                return@task
+            }
+
             if (currentlyFighting.isEmpty()) {
                 startNewMatch()
             } else {
-                if (timer < 0) {
+                if (timer.get() <= 1) {
                     currentlyFighting.forEach { fighting ->
                         fighting.bukkitPlayer?.title(
-                            when (-timer) {
-                                3 -> "${ChatColor.RED}3"
-                                2 -> "${ChatColor.YELLOW}2"
-                                1 -> "${ChatColor.DARK_GREEN}1"
-                                else -> "${ChatColor.GREEN}Go!"
+                            when (timer.get()) {
+                                -3 -> "${ChatColor.RED}3"
+                                -2 -> "${ChatColor.YELLOW}2"
+                                -1 -> "${ChatColor.DARK_GREEN}1"
+                                0 -> "${ChatColor.GREEN}Go!"
+                                else -> " "
                             }
                         )
+
                     }
                 }
 
-                if (timer == 60) {
+                if (timer.get() == 60) {
                     endFight(null)
                 } else {
-                    timer.inc()
+                    timer.incrementAndGet()
+                    broadcast("${ChatColor.YELLOW}increment")
                 }
             }
 
@@ -126,7 +135,7 @@ object Agnikai {
                 return@listen
             }
 
-            if (entity.hgPlayer !in currentlyFighting || damager.hgPlayer !in currentlyFighting || timer < 0) {
+            if (entity.hgPlayer !in currentlyFighting || damager.hgPlayer !in currentlyFighting || timer.get() < 0) {
                 it.isCancelled = true
                 return@listen
             }
@@ -154,6 +163,11 @@ object Agnikai {
             winner.makeGameReady()
         } else {
             broadcast("${ChatColor.RED}Current Agnikai fight timed out. Removing ${currentlyFighting.joinToString { it.name }}")
+            currentlyFighting.forEach { fighting ->
+                fighting.bukkitPlayer?.inventory?.clear()
+                fighting.bukkitPlayer?.gameMode = GameMode.SPECTATOR
+                fighting.bukkitPlayer?.teleport(GameManager.world.spawnLocation.clone().add(0, 10, 0))
+            }
         }
         currentlyFighting.clear()
     }
