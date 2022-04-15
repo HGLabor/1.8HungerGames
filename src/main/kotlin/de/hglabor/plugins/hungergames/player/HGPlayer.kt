@@ -72,6 +72,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             inventory.addItem(ItemStack(Material.COMPASS))
             gameMode = GameMode.SURVIVAL
             closeInventory()
+            maxHealth = 20.0
             feedSaturate()
             heal()
             kit.internal.givePlayer(this)

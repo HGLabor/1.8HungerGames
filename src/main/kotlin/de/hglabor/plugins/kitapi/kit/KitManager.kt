@@ -19,7 +19,7 @@ object KitManager {
         Phantom,
         Reaper,
         Redstoner,
-        //Relaxo,
+        Relaxo,
         Revive,
         Smoothyy,
         Snail,
