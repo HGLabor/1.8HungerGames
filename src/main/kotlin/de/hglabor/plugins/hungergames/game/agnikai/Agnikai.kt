@@ -109,7 +109,6 @@ object Agnikai {
                     endFight(null)
                 } else {
                     timer.incrementAndGet()
-                    broadcast("${ChatColor.YELLOW}increment")
                 }
             }
 
@@ -161,6 +160,12 @@ object Agnikai {
             val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
             broadcast("${ChatColor.GREEN}${loser.name} lost against ${winner.name}")
             winner.makeGameReady()
+            winner.bukkitPlayer?.inventory?.apply {
+                addItem(ItemStack(Material.STONE_SWORD))
+                for (i in 0..35) {
+                    addItem(ItemStack(Material.MUSHROOM_SOUP))
+                }
+            }
         } else {
             broadcast("${ChatColor.RED}Current Agnikai fight timed out. Removing ${currentlyFighting.joinToString { it.name }}")
             currentlyFighting.forEach { fighting ->
