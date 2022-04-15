@@ -10,6 +10,7 @@ object KitManager {
         //Counter,
         Digger,
         Domino,
+        Endermage,
         Gladiator,
         Lumberjack,
         Magma,
