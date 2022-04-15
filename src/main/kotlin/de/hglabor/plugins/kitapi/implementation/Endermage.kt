@@ -1,6 +1,7 @@
 package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.utils.hasMark
 import de.hglabor.plugins.hungergames.utils.mark
 import de.hglabor.plugins.hungergames.utils.unmark
@@ -108,7 +109,7 @@ class EndermageSearch(mage: Player, val location: Location) {
                 player.teleport(location.clone().add(0.5, 1.0, 0.5))
                 whoMaged[player.uniqueId] = mageUUID
                 player.mark("wasMaged")
-                player.sendMessage("${Prefix}You have been ${ChatColor.LIGHT_PURPLE}maged${ChatColor.GRAY}! You are now ${ChatColor.WHITE}invulnerable ${ChatColor.GRAY}for ${ChatColor.WHITE}5 seconds${ChatColor.GRAY}.")
+                player.sendMessage("${Prefix}You have been ${SecondaryColor}maged${ChatColor.GRAY}! You are now ${ChatColor.WHITE}invulnerable ${ChatColor.GRAY}for ${ChatColor.WHITE}5 seconds${ChatColor.GRAY}.")
 
                 taskRunLater(5*20) {
                     if (whoMaged[entity.uniqueId] == mageUUID) {
