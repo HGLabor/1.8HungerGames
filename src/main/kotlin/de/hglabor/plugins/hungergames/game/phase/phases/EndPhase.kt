@@ -6,6 +6,7 @@ import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
+import de.hglabor.plugins.hungergames.player.hgPlayer
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.onlinePlayers
 import org.bukkit.*
@@ -22,6 +23,10 @@ object EndPhase : GamePhase(25, null) {
     override fun onStart() {
         val platformLoc = createWinningPlatform()
         winner = PlayerList.alivePlayers.singleOrNull() ?: PlayerList.alivePlayers.minByOrNull { it.kills.get() }!!
+
+        onlinePlayers.forEach {
+            it.hgPlayer.setGameScoreboard(true)
+        }
 
         onlinePlayers.filter { it != winner?.bukkitPlayer }.forEach {
             it.gameMode = GameMode.SPECTATOR

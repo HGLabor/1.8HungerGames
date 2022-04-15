@@ -37,7 +37,7 @@ object KitSelector {
                     clickEvent.player.chooseKit(kit)
                     clickEvent.player.closeInventory()
                 })
-            compound.sortContentBy { kit -> kit.properties.kitname }
+            compound.sortContentBy { kit -> kit.properties.kitname.lowercase() }
             compoundScroll(
                 Slots.RowThreeSlotNine,
                 ItemStack(Material.STAINED_GLASS_PANE, 1, 5).apply {
