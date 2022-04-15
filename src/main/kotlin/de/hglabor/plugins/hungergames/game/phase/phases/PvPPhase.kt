@@ -1,6 +1,5 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
-import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
@@ -9,9 +8,7 @@ import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
-import net.axay.kspigot.chat.KColors
 import net.axay.kspigot.extensions.broadcast
-import org.bukkit.ChatColor
 
 
 object PvPPhase : IngamePhase(1800, EndPhase) {
@@ -40,7 +37,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
         }
 
         // Winner
-        if (PlayerList.alivePlayers.size == 1) {
+        if (PlayerList.alivePlayers.size == 1 || (PlayerList.alivePlayers.size == 0 && Agnikai.queuedPlayers.size <= 1 && Agnikai.currentlyFighting.isEmpty())) {
             GameManager.startNextPhase()
         }
     }
