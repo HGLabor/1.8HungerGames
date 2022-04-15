@@ -57,6 +57,7 @@ class HungerGames: KSpigot() {
         RecraftRecipes.register()
         BlocksToInv.register()
         RemoveFishingRod.register()
+        NoInvDropOnClose.register()
     }
 
     private fun whitelistManager() {
