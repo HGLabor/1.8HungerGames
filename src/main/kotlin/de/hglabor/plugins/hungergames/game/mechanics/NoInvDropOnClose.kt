@@ -28,8 +28,10 @@ object NoInvDropOnClose {
                     if (itemStack == null || index == indexToIgnore)
                         return@forEachIndexed
 
-                    e.player.inventory.addItem(itemStack)
-                    itemStack.setMeta<ItemMeta> { displayName = IS_DEL_MARKER }
+                    val toDrop = e.player.inventory.addItem(itemStack)
+                    if (toDrop.isEmpty()) {
+                        itemStack.setMeta<ItemMeta> { displayName = IS_DEL_MARKER }
+                    }
                 }
             }
 
