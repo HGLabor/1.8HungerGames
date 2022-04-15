@@ -17,7 +17,7 @@ object SoupHealing {
                 if (health >= maxHealth - 0.4 && foodLevel == 20) return@listen
                 Bukkit.getPluginManager().callEvent(PlayerSoupEvent(this, itemInHand))
                 health = min(maxHealth, health + 7)
-                foodLevel = min(foodLevel, foodLevel + 6)
+                foodLevel = min(30, foodLevel + 6)
                 itemInHand.type = Material.BOWL
             }
         }
