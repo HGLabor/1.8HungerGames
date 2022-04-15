@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
+import de.hglabor.plugins.hungergames.utils.cancelFalldamage
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
@@ -28,10 +29,11 @@ val Phantom = Kit("Phantom", ::PhantomProperties) {
                 isFlying = true
 
                 val timer = AtomicInteger(kit.properties.flightTime)
-                task(false, 20, 20) { task ->
+                task(true, 20, 20) { task ->
                     val t = timer.getAndDecrement()
                     if (t == 0) {
                         task.cancel()
+                        cancelFalldamage(100, true)
                         allowFlight = false
                         isFlying = false
                         player.sendMessage("${Prefix}You are no longer able to fly.")

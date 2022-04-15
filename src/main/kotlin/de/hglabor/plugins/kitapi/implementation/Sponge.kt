@@ -3,25 +3,22 @@ package de.hglabor.plugins.kitapi.implementation
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.event.PlayerKilledEntityEvent
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.hungergames.utils.cancelFalldamage
 import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.items.meta
-import net.axay.kspigot.items.setLore
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import net.axay.kspigot.runnables.taskRunLater
 import net.axay.kspigot.utils.OnlinePlayerMap
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockFromToEvent
-import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
@@ -44,7 +41,6 @@ val Sponge = Kit("Sponge", ::SpongeProperties) {
 
     val waterBlocks = ArrayList<Block>()
     val waterTasks = OnlinePlayerMap<KSpigotRunnable?>()
-    val fallDamageTasks = OnlinePlayerMap<KSpigotRunnable?>()
 
     listen<BlockFromToEvent> {
         if (it.block.type == Material.WATER || it.block.type == Material.STATIONARY_WATER) {
@@ -99,22 +95,7 @@ val Sponge = Kit("Sponge", ::SpongeProperties) {
         // Sponge-block boost (launcher)
         if (player.location.block.getRelative(BlockFace.DOWN).type == Material.SPONGE) {
             player.velocity = Vector(0.0, player.getSpongeBoost(), 0.0)
-            fallDamageTasks[player]?.cancel()
-
-            fallDamageTasks[player] = task(true, 100, howOften = 1, endCallback = {
-                fallDamageTasks[player] = null
-            }) { }
-        }
-    }
-
-
-    listen<EntityDamageEvent> {
-        val player = it.entity as? Player ?: return@listen
-        if (it.cause != EntityDamageEvent.DamageCause.FALL) return@listen
-        if (fallDamageTasks[player] != null) {
-            it.isCancelled = true
-            fallDamageTasks[player]?.cancel()
-            fallDamageTasks[player] = null
+            player.cancelFalldamage(100, true)
         }
     }
 
