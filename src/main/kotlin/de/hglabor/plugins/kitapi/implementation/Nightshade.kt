@@ -9,7 +9,6 @@ import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.bukkit.give
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
 import net.axay.kspigot.runnables.taskRunLater
@@ -24,9 +23,9 @@ class NightshadeProperties  : CooldownProperties(20000) {
 }
 
 val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
-    displayMaterial = Material.NETHER_BRICK
+    displayMaterial = Material.NETHER_BRICK_ITEM
 
-    clickOnEntityItem(ItemStack(Material.NETHER_BRICK)) {
+    clickOnEntityItem(ItemStack(Material.NETHER_BRICK_ITEM)) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem
         applyCooldown(it) {
             if (rightClicked.hasMark("nightshadeHealth")) {
@@ -41,7 +40,7 @@ val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
                 val slot = (0..9)
                     .filter { s ->
                         val item = rightClicked.inventory.getItem(s)
-                        item.type == Material.MUSHROOM_SOUP && item.itemMeta.name != "Nightshade"
+                        item != null && item.type == Material.MUSHROOM_SOUP && item.itemMeta != null && item.itemMeta.name != "Nightshade"
                     }.randomOrNull()
 
                 if (slot != null) {

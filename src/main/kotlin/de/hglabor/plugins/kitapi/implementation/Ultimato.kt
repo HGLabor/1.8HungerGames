@@ -38,7 +38,7 @@ class UltimatoInstance(private val ultimato: Player) {
 
     val players = tempEntity
         .getNearbyEntities(Ultimato.value.properties.radius, 256.0, Ultimato.value.properties.radius)
-        .filterIsInstance<Player>().filterNot { it.hasMark("inGladi") }.onEach { it.mark("inUltimato") }
+        .filterIsInstance<Player>().filterNot { it.isInGladiator }.onEach { it.mark("inUltimato") }
 
     var particleTask: KSpigotRunnable? = null
     var arenaTask: KSpigotRunnable? = null
@@ -64,7 +64,7 @@ class UltimatoInstance(private val ultimato: Player) {
             val strength = Ultimato.value.properties.boostStrength
 
             for (entity in tempEntity.getNearbyEntities(radius + 0.5, 256.0, radius + 0.5)) {
-                if (entity.hasMark("inGladi")) continue
+                if ((entity as? Player ?: return@task).isInGladiator) continue
                 // TODO radius ist ein viereck sollte aber ein kreis sein aber ka wie :<
                     if (entity.location.distance(centerLocation) >= radius) {
                         val direction = centerLocation.toVector().subtract(entity.location.toVector()).normalize()
@@ -111,11 +111,11 @@ val Ultimato = Kit("Ultimato", ::UltimatoProperties) {
     displayItem = ItemStack(Material.STAINED_GLASS_PANE, 1, 14)
 
     clickableItem(ItemStack(Material.STAINED_GLASS_PANE, 1, 14)) {
-        if (it.player.hasMark("inUltimato") || it.player.hasMark("inGladi")) return@clickableItem
+        if (it.player.isInUltimato || it.player.isInGladiator) return@clickableItem
         val radius = kit.properties.radius
         if (it.player.getNearbyEntities(radius, 128.0, radius)
                 .filterIsInstance<Player>()
-                .filterNot { it.hasMark("inGladi") || it.hasMark("inUltimato") }
+                .filterNot { it.isInGladiator || it.isInUltimato }
                 .isEmpty()
         ) {
             it.player.sendMessage("${Prefix}There are no Players nearby.")
@@ -126,3 +126,5 @@ val Ultimato = Kit("Ultimato", ::UltimatoProperties) {
         }
     }
 }
+
+val Player.isInUltimato: Boolean get() = hasMark("inUltimato")

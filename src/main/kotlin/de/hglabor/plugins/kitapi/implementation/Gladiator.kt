@@ -204,8 +204,8 @@ val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
     clickOnEntityItem(ItemStack(Material.IRON_FENCE)) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem
         if (!rightClicked.hgPlayer.isAlive) return@clickOnEntityItem
-        if (it.player.hasMark("inGladi") || rightClicked.hasMark("inGladi")) return@clickOnEntityItem
-        if (it.player.hasMark("inUltimato") || rightClicked.hasMark("inUltimato")) return@clickOnEntityItem
+        if (it.player.isInGladiator || rightClicked.isInGladiator) return@clickOnEntityItem
+        if (it.player.isInUltimato || rightClicked.isInUltimato) return@clickOnEntityItem
         if (!hasCooldown(it.player)) {
             GladiatorInstance(it.player, rightClicked)
         }
@@ -258,3 +258,5 @@ val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
         stopGladi(gladi)
     }
 }
+
+val Player.isInGladiator: Boolean get() = hasMark("inGladi")
