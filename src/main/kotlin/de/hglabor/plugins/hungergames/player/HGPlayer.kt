@@ -11,6 +11,7 @@ import de.hglabor.plugins.kitapi.implementation.None
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.extensions.bukkit.feedSaturate
 import net.axay.kspigot.extensions.bukkit.heal
+import net.axay.kspigot.extensions.geometry.add
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -74,7 +75,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             feedSaturate()
             heal()
             kit.internal.givePlayer(this)
-            teleport(GameManager.world.spawnLocation)
+            teleport(GameManager.world.getHighestBlockAt(0, 0).location.add(0, 3, 0))
         }
     }
 
