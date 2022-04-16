@@ -20,6 +20,7 @@ object SoupHealing {
                 foodLevel = min(20, foodLevel + 6)
                 saturation = min(20f, saturation + 6)
                 itemInHand.type = Material.BOWL
+                updateInventory()
             }
         }
     }
