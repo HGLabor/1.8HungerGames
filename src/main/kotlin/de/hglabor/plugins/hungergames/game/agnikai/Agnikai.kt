@@ -24,7 +24,9 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
+import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import java.util.concurrent.atomic.AtomicInteger
@@ -65,8 +67,8 @@ object Agnikai {
                 +" "
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Waiting:#${ChatColor.WHITE}${queuedPlayers.size}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Fighting:#${ChatColor.WHITE}${fightDuration()}" }
-                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(0)?.name ?: "None"}" }
-                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(1)?.name ?: "None"}" }
+                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(0)?.name ?: "None"}".substring(0, 15) }
+                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(1)?.name ?: "None"}".substring(0, 15) }
                 +" "
             }
         }
@@ -225,6 +227,18 @@ object Agnikai {
 
         listen<EntitySpawnEvent> {
             if (it.entity !is LivingEntity) return@listen
+            if (it.entity.world == world) {
+                it.isCancelled = true
+            }
+        }
+
+        listen<PlayerDropItemEvent> {
+            if (it.player.world == world) {
+                it.isCancelled = true
+            }
+        }
+
+        listen<ItemSpawnEvent> {
             if (it.entity.world == world) {
                 it.isCancelled = true
             }
