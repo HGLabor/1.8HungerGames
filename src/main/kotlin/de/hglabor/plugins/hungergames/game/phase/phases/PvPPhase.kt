@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
+import com.mongodb.client.AggregateIterable
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
@@ -29,6 +30,8 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
     override fun tick(tickCount: Int) {
         // recraft nerf
         // if (tickCount % 5 == 0) recraftInspector.tick()
+
+        // Combat Timer
         PlayerList.alivePlayers.filter { it.isInCombat }.forEach { alive ->
             alive.combatTimer.decrementAndGet()
         }
@@ -50,7 +53,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
         }
 
         // Winner
-        if (PlayerList.alivePlayers.size == 1 || (PlayerList.alivePlayers.size == 0 && Agnikai.queuedPlayers.size <= 1 && Agnikai.currentlyFighting.isEmpty())) {
+        if (PlayerList.alivePlayers.size <= 1 && Agnikai.currentlyFighting.isEmpty() && Agnikai.queuedPlayers.size < 2) {
             GameManager.startNextPhase()
         }
     }
