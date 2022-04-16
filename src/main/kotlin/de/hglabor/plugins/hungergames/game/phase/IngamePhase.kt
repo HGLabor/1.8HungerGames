@@ -32,14 +32,17 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
         val player = event.entity
 
         if (player.hgPlayer.status == PlayerStatus.INGAME && Agnikai.isOpen && !player.hgPlayer.wasInAgnikai) {
+            DeathMessages.announce(event, true)
             taskRunLater(1) {
                 Agnikai.queuePlayer(player)
             }
         } else {
-            player.hgPlayer.status = PlayerStatus.ELIMINATED
             taskRunLater(1) { player.spigot().respawn() }
             player.gameMode = GameMode.SPECTATOR
-            DeathMessages.announce(event)
+            if (player.hgPlayer.status != PlayerStatus.GULAG) {
+                DeathMessages.announce(event, false)
+            }
+            player.hgPlayer.status = PlayerStatus.ELIMINATED
         }
         if (event.entity.killer != null) {
             val killer = event.entity.killer ?: return
