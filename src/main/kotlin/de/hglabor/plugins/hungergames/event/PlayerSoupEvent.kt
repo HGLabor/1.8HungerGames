@@ -3,8 +3,9 @@ package de.hglabor.plugins.hungergames.event
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
+import org.bukkit.inventory.ItemStack
 
-class PlayerSoupEvent(player: Player) : PlayerEvent(player) {
+class PlayerSoupEvent(player: Player, val soup: ItemStack) : PlayerEvent(player) {
 
     companion object {
         @JvmStatic
@@ -16,6 +17,7 @@ class PlayerSoupEvent(player: Player) : PlayerEvent(player) {
 
     override fun getHandlers(): HandlerList {
         return HANDLERS
-
     }
+
+    val overhealed: Boolean = player.health + 7 > player.maxHealth
 }

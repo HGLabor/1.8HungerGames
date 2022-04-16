@@ -1,9 +1,6 @@
 package de.hglabor.plugins.kitapi.implementation
 
-import de.hglabor.plugins.hungergames.Prefix
-import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
-import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
@@ -16,7 +13,7 @@ import org.bukkit.inventory.ItemStack
 import java.awt.Container
 
 class DiggerProperties : CooldownProperties(12000) {
-    val radius by int(5)
+    val radius by int(3)
 }
 
 val Digger = Kit("Digger", ::DiggerProperties) {
@@ -25,6 +22,7 @@ val Digger = Kit("Digger", ::DiggerProperties) {
     fun Block.isReplaceable(): Boolean =
         when {
             hasMetadata(Feast.BLOCK_KEY) -> false
+            hasMetadata("gladiBlock") -> false
             this is Container -> {
                 this.breakNaturally()
                 false
@@ -38,11 +36,7 @@ val Digger = Kit("Digger", ::DiggerProperties) {
             }
         }
 
-    placeableItem(ItemStack(Material.DRAGON_EGG)) {
-        if (GameManager.phase == InvincibilityPhase) {
-            it.player.sendMessage("${Prefix}You can't use this kit while during the grace period.")
-            return@placeableItem
-        }
+    placeableItem(ItemStack(Material.DRAGON_EGG), useInInvincibility = false) {
         it.isCancelled = true
         applyCooldown(it.player) {
             val radius = kit.properties.radius
@@ -50,7 +44,7 @@ val Digger = Kit("Digger", ::DiggerProperties) {
             taskRunLater(15, true) {
                 it.player.world.playSound(eggLocation, Sound.DIG_STONE, 1f, 1f)
                 for (x in -radius..radius) {
-                    for (y in -1 downTo -radius) {
+                    for (y in -1 downTo -radius*2) {
                         for (z in -radius..radius) {
                             val block = eggLocation.clone().add(x, y, z).block
                             if (!block.isReplaceable()) continue

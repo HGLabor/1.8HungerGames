@@ -1,16 +1,19 @@
-package de.hglabor.plugins.hungergames.player
+    package de.hglabor.plugins.hungergames.player
 
 import de.hglabor.plugins.hungergames.event.KitDisableEvent
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.Recraft
+import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
 import de.hglabor.plugins.kitapi.implementation.None
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.extensions.bukkit.feedSaturate
 import net.axay.kspigot.extensions.bukkit.heal
+import net.axay.kspigot.extensions.geometry.add
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -30,36 +33,40 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     //TODO var combatLogMob: UUID? = null
     var offlineTime: AtomicInteger = AtomicInteger(120)
 
-    //var hasBeenRevived: Boolean = false
     var kills: AtomicInteger = AtomicInteger(0)
-    var isInCombat = false
+    var combatTimer: AtomicInteger = AtomicInteger(0)
+    val isInCombat: Boolean
+        get() = combatTimer.get() > 0 && isAlive
     val recraft = Recraft()
     var board: Board? = null
     var kit: Kit<*> = None.value
     var isKitEnabled = true
+    var wasInAgnikai: Boolean = false
 
     fun login() {
+        OfflineTimer.stopTimer(this)
+        setGameScoreboard()
+    }
+
+    fun setGameScoreboard(forceReset: Boolean = false) {
         val player = bukkitPlayer ?: return
-        if (board != null) {
+        if (board != null && !forceReset) {
             board!!.setScoreboard(player)
             return
         }
 
         board = player.setScoreboard {
-            title = "${ChatColor.DARK_PURPLE}${ChatColor.BOLD}HGLabor"
-            period = 20
-            val p = "${ChatColor.LIGHT_PURPLE}"
+            title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
+            period = 4
             content {
                 +" "
-                +{ "${p}Players${ChatColor.DARK_GRAY}: ${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
-                +{ "${p}Kit${ChatColor.DARK_GRAY}: ${ChatColor.WHITE}${kit.properties.kitname}" }
-                +{ "${p}Kills${ChatColor.DARK_GRAY}: ${ChatColor.WHITE}${kills.get()}" }
-                +{ "${p}${GameManager.phase.timeName}${ChatColor.DARK_GRAY}: ${GameManager.phase.getTimeString()}" }
-                +" "
+                +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
+                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${ChatColor.WHITE}${kit.properties.kitname}" }
+                +{ "${ChatColor.RED}${ChatColor.BOLD}Kills:#${ChatColor.WHITE}${kills.get()}" }
+                +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
+                +{ if (isInCombat) "${ChatColor.RED}${ChatColor.BOLD}IN COMBAT" else " " }
             }
         }
-
-        OfflineTimer.stopTimer(this)
     }
 
     fun makeGameReady() {
@@ -69,10 +76,16 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             inventory.addItem(ItemStack(Material.COMPASS))
             gameMode = GameMode.SURVIVAL
             closeInventory()
+            maxHealth = 20.0
             feedSaturate()
             heal()
-            kit.internal.givePlayer(this)
-            teleport(GameManager.world.spawnLocation)
+            if (kit == None.value && GameManager.phase == InvincibilityPhase) {
+                inventory.addItem(KitSelector.kitSelectorItem)
+            } else {
+                kit.internal.givePlayer(this)
+            }
+            hgPlayer.combatTimer.set(0)
+            teleport(GameManager.world.getHighestBlockAt(0, 0).location.add(0, 3, 0))
         }
     }
 

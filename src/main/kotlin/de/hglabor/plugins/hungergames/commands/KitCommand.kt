@@ -1,6 +1,7 @@
 package de.hglabor.plugins.hungergames.commands
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
@@ -42,7 +43,7 @@ object KitCommand : CommandExecutor, TabCompleter {
 
         if (args.size != 1) {
             player.openGUI(KitSelector.gui)
-            sender.sendMessage("${Prefix}Please use ${ChatColor.WHITE}/kit ${ChatColor.GRAY}<${ChatColor.LIGHT_PURPLE}Kit${ChatColor.GRAY}>.")
+            sender.sendMessage("${Prefix}Please use ${ChatColor.WHITE}/kit ${ChatColor.GRAY}<${SecondaryColor}Kit${ChatColor.GRAY}>.")
             return false
         }
 

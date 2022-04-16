@@ -31,10 +31,7 @@ dependencies {
     compileOnly("org.spigotmc", "spigot-api", "$mcVersion-R0.1-SNAPSHOT")
 
     // KSpigot
-    implementation(files("/libs/KSpigot-1.8.0.jar"))
-
-    // HGLaborUtils
-    implementation("de.hglabor", "hglabor-utils", "1.17.1_v3") //We don't use any version specific code
+    implementation(files("libs/KSpigot-1.8.0.jar"))
 
     // KMONGO
     implementation("org.litote.kmongo", "kmongo", "4.5.1")
@@ -74,6 +71,9 @@ bukkit {
         }
         register("feast") {
             description = "Point your compass towards the feast"
+        }
+        register("revive") {
+            description = "Revive a player"
         }
     }
 }

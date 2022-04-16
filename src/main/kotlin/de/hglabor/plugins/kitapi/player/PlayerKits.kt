@@ -1,22 +1,20 @@
 package de.hglabor.plugins.kitapi.player
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
+import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
-import de.hglabor.plugins.kitapi.kit.ClickableKitItem
-import de.hglabor.plugins.kitapi.kit.Kit
-import de.hglabor.plugins.kitapi.kit.PlaceableKitItem
-import de.hglabor.plugins.kitapi.kit.isKitItem
+import de.hglabor.plugins.kitapi.kit.*
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.broadcast
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.ItemSpawnEvent
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 object PlayerKits {
@@ -31,7 +29,29 @@ object PlayerKits {
                 if (playerKit.properties.kitname != kitKey) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is ClickableKitItem) {
-                    kitItem.onClick.invoke(event)
+                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
+                        kitItem.onClick.invoke(event)
+                    } else {
+                        event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
+                    }
+                }
+            }
+        }
+
+        listen<PlayerInteractAtEntityEvent> { event ->
+            val item = event.player.itemInHand ?: return@listen
+            val hgPlayer = event.player.hgPlayer
+            val playerKit = hgPlayer.kit
+            if (item.isKitItem) {
+                val kitKey = item.itemMeta.displayName.split("${ChatColor.DARK_PURPLE}").last()
+                if (playerKit.properties.kitname != kitKey) return@listen
+                val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
+                if (kitItem is ClickOnEntityKitItem) {
+                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
+                        kitItem.onClick.invoke(event)
+                    } else {
+                        event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
+                    }
                 }
             }
         }
@@ -45,7 +65,14 @@ object PlayerKits {
                 if (playerKit.properties.kitname != kitKey) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is PlaceableKitItem) {
-                    kitItem.onBlockPlace.invoke(event)
+                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
+                        kitItem.onBlockPlace.invoke(event)
+                    } else {
+                        event.isCancelled = true
+                        event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
+                    }
+                } else {
+                    event.isCancelled = true
                 }
             }
         }
@@ -88,8 +115,12 @@ object PlayerKits {
 
     fun Player.chooseKit(kit: Kit<*>) {
         hgPlayer.kit = kit
-        sendMessage("${Prefix}You chose the kit ${ChatColor.LIGHT_PURPLE}${kit.properties.kitname}${ChatColor.GRAY}.")
+        sendMessage("${Prefix}You chose the kit ${SecondaryColor}${kit.properties.kitname}${ChatColor.GRAY}.")
         if (GameManager.phase != LobbyPhase)
             kit.internal.givePlayer(this)
+
+        if (GameManager.phase == InvincibilityPhase) {
+            inventory.remove(KitSelector.kitSelectorItem)
+        }
     }
 }

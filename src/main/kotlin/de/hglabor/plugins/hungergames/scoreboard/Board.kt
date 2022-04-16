@@ -118,9 +118,14 @@ class Board(var updatingPeriod: Long = 20L) {
             team = scoreboard.getTeam("$index") ?: scoreboard.registerNewTeam("$index")
             entry = entry(index)
             team.addEntry(entry)
-            val (pre, suf) = text.split(" ")
-            team.prefix = pre
-            team.suffix = " $suf"
+            if (text.contains('#')) {
+                val (pre, suf) = text.split("#")
+                team.prefix = pre
+                team.suffix = " $suf"
+            } else {
+                team.prefix = text
+                team.suffix = ""
+            }
             objective.getScore(entry).score = index
         }
 
@@ -129,9 +134,14 @@ class Board(var updatingPeriod: Long = 20L) {
         }
 
         fun update() {
-            val (pre, suf) = text.split(" ")
-            team.prefix = pre
-            team.suffix = " $suf"
+            if (text.contains('#')) {
+                val (pre, suf) = text.split("#")
+                team.prefix = pre
+                team.suffix = " $suf"
+            } else {
+                team.prefix = text
+                team.suffix = ""
+            }
         }
 
         fun set(textCallback: () -> String) {
