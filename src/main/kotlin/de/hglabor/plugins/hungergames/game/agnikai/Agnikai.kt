@@ -181,6 +181,8 @@ object Agnikai {
             if (player.hgPlayer in queuedPlayers) {
                 player.hgPlayer.status = PlayerStatus.ELIMINATED
                 queuedPlayers.remove(player.hgPlayer)
+                player.teleport(GameManager.world.spawnLocation)
+                player.gameMode = GameMode.SPECTATOR
             }
 
             if (player.hgPlayer in currentlyFighting) {
