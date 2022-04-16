@@ -51,6 +51,7 @@ object Agnikai {
         player.hgPlayer.status = PlayerStatus.GULAG
         queuedPlayers += player.hgPlayer
         player.hgPlayer.wasInAgnikai = true
+        player.inventory.clear()
 
         player.setScoreboard {
             title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
