@@ -3,6 +3,7 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
+import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.RecraftInspector
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
@@ -10,6 +11,7 @@ import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
 import net.axay.kspigot.extensions.broadcast
+import net.axay.kspigot.extensions.onlinePlayers
 import org.bukkit.ChatColor
 
 
@@ -17,6 +19,12 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
     //private val recraftInspector: RecraftInspector = RecraftInspector()
     override val timeName = "Time"
     override fun getTimeString() = TimeConverter.stringify((GameManager.elapsedTime.get()).toInt())
+
+    override fun onStart() {
+        onlinePlayers.forEach { player ->
+            player.inventory.remove(KitSelector.kitSelectorItem)
+        }
+    }
 
     override fun tick(tickCount: Int) {
         // recraft nerf

@@ -3,8 +3,10 @@
 import de.hglabor.plugins.hungergames.event.KitDisableEvent
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.Recraft
+import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
 import de.hglabor.plugins.kitapi.implementation.None
@@ -77,7 +79,11 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             maxHealth = 20.0
             feedSaturate()
             heal()
-            kit.internal.givePlayer(this)
+            if (kit == None.value && GameManager.phase == InvincibilityPhase) {
+                inventory.addItem(KitSelector.kitSelectorItem)
+            } else {
+                kit.internal.givePlayer(this)
+            }
             hgPlayer.combatTimer.set(0)
             teleport(GameManager.world.getHighestBlockAt(0, 0).location.add(0, 3, 0))
         }

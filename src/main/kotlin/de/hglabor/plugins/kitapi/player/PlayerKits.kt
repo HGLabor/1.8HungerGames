@@ -3,6 +3,7 @@ package de.hglabor.plugins.kitapi.player
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
@@ -117,5 +118,9 @@ object PlayerKits {
         sendMessage("${Prefix}You chose the kit ${SecondaryColor}${kit.properties.kitname}${ChatColor.GRAY}.")
         if (GameManager.phase != LobbyPhase)
             kit.internal.givePlayer(this)
+
+        if (GameManager.phase == InvincibilityPhase) {
+            inventory.remove(KitSelector.kitSelectorItem)
+        }
     }
 }
