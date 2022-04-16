@@ -9,8 +9,11 @@ import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.RecraftInspector
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
+import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
+import de.hglabor.plugins.kitapi.implementation.None
+import de.hglabor.plugins.kitapi.kit.KitManager
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.onlinePlayers
 import org.bukkit.ChatColor
@@ -24,6 +27,10 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
     override fun onStart() {
         onlinePlayers.forEach { player ->
             player.inventory.remove(KitSelector.kitSelectorItem)
+            if (player.hgPlayer.kit == None) {
+                player.hgPlayer.kit = KitManager.kits.random()
+                player.hgPlayer.kit.internal.givePlayer(player)
+            }
         }
     }
 
