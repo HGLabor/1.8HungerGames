@@ -8,10 +8,12 @@ import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.kitapi.kit.isKitItem
 import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
@@ -61,5 +63,10 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase): GamePhase(maxDu
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
         OfflineTimer.putAndStartTimer(event.player.hgPlayer)
+    }
+
+    @EventHandler
+    fun onPlayerCraftItem(event: CraftItemEvent) {
+        event.isCancelled = event.inventory.contents.any { it.isKitItem }
     }
 }
