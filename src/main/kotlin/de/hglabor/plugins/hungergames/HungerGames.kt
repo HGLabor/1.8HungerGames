@@ -66,6 +66,7 @@ class HungerGames: KSpigot() {
         NoInvDropOnClose.register()
         MoreDurability.register()
         MushroomCowNerf.register()
+        HungerNerf.register()
     }
 
     private fun whitelistManager() {
