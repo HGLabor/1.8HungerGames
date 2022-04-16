@@ -6,6 +6,7 @@ import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import net.axay.kspigot.extensions.broadcast
+import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.ChatColor
 import org.bukkit.event.entity.PlayerDeathEvent
 
@@ -26,8 +27,9 @@ object DeathMessages {
                 announce(hgPlayer)
             }
         }
-        if (PlayerList.alivePlayers.size > 1)
+        taskRunLater(2) {
             announcePlayerCount(enteredAgnikai)
+        }
     }
 
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
