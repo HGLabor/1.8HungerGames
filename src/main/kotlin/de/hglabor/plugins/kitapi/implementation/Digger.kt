@@ -46,7 +46,7 @@ val Digger = Kit("Digger", ::DiggerProperties) {
             taskRunLater(15, true) {
                 it.player.world.playSound(eggLocation, Sound.DIG_STONE, 1f, 1f)
                 for (x in -radius..radius) {
-                    for (y in -1 downTo -radius) {
+                    for (y in -1 downTo -radius*2) {
                         for (z in -radius..radius) {
                             val block = eggLocation.clone().add(x, y, z).block
                             if (!block.isReplaceable()) continue
