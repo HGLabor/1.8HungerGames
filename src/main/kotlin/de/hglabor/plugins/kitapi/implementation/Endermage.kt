@@ -89,7 +89,6 @@ class EndermageSearch(mage: Player, val location: Location) {
     }
 
     private fun startSearching() {
-        broadcast("start searching")
         task = task(true, 0, 10) {
             val radius = Endermage.value.properties.searchRadius
             val tempEntity = tempEntity ?: return@task
