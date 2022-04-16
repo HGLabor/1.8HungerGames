@@ -77,11 +77,11 @@ import java.util.concurrent.atomic.AtomicInteger
             maxHealth = 20.0
             feedSaturate()
             heal()
-            /*if (kit == None.value && GameManager.phase == InvincibilityPhase) {
+            if (kit == None.value && GameManager.phase == InvincibilityPhase) {
                 inventory.addItem(KitSelector.kitSelectorItem)
-            } else {*/
+            } else {
                 kit.internal.givePlayer(this)
-            //}
+            }
             hgPlayer.combatTimer.set(0)
             teleport(GameManager.world.getHighestBlockAt(GameManager.world.spawnLocation).location.clone().add(0, 3 ,0))
         }
