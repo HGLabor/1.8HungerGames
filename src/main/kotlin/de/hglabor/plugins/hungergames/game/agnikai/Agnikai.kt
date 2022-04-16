@@ -15,17 +15,22 @@ import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import org.bukkit.*
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntitySpawnEvent
+import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import java.util.concurrent.atomic.AtomicInteger
 
 object Agnikai {
-    val world = Bukkit.getWorld("arena").apply {
-        setGameRuleValue("doMobSpawnIng", "false")
-    }
+    val world = Bukkit.getWorld("arena")
+    val queueLocation = Location(world, 1230.5, 13.0, 309.5, 0f, 0F)
+    val spawn1Location = Location(world, 1230.5, 5.0, 313.5, 0f, 0F)
+    val spawn2Location = Location(world, 1230.5, 5.0, 328.5, 180f, 0F)
+
     var isOpen = true
     val queuedPlayers = mutableListOf<HGPlayer>()
     val currentlyFighting = mutableListOf<HGPlayer>()
@@ -34,7 +39,7 @@ object Agnikai {
 
     fun queuePlayer(player: Player) {
         player.spigot().respawn()
-        player.teleport(Location(world, 20.0, 0.0, 0.0))
+        player.teleport(queueLocation)
         player.hgPlayer.status = PlayerStatus.GULAG
         queuedPlayers += player.hgPlayer
         player.hgPlayer.wasInAgnikai = true
@@ -68,9 +73,10 @@ object Agnikai {
     }
 
     private fun giveKits() {
-        currentlyFighting.forEach { fighting ->
+        currentlyFighting.forEachIndexed { index, fighting ->
             fighting.bukkitPlayer?.let { player ->
-                player.teleport(world.getHighestBlockAt(0, 0).location.add(0, 1, 0))
+                val loc = if (index == 1) spawn1Location else spawn2Location
+                player.teleport(loc)
                 player.give(ItemStack(Material.STONE_SWORD))
                 repeat(8) {
                     player.give(ItemStack(Material.MUSHROOM_SOUP))
@@ -79,7 +85,31 @@ object Agnikai {
         }
     }
 
+    private fun endFight(loser: Player?) {
+        currentlyFighting.forEach { it.setGameScoreboard(true) }
+        if (loser != null) {
+            val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
+            broadcast("${ChatColor.GREEN}${loser.name} lost against ${winner.name}")
+            winner.makeGameReady()
+            winner.bukkitPlayer?.inventory?.apply {
+                addItem(ItemStack(Material.STONE_SWORD))
+                for (i in 0..35) {
+                    addItem(ItemStack(Material.MUSHROOM_SOUP))
+                }
+            }
+        } else {
+            broadcast("${ChatColor.RED}Current Agnikai fight timed out. Removing ${currentlyFighting.joinToString { it.name }}")
+            currentlyFighting.forEach { fighting ->
+                fighting.bukkitPlayer?.inventory?.clear()
+                fighting.bukkitPlayer?.gameMode = GameMode.SPECTATOR
+                fighting.bukkitPlayer?.teleport(GameManager.world.spawnLocation.clone().add(0, 10, 0))
+            }
+        }
+        currentlyFighting.clear()
+    }
+
     fun register() {
+        world.difficulty = Difficulty.NORMAL
         task = task(true, 20, 20) {
             if (GameManager.phase == EndPhase) {
                 it.cancel()
@@ -152,28 +182,19 @@ object Agnikai {
                 endFight(player)
             }
         }
-    }
 
-    private fun endFight(loser: Player?) {
-        currentlyFighting.forEach { it.setGameScoreboard(true) }
-        if (loser != null) {
-            val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
-            broadcast("${ChatColor.GREEN}${loser.name} lost against ${winner.name}")
-            winner.makeGameReady()
-            winner.bukkitPlayer?.inventory?.apply {
-                addItem(ItemStack(Material.STONE_SWORD))
-                for (i in 0..35) {
-                    addItem(ItemStack(Material.MUSHROOM_SOUP))
-                }
-            }
-        } else {
-            broadcast("${ChatColor.RED}Current Agnikai fight timed out. Removing ${currentlyFighting.joinToString { it.name }}")
-            currentlyFighting.forEach { fighting ->
-                fighting.bukkitPlayer?.inventory?.clear()
-                fighting.bukkitPlayer?.gameMode = GameMode.SPECTATOR
-                fighting.bukkitPlayer?.teleport(GameManager.world.spawnLocation.clone().add(0, 10, 0))
+        listen<EntitySpawnEvent> {
+            if (it.entity !is LivingEntity) return@listen
+            if (it.entity.world == world) {
+                it.isCancelled = true
             }
         }
-        currentlyFighting.clear()
+
+        listen<FoodLevelChangeEvent> {
+            if (it.entity !is LivingEntity) return@listen
+            if (it.entity.world == world) {
+                it.isCancelled = true
+            }
+        }
     }
 }
