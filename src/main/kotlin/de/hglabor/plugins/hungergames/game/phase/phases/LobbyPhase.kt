@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-object LobbyPhase : GamePhase(240, InvincibilityPhase) {
+object LobbyPhase : GamePhase(150, InvincibilityPhase) {
     override val timeName = "Starting"
     override fun getTimeString() = TimeConverter.stringify(remainingTime.toInt())
 
