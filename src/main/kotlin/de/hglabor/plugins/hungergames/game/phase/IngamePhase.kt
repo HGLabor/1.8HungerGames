@@ -17,6 +17,7 @@ import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -77,8 +78,9 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
         OfflineTimer.putAndStartTimer(event.player.hgPlayer)
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     fun onEntityDamageByEntity(event: EntityDamageByEntityEvent) {
+        if (event.isCancelled) return
         val damager = event.damager as? Player ?: return
         val entity = event.entity as? Player ?: return
         damager.hgPlayer.combatTimer.set(12)
