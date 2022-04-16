@@ -6,6 +6,7 @@ import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
+import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.kit.*
 import net.axay.kspigot.event.listen
@@ -29,7 +30,7 @@ object PlayerKits {
                 if (playerKit.properties.kitname != kitKey) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is ClickableKitItem) {
-                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
+                    if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase) || GameManager.phase == PvPPhase) {
                         kitItem.onClick.invoke(event)
                     } else {
                         event.player.sendMessage("${Prefix}You can't use this kit during the grace period.")
