@@ -3,10 +3,8 @@
 import de.hglabor.plugins.hungergames.event.KitDisableEvent
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
 import de.hglabor.plugins.hungergames.game.mechanics.recraft.Recraft
-import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
 import de.hglabor.plugins.kitapi.implementation.None
@@ -23,7 +21,7 @@ import org.bukkit.inventory.ItemStack
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
-open class HGPlayer(val uuid: UUID, val name: String) {
+    open class HGPlayer(val uuid: UUID, val name: String) {
     val bukkitPlayer: Player?
         get() = Bukkit.getPlayer(uuid)
     val isAlive: Boolean
@@ -57,7 +55,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
 
         board = player.setScoreboard {
             title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
-            period = 4
+            period = 20
             content {
                 +" "
                 +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }

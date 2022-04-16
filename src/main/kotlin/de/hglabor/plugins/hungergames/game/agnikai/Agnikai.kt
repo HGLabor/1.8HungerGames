@@ -54,7 +54,7 @@ object Agnikai {
 
         player.setScoreboard {
             title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
-            period = 4
+            period = 20
             content {
                 fun fightDuration(): String {
                     if (currentlyFighting.isEmpty()) return " "
@@ -67,8 +67,8 @@ object Agnikai {
                 +" "
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Waiting:#${ChatColor.WHITE}${queuedPlayers.size}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Fighting:#${ChatColor.WHITE}${fightDuration()}" }
-                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(0)?.name ?: "None"}".substring(0, 15) }
-                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(1)?.name ?: "None"}".substring(0, 15) }
+                +{ "  ${ChatColor.GRAY}-#${(currentlyFighting.getOrNull(0)?.name ?: "None").take(15)}" }
+                +{ "  ${ChatColor.GRAY}-#${(currentlyFighting.getOrNull(1)?.name ?: "None").take(15)}" }
                 +" "
             }
         }
