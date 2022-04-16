@@ -3,6 +3,7 @@ package de.hglabor.plugins.hungergames.game
 import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
+import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
@@ -74,6 +75,7 @@ object GameManager {
                 }
                 return@task
             }
+
             phaseBroadcasts()
             phase.incrementElapsedTime()
         }
@@ -97,6 +99,13 @@ object GameManager {
             PvPPhase -> {
                 when (PvPPhase.remainingTime.toInt()) {
                     60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most eliminations wins in ${ChatColor.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+                }
+
+                if (Agnikai.isOpen && elapsedTime.toInt() > 900) {
+                    Agnikai.isOpen = false
+                    broadcast("${Agnikai.Prefix}${ChatColor.RED}The Agnikai has been closed!")
+                    Agnikai.task?.cancel()
+                    Agnikai.task = null
                 }
             }
         }

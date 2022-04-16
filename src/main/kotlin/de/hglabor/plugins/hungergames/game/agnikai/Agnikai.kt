@@ -151,12 +151,6 @@ object Agnikai {
                     timer.incrementAndGet()
                 }
             }
-
-            if (isOpen && GameManager.elapsedTime.toInt() > 900) {
-                isOpen = false
-                it.cancel()
-                task = null
-            }
         }
 
         listen<PlayerDeathEvent> {
