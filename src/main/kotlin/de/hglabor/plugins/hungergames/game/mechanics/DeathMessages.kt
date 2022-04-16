@@ -1,6 +1,7 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.hgPlayer
@@ -9,7 +10,12 @@ import org.bukkit.ChatColor
 import org.bukkit.event.entity.PlayerDeathEvent
 
 object DeathMessages {
-    fun announce(event: PlayerDeathEvent) {
+    fun announceAgnikaiDeath(winner: HGPlayer, loser: HGPlayer) {
+        broadcast("${Agnikai.Prefix}${ChatColor.GREEN}${winner.name} ${ChatColor.GRAY}won the fight against ${ChatColor.RED}${loser.name}${ChatColor.GRAY}.")
+    }
+
+    fun announce(event: PlayerDeathEvent, enteredAgnikai: Boolean) {
+        event.deathMessage = null
         val hgPlayer = event.entity.hgPlayer
         if (event.entity.killer != null) {
             announce(event.entity.killer.hgPlayer, hgPlayer)
@@ -20,9 +26,8 @@ object DeathMessages {
                 announce(hgPlayer)
             }
         }
-        event.deathMessage = null
         if (PlayerList.alivePlayers.size > 1)
-            announcePlayerCount()
+            announcePlayerCount(enteredAgnikai)
     }
 
     private fun announce(killer: HGPlayer, dead: HGPlayer) {
@@ -46,7 +51,11 @@ object DeathMessages {
         broadcast(Prefix + message.replace(dead.name.toRegex(), deadText))
     }
 
-    private fun announcePlayerCount() {
-        broadcast("${Prefix}There are ${ChatColor.WHITE}${PlayerList.alivePlayers.size} ${ChatColor.GRAY}players left.")
+    private fun announcePlayerCount(enteredAgnikai: Boolean) {
+        if (enteredAgnikai) {
+            broadcast("${Agnikai.Prefix}They have entered the ${ChatColor.AQUA}Agnikai${ChatColor.GRAY}.")
+        } else {
+            broadcast("${Prefix}There are ${ChatColor.WHITE}${PlayerList.alivePlayers.size} ${ChatColor.GRAY}players left.")
+        }
     }
 }
