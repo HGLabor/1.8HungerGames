@@ -42,10 +42,12 @@ object ReviveCommand : CommandExecutor {
             sender.sendMessage("${Prefix}${ChatColor.GRAY}${target.name} is currently fighting in agnikai.")
             return false
         }
-
+        sender.sendMessage("${Prefix}${SecondaryColor}${target.name} has been ${ChatColor.GREEN}revived${ChatColor.GRAY}.")
         target.hgPlayer.makeGameReady()
+        target.hgPlayer.wasInAgnikai = false
         target.hgPlayer.setGameScoreboard(true)
         Agnikai.queuedPlayers.remove(target.hgPlayer)
+        target.sendMessage("${Prefix}You have been ${ChatColor.GREEN}revived${ChatColor.GRAY}.")
         return true
     }
 }
