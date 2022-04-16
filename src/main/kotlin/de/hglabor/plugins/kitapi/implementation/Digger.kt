@@ -22,6 +22,7 @@ val Digger = Kit("Digger", ::DiggerProperties) {
     fun Block.isReplaceable(): Boolean =
         when {
             hasMetadata(Feast.BLOCK_KEY) -> false
+            hasMetadata("gladiBlock") -> false
             this is Container -> {
                 this.breakNaturally()
                 false
