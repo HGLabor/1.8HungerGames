@@ -2,6 +2,7 @@ package de.hglabor.plugins.hungergames.commands
 
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
+import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import net.axay.kspigot.gui.openGUI
@@ -37,7 +38,14 @@ object ReviveCommand : CommandExecutor {
             return false
         }
 
+        if (Agnikai.currentlyFighting.contains(target.hgPlayer)) {
+            sender.sendMessage("${Prefix}${ChatColor.GRAY}${target.name} is currently fighting in agnikai.")
+            return false
+        }
+
         target.hgPlayer.makeGameReady()
+        target.hgPlayer.setGameScoreboard(true)
+        Agnikai.queuedPlayers.remove(target.hgPlayer)
         return true
     }
 }
