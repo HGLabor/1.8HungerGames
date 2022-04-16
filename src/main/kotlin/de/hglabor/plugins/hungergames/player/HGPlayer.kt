@@ -79,13 +79,13 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             maxHealth = 20.0
             feedSaturate()
             heal()
-            if (kit == None.value && GameManager.phase == InvincibilityPhase) {
+            /*if (kit == None.value && GameManager.phase == InvincibilityPhase) {
                 inventory.addItem(KitSelector.kitSelectorItem)
-            } else {
+            } else {*/
                 kit.internal.givePlayer(this)
-            }
+            //}
             hgPlayer.combatTimer.set(0)
-            teleport(GameManager.world.getHighestBlockAt(0, 0).location.add(0, 3, 0))
+            teleport(GameManager.world.getHighestBlockAt(GameManager.world.spawnLocation).location.clone().add(0, 3 ,0))
         }
     }
 
