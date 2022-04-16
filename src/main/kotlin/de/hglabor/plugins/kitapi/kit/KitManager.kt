@@ -21,7 +21,7 @@ object KitManager {
         Phantom,
         Reaper,
         Redstoner,
-        Relaxo,
+        //Relaxo,
         Revive,
         Smoothyy,
         Snail,
@@ -30,7 +30,7 @@ object KitManager {
         Squid,
         Stomper,
         Toblerone,
-        Ultimato,
+        //Ultimato,
         Viking,
         ZickZack,
     ).map { it.value }
