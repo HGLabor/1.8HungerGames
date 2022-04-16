@@ -19,9 +19,11 @@ import net.axay.kspigot.runnables.sync
 import net.axay.kspigot.runnables.task
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.Difficulty
+import org.bukkit.entity.EntityType
 import org.bukkit.event.HandlerList
+import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.world.ChunkUnloadEvent
 import java.util.concurrent.atomic.AtomicLong
 
 object GameManager {
@@ -31,14 +33,21 @@ object GameManager {
     var feast: Feast? = null
 
     fun enable() {
+        world.difficulty = Difficulty.NORMAL
         phase.start()
         Bukkit.getPluginManager().registerEvents(phase, Manager)
         world.setSpawnLocation(0, world.getHighestBlockYAt(0, 0) + 15, 0)
         world.loadChunk(world.spawnLocation.chunk)
         world.worldBorder.setCenter(0.0, 0.0)
         world.worldBorder.size = 600.0*2
-        listen<ChunkUnloadEvent> { if (it.chunk == world.spawnLocation.chunk) it.isCancelled = true }
         listen<PlayerJoinEvent> { it.player.hgPlayer.login() }
+        listen<EntitySpawnEvent> {
+            when(it.entity.type) {
+                EntityType.CREEPER, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.WITCH, EntityType.ZOMBIE,
+                EntityType.CAVE_SPIDER, EntityType.ENDERMAN, EntityType.SPIDER -> it.isCancelled = true
+                else -> {}
+            }
+        }
 
         runBlocking {
             launch {
