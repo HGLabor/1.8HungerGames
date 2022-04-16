@@ -19,6 +19,8 @@ import net.axay.kspigot.runnables.task
 import org.bukkit.*
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
@@ -63,8 +65,8 @@ object Agnikai {
                 +" "
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Waiting:#${ChatColor.WHITE}${queuedPlayers.size}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Fighting:#${ChatColor.WHITE}${fightDuration()}" }
-                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(0)?.name ?: "None" }" }
-                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(1)?.name ?: "None" }" }
+                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(0)?.name ?: "None"}" }
+                +{ "  ${ChatColor.GRAY}-#${currentlyFighting.getOrNull(1)?.name ?: "None"}" }
                 +" "
             }
         }
@@ -107,7 +109,13 @@ object Agnikai {
                 }
             }
         } else {
-            broadcast("${Prefix}Current fight ${ChatColor.RED}timed out${ChatColor.GRAY}. Eliminating both, ${currentlyFighting.joinToString(" ${ChatColor.GRAY}and ") { "${ChatColor.WHITE}${it.name}" }}${ChatColor.GRAY}.")
+            broadcast(
+                "${Prefix}Current fight ${ChatColor.RED}timed out${ChatColor.GRAY}. Eliminating both, ${
+                    currentlyFighting.joinToString(
+                        " ${ChatColor.GRAY}and "
+                    ) { "${ChatColor.WHITE}${it.name}" }
+                }${ChatColor.GRAY}."
+            )
             currentlyFighting.forEach { fighting ->
                 fighting.bukkitPlayer?.inventory?.clear()
                 fighting.bukkitPlayer?.gameMode = GameMode.SPECTATOR
@@ -125,6 +133,17 @@ object Agnikai {
                 it.cancel()
                 task = null
                 return@task
+            }
+            if (!isOpen && queuedPlayers.size == 1) {
+                val revived = queuedPlayers.single()
+                revived.makeGameReady()
+                revived.bukkitPlayer?.inventory?.apply {
+                    addItem(ItemStack(Material.STONE_SWORD))
+                    for (i in 0..35) {
+                        addItem(ItemStack(Material.MUSHROOM_SOUP))
+                    }
+                }
+                broadcast("${Prefix}${ChatColor.WHITE}${revived.name} ${ChatColor.GRAY}was revived.")
             }
 
             if (currentlyFighting.isEmpty()) {
@@ -160,6 +179,16 @@ object Agnikai {
             endFight(it.entity)
         }
 
+        listen<BlockBreakEvent> {
+            if (it.block.world != Bukkit.getWorld("arena")) return@listen
+            it.isCancelled = true
+        }
+
+        listen<BlockPlaceEvent> {
+            if (it.block.world != Bukkit.getWorld("arena")) return@listen
+            it.isCancelled = true
+        }
+
         listen<EntityDamageByEntityEvent> {
             if (it.entity.world != Bukkit.getWorld("arena")) return@listen
             val entity = it.entity
@@ -186,6 +215,10 @@ object Agnikai {
             }
 
             if (player.hgPlayer in currentlyFighting) {
+                player.hgPlayer.status = PlayerStatus.ELIMINATED
+                queuedPlayers.remove(player.hgPlayer)
+                player.teleport(GameManager.world.spawnLocation)
+                player.gameMode = GameMode.SPECTATOR
                 endFight(player)
             }
         }
