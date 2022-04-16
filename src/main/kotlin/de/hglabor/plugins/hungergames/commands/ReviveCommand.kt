@@ -21,9 +21,14 @@ object ReviveCommand : CommandExecutor {
         args: Array<out String>
     ): Boolean {
         val player = sender as? Player ?: return false
+        if (!player.hasPermission("hglabor.hg.revive")) {
+            sender.sendMessage("${Prefix}${ChatColor.RED}You are not permitted to execute this command.")
+            return false
+        }
+
         if (args.size != 1) {
             player.openGUI(KitSelector.gui)
-            sender.sendMessage("${Prefix}Please use ${ChatColor.WHITE}/kit ${ChatColor.GRAY}<${SecondaryColor}Kit${ChatColor.GRAY}>.")
+            sender.sendMessage("${Prefix}Please use ${ChatColor.WHITE}/revive ${ChatColor.GRAY}<${SecondaryColor}Player${ChatColor.GRAY}>.")
             return false
         }
 
@@ -42,7 +47,7 @@ object ReviveCommand : CommandExecutor {
             sender.sendMessage("${Prefix}${ChatColor.GRAY}${target.name} is currently fighting in agnikai.")
             return false
         }
-        sender.sendMessage("${Prefix}${SecondaryColor}${target.name} has been ${ChatColor.GREEN}revived${ChatColor.GRAY}.")
+        sender.sendMessage("${Prefix}${SecondaryColor}${target.name}${ChatColor.GRAY} has been ${ChatColor.GREEN}revived${ChatColor.GRAY}.")
         target.hgPlayer.makeGameReady()
         target.hgPlayer.wasInAgnikai = false
         target.hgPlayer.setGameScoreboard(true)

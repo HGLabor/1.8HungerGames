@@ -16,7 +16,10 @@ object StartCommand: CommandExecutor {
         label: String,
         args: Array<out String>
     ): Boolean {
-        if (!sender.hasPermission("hglabor.staff")) return false
+        if (!sender.hasPermission("hglabor.hg.start")) {
+            sender.sendMessage("${Prefix}${ChatColor.RED}You are not permitted to execute this command.")
+            return false
+        }
         if (GameManager.phase == PvPPhase) {
             sender.sendMessage("${Prefix}? x D")
             return false
