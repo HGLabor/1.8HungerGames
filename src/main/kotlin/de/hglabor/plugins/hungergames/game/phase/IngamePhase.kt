@@ -10,10 +10,14 @@ import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.GameMode
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -71,5 +75,13 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
         OfflineTimer.putAndStartTimer(event.player.hgPlayer)
+    }
+
+    @EventHandler
+    fun onEntityDamageByEntity(event: EntityDamageByEntityEvent) {
+        val damager = event.damager as? Player ?: return
+        val entity = event.entity as? Player ?: return
+        damager.hgPlayer.combatTimer.set(12)
+        entity.hgPlayer.combatTimer.set(12)
     }
 }

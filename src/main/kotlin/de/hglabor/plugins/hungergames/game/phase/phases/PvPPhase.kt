@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
+import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
@@ -9,20 +10,24 @@ import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
 import net.axay.kspigot.extensions.broadcast
+import org.bukkit.ChatColor
 
 
 object PvPPhase : IngamePhase(1800, EndPhase) {
-    private val recraftInspector: RecraftInspector = RecraftInspector()
+    //private val recraftInspector: RecraftInspector = RecraftInspector()
     override val timeName = "Time"
     override fun getTimeString() = TimeConverter.stringify((GameManager.elapsedTime.get()).toInt())
 
     override fun tick(tickCount: Int) {
         // recraft nerf
         // if (tickCount % 5 == 0) recraftInspector.tick()
+        PlayerList.alivePlayers.filter { it.isInCombat }.forEach { alive ->
+            alive.combatTimer.decrementAndGet()
+        }
 
         // Bordershrink
         if ((maxDuration - GameManager.elapsedTime.get()).toInt() == 10 * 60) {
-            broadcast("Border starts shrinking")
+            broadcast("${Prefix}${ChatColor.WHITE}${ChatColor.BOLD}The border starts shrinking now.")
             GameManager.world.worldBorder.setSize(25.0 * 2, 10 * 60)
         }
 

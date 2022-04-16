@@ -32,7 +32,9 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     var offlineTime: AtomicInteger = AtomicInteger(120)
 
     var kills: AtomicInteger = AtomicInteger(0)
-    var isInCombat = false
+    var combatTimer: AtomicInteger = AtomicInteger(0)
+    val isInCombat: Boolean
+        get() = combatTimer.get() > 0 && isAlive
     val recraft = Recraft()
     var board: Board? = null
     var kit: Kit<*> = None.value
@@ -60,7 +62,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${ChatColor.WHITE}${kit.properties.kitname}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Kills:#${ChatColor.WHITE}${kills.get()}" }
                 +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
-                +" "
+                +{ if (isInCombat) "${ChatColor.RED}${ChatColor.BOLD}IN COMBAT" else " " }
             }
         }
     }
@@ -76,6 +78,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             feedSaturate()
             heal()
             kit.internal.givePlayer(this)
+            hgPlayer.combatTimer.set(0)
             teleport(GameManager.world.getHighestBlockAt(0, 0).location.add(0, 3, 0))
         }
     }
