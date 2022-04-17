@@ -8,13 +8,10 @@ import de.hglabor.plugins.kitapi.kit.KitProperties
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import net.axay.kspigot.utils.OnlinePlayerMap
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.inventory.ItemStack
-
 
 
 class NewVersionProperties : KitProperties() {

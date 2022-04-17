@@ -18,7 +18,7 @@ class MagmaProperties : KitProperties() {
 val Magma = Kit("Magma", ::MagmaProperties) {
     displayMaterial = Material.FIREBALL
 
-    kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, player ->
+    kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, _ ->
         val isFireDamage = when (it.cause) {
             EntityDamageEvent.DamageCause.LAVA,
             EntityDamageEvent.DamageCause.FIRE,
@@ -31,7 +31,7 @@ val Magma = Kit("Magma", ::MagmaProperties) {
         }
     }
 
-    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, EventPriority.HIGH, false) { it, damager ->
+    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, EventPriority.HIGH, false) { it, _ ->
         if (it.isCancelled) return@kitPlayerEvent
         val entity = it.entity
         if (ChanceUtils.roll(kit.properties.likelihood)) {

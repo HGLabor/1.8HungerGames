@@ -57,6 +57,6 @@ class RecraftMaterial(getMaxSoupAmount: Int, vararg materials: Material) {
         get() = maxSoupAmount.toFloat() / materials.size
 
     fun reset() {
-        materials.replaceAll { m: Material?, v: Int? -> 0 }
+        materials.replaceAll { _, _ -> 0 }
     }
 }

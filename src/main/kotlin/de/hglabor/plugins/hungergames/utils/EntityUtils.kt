@@ -40,6 +40,7 @@ object EntityDamageUtils {
                         }
                     }
                 }
+                else -> {}
             }
         }
     }

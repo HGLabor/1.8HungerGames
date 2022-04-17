@@ -122,7 +122,7 @@ val Sponge = Kit("Sponge", ::SpongeProperties) {
         it.player.inventory.addItem(ItemStack(Material.SPONGE, kit.properties.spongesOnStart))
     }
 
-    kitPlayerEvent<PlayerKilledEntityEvent>({ it.killer }) { event, player ->
+    kitPlayerEvent<PlayerKilledEntityEvent>({ it.killer }) { _, player ->
         player.inventory.addItem(ItemStack(Material.SPONGE, kit.properties.spongesOnKill))
     }
 }

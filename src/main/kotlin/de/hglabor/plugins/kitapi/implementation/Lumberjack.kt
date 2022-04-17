@@ -34,7 +34,7 @@ val Lumberjack = Kit("Lumberjack", ::LumberjackProperties) {
         }
     }
 
-    kitPlayerEvent<BlockBreakEvent>({ it.player }) { it, player ->
+    kitPlayerEvent<BlockBreakEvent>({ it.player }) { it, _ ->
         if (isWood(it.block)) {
             breakSurroundingWood(it.block, AtomicInteger(0))
         }
