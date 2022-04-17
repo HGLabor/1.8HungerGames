@@ -114,9 +114,12 @@ object PlayerKits {
         return hgPlayer.kit == kit && hgPlayer.isKitEnabled
     }
 
-    fun Player.chooseKit(kit: Kit<*>) {
+    fun Player.chooseKit(kit: Kit<out KitProperties>, sendMessage: Boolean = true) {
         hgPlayer.kit = kit
-        sendMessage("${Prefix}You chose the kit ${SecondaryColor}${kit.properties.kitname}${ChatColor.GRAY}.")
+        hgPlayer.changedKitBefore = true
+        if (sendMessage) {
+            sendMessage("${Prefix}You chose the kit ${SecondaryColor}${kit.properties.kitname}${ChatColor.GRAY}.")
+        }
         if (GameManager.phase != LobbyPhase)
             kit.internal.givePlayer(this)
 

@@ -1,6 +1,7 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
 import de.hglabor.plugins.hungergames.Prefix
+import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
@@ -12,10 +13,10 @@ import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
 import de.hglabor.plugins.kitapi.implementation.None
 import de.hglabor.plugins.kitapi.kit.KitManager
+import de.hglabor.plugins.kitapi.player.PlayerKits.chooseKit
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.onlinePlayers
 import org.bukkit.ChatColor
-
 
 object PvPPhase : IngamePhase(1800, EndPhase) {
     override val timeName = "Time"
@@ -24,9 +25,9 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
     override fun onStart() {
         onlinePlayers.forEach { player ->
             player.inventory.remove(KitSelector.kitSelectorItem)
-            if (player.hgPlayer.kit == None) {
-                player.hgPlayer.kit = KitManager.kits.random()
-                player.hgPlayer.kit.internal.givePlayer(player)
+            if (player.hgPlayer.kit == None.value && !player.hgPlayer.changedKitBefore) {
+                player.chooseKit(KitManager.kits.random(), false)
+                player.sendMessage("${Prefix}You have been given the kit $SecondaryColor${player.hgPlayer.kit.properties.kitname}${ChatColor.GRAY}.")
             }
         }
     }

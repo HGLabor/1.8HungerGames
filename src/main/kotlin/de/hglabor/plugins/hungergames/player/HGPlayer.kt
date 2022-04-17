@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger
         get() = combatTimer.get() > 0 && isAlive
     var board: Board? = null
     var kit: Kit<*> = None.value
+    var changedKitBefore: Boolean = false
     var isKitEnabled = true
     var wasInAgnikai: Boolean = false
 
