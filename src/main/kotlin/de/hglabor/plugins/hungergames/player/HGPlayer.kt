@@ -17,7 +17,9 @@ import net.axay.kspigot.extensions.geometry.add
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -85,8 +87,16 @@ import java.util.concurrent.atomic.AtomicInteger
                 kit.internal.givePlayer(this)
             }
             hgPlayer.combatTimer.set(0)
-            teleport(GameManager.world.getHighestBlockAt(GameManager.world.spawnLocation).location.clone().add(0, 3 ,0))
+            teleport(getSpawnLocation().add(0, 3 ,0))
         }
+    }
+
+    private fun getSpawnLocation(): Location {
+        val spawnLoc = GameManager.world.spawnLocation
+        val newLoc = spawnLoc.clone().add((-25..25).random(), 0, (-25..25).random())
+        val highestBlock = newLoc.world.getHighestBlockAt(newLoc)
+        return if (highestBlock.y > 85 || (!highestBlock.type.isSolid && !highestBlock.getRelative(BlockFace.DOWN).type.isSolid)) getSpawnLocation()
+        else highestBlock.location
     }
 
     fun enableKit() {
