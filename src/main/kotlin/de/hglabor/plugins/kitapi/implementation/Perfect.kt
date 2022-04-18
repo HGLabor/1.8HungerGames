@@ -10,7 +10,7 @@ import java.util.*
 
 class PerfectProperties : KitProperties() {
     val soupsForReward by int(8);
-    val soupsAsReward by int(5);
+    val soupsAsReward by int(3);
 }
 
 val Perfect = Kit("Perfect", ::PerfectProperties)  {
