@@ -1,5 +1,6 @@
 package de.hglabor.plugins.kitapi.implementation
 
+import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.event.PlayerSoupEvent
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.utils.hasMark
@@ -29,6 +30,7 @@ val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem
         applyCooldown(it) {
             if (rightClicked.hasMark("nightshadeHealth")) {
+                it.player.sendMessage("${Prefix}This player is already affected by nightshade")
                 cancelCooldown()
                 return@clickOnEntityItem
             }

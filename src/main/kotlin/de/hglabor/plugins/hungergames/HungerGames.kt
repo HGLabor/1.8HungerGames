@@ -66,6 +66,7 @@ class HungerGames: KSpigot() {
         NoInvDropOnClose.register()
         MoreDurability.register()
         MushroomCowNerf.register()
+        HungerNerf.register()
     }
 
     private fun whitelistManager() {
@@ -81,12 +82,12 @@ class HungerGames: KSpigot() {
         Bukkit.getOfflinePlayer(UUID.fromString("50bf6931-e149-4743-9210-92cd58d85c5d")).apply { //TAITO
             isWhitelisted = true; isOp = true
         }
-        Bukkit.getOfflinePlayer(UUID.fromString("6bf9509e-d439-4460-ad35-f61cc052baee")).apply { //TOBACKE
+       /* Bukkit.getOfflinePlayer(UUID.fromString("6bf9509e-d439-4460-ad35-f61cc052baee")).apply { //TOBACKE
             isWhitelisted = true; isOp = true
         }
         Bukkit.getOfflinePlayer(UUID.fromString("c5346b93-d9de-4600-8b37-83b62faa5cbc")).apply { //QOCH
             isWhitelisted = true; isOp = true
-        }
+        }*/
     }
 }
 

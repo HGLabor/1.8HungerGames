@@ -57,7 +57,7 @@ val Relaxo = Kit("Relaxo", ::RelaxoCooldownProperties) {
         }
     }
 
-    kitPlayerEvent<PlayerBedLeaveEvent> ({ it.player}) { it, player ->
+    kitPlayerEvent<PlayerBedLeaveEvent> ({ it.player}) { _, player ->
         val time = maxTime[player.uniqueId]?.get() ?: return@kitPlayerEvent
         tasks[player.uniqueId]?.cancel()
         tasks[player.uniqueId] = null

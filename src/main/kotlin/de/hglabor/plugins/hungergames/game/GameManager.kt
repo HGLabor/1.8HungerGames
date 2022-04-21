@@ -10,6 +10,7 @@ import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.hungergames.utils.TimeConverter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.axay.kspigot.event.listen
@@ -82,23 +83,24 @@ object GameManager {
     }
 
     private fun phaseBroadcasts() {
+        val remaining = "${ChatColor.WHITE}${TimeConverter.stringify(phase.remainingTime.toInt())}${ChatColor.GRAY}"
         when (phase) {
             LobbyPhase -> {
                 when (LobbyPhase.remainingTime.toInt()) {
-                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The HungerGames are starting in ${ChatColor.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The HungerGames are starting in ${remaining}.")
                     0 -> onlinePlayers.forEach { it.title("${SecondaryColor}gl hf") }
                 }
             }
 
             InvincibilityPhase -> {
                 when (InvincibilityPhase.remainingTime.toInt()) {
-                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The invincibility period ends in ${ChatColor.WHITE}${InvincibilityPhase.getTimeString()}${ChatColor.GRAY}.")
+                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The invincibility period ends in ${remaining}.")
                 }
             }
 
             PvPPhase -> {
                 when (PvPPhase.remainingTime.toInt()) {
-                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most eliminations wins in ${ChatColor.WHITE}${LobbyPhase.getTimeString()}${ChatColor.GRAY}.")
+                    60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most eliminations wins in ${remaining}.")
                 }
 
                 if (Agnikai.isOpen && elapsedTime.toInt() > 900) {

@@ -9,9 +9,9 @@ import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
-import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
@@ -24,7 +24,8 @@ class SquidProperties : KitProperties() {
 val Squid = Kit("Squid", ::SquidProperties) {
     displayMaterial = Material.INK_SACK
 
-    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, damager ->
+    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, _ ->
+        if (it.isCancelled) return@kitPlayerEvent
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
         if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
         target.addPotionEffect(
@@ -37,7 +38,7 @@ val Squid = Kit("Squid", ::SquidProperties) {
     }
 
     kitPlayerEvent<KitEnableEvent> {
-        it.player.addPotionEffect(PotionEffect(PotionEffectType.WATER_BREATHING, Int.MAX_VALUE, Int.MAX_VALUE))
+        it.player.addPotionEffect(PotionEffect(PotionEffectType.WATER_BREATHING, Int.MAX_VALUE, 200))
     }
 
     kitPlayerEvent<KitDisableEvent> {
@@ -47,7 +48,7 @@ val Squid = Kit("Squid", ::SquidProperties) {
     kitPlayerEvent<PlayerItemConsumeEvent> {
         if (it.item.type == Material.MILK_BUCKET) {
             taskRunLater(1) {
-                it.player.addPotionEffect(PotionEffect(PotionEffectType.WATER_BREATHING, Int.MAX_VALUE, Int.MAX_VALUE))
+                it.player.addPotionEffect(PotionEffect(PotionEffectType.WATER_BREATHING, Int.MAX_VALUE, 200))
             }
         }
     }

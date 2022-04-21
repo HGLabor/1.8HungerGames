@@ -5,7 +5,6 @@ import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
-import de.hglabor.plugins.hungergames.game.mechanics.recraft.Recraft
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
@@ -17,13 +16,15 @@ import net.axay.kspigot.extensions.geometry.add
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
-open class HGPlayer(val uuid: UUID, val name: String) {
+    open class HGPlayer(val uuid: UUID, val name: String) {
     val bukkitPlayer: Player?
         get() = Bukkit.getPlayer(uuid)
     val isAlive: Boolean
@@ -37,9 +38,9 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     var combatTimer: AtomicInteger = AtomicInteger(0)
     val isInCombat: Boolean
         get() = combatTimer.get() > 0 && isAlive
-    val recraft = Recraft()
     var board: Board? = null
     var kit: Kit<*> = None.value
+    var changedKitBefore: Boolean = false
     var isKitEnabled = true
     var wasInAgnikai: Boolean = false
 
@@ -57,7 +58,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
 
         board = player.setScoreboard {
             title = "${ChatColor.AQUA}${ChatColor.BOLD}HG${ChatColor.WHITE}${ChatColor.BOLD}Labor.de"
-            period = 4
+            period = 20
             content {
                 +" "
                 +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
@@ -85,8 +86,16 @@ open class HGPlayer(val uuid: UUID, val name: String) {
                 kit.internal.givePlayer(this)
             }
             hgPlayer.combatTimer.set(0)
-            teleport(GameManager.world.getHighestBlockAt(0, 0).location.add(0, 3, 0))
+            teleport(getSpawnLocation().add(0, 3 ,0))
         }
+    }
+
+    private fun getSpawnLocation(): Location {
+        val spawnLoc = GameManager.world.spawnLocation
+        val newLoc = spawnLoc.clone().add((-25..25).random(), 0, (-25..25).random())
+        val highestBlock = newLoc.world.getHighestBlockAt(newLoc)
+        return if (highestBlock.y > 85 || (!highestBlock.type.isSolid && !highestBlock.getRelative(BlockFace.DOWN).type.isSolid)) getSpawnLocation()
+        else highestBlock.location
     }
 
     fun enableKit() {

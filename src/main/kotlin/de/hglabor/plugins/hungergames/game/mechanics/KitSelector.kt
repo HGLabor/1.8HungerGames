@@ -2,6 +2,8 @@ package de.hglabor.plugins.hungergames.game.mechanics
 
 import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.SecondaryColor
+import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitManager
 import de.hglabor.plugins.kitapi.player.PlayerKits.chooseKit
@@ -14,6 +16,7 @@ import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
 import org.bukkit.Material
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -61,7 +64,17 @@ object KitSelector {
     fun register() {
         listen<PlayerInteractEvent> {
             if (it.item == kitSelectorItem) {
-                it.player.openGUI(gui)
+                if (GameManager.phase == PvPPhase) {
+                    it.player.inventory.remove(kitSelectorItem)
+                } else {
+                    it.player.openGUI(gui)
+                }
+            }
+        }
+
+        listen<BlockPlaceEvent> {
+            if (it.player.itemInHand == kitSelectorItem) {
+                it.isCancelled = true
             }
         }
     }

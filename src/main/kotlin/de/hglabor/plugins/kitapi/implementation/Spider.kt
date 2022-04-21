@@ -1,8 +1,5 @@
 package de.hglabor.plugins.kitapi.implementation
 
-import de.hglabor.plugins.hungergames.Prefix
-import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.hungergames.utils.WorldUtils
@@ -46,7 +43,7 @@ val Spider = Kit("Spider", ::SpiderProperties) {
     val spiderSnowball = "spidersb"
 
     // Viper ability
-    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, damager ->
+    kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, _ ->
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
         if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
         target.addPotionEffect(
@@ -96,17 +93,17 @@ val Spider = Kit("Spider", ::SpiderProperties) {
     }
 
     fun nearWall(distance: Double, player: Player): Boolean {
-        val loc = player.location
+        val location = player.location
         val surroundingLocs = setOf(
-            loc.clone().add(distance, 1.0, 0.0),
-            loc.clone().add(-distance, 1.0, 0.0),
-            loc.clone().add(0.0, 1.0, +distance),
-            loc.clone().add(0.0, 1.0, -distance)
+            location.clone().add(distance, 1.0, 0.0),
+            location.clone().add(-distance, 1.0, 0.0),
+            location.clone().add(0.0, 1.0, +distance),
+            location.clone().add(0.0, 1.0, -distance)
         )
         return surroundingLocs.any { loc -> loc.block.type.isSolid }
     }
 
-    kitPlayerEvent<PlayerMoveEvent>( { it.player }) { event, player ->
+    kitPlayerEvent<PlayerMoveEvent>( { it.player }) { _, player ->
         if (!player.hgPlayer.isAlive) return@kitPlayerEvent
         if (!player.itemInHand.isKitItem  || player.itemInHand.type != Material.WEB) return@kitPlayerEvent
 

@@ -10,6 +10,7 @@ import de.hglabor.plugins.kitapi.cooldown.CooldownManager
 import de.hglabor.plugins.kitapi.cooldown.CooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.hasCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
+import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.spawnCleanEntity
 import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.KSpigotRunnable
@@ -22,9 +23,9 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class UltimatoProperties : CooldownProperties(7500) {
+class UltimatoProperties : CooldownProperties(45000) {
     val radius by double(13.0)
-    val duration by int(150)
+    val duration by int(35)
     val boostStrength by double(0.8)
 }
 
@@ -110,7 +111,7 @@ class UltimatoInstance(private val ultimato: Player) {
 val Ultimato = Kit("Ultimato", ::UltimatoProperties) {
     displayItem = ItemStack(Material.STAINED_GLASS_PANE, 1, 14)
 
-    clickableItem(ItemStack(Material.STAINED_GLASS_PANE, 1, 14)) {
+    clickableItem(ItemStack(Material.STAINED_GLASS_PANE, 1, 14), useInInvincibility = false) {
         if (it.player.isInUltimato || it.player.isInGladiator) return@clickableItem
         val radius = kit.properties.radius
         if (it.player.getNearbyEntities(radius, 128.0, radius)

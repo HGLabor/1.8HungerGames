@@ -9,7 +9,6 @@ import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.spawnCleanEntity
 import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.KSpigotRunnable
@@ -51,7 +50,7 @@ val Endermage = Kit("Endermage", ::EndermageProperties) {
             }
             val clickedBlock = it.clickedBlock ?: return@clickableItem
             clickedBlock.type = Material.ENDER_PORTAL_FRAME
-            mageInstances[player.uniqueId] = EndermageSearch(player, clickedBlock.location.add(0.5, 0.0, 0.5))
+            mageInstances[player.uniqueId] = EndermageSearch(player, clickedBlock.location.add(0.5, 1.0, 0.5))
             taskRunLater(kit.properties.searchTime*20L) {
                 clickedBlock.type = Material.ENDER_STONE
                 mageInstances[player.uniqueId]?.cancelSearching()
@@ -75,9 +74,9 @@ val Endermage = Kit("Endermage", ::EndermageProperties) {
 }
 
 class EndermageSearch(mage: Player, val location: Location) {
-    val mageUUID = mage.uniqueId
+    private val mageUUID: UUID = mage.uniqueId
     var task: KSpigotRunnable? = null
-    var firstMage = true
+    private var firstMage = true
     private var tempEntity: ArmorStand? =
     (location.clone().add(0, 100, 0).spawnCleanEntity(EntityType.ARMOR_STAND) as ArmorStand).apply {
         isVisible = false
@@ -105,7 +104,7 @@ class EndermageSearch(mage: Player, val location: Location) {
                 }
 
                 player.leaveVehicle()
-                player.teleport(location.clone().add(0.5, 1.0, 0.5))
+                player.teleport(location)
                 whoMaged[player.uniqueId] = mageUUID
                 player.mark("wasMaged")
                 player.sendMessage("${Prefix}You have been ${SecondaryColor}maged${ChatColor.GRAY}! You are now ${ChatColor.WHITE}invulnerable ${ChatColor.GRAY}for ${ChatColor.WHITE}5 seconds${ChatColor.GRAY}.")
@@ -127,6 +126,6 @@ class EndermageSearch(mage: Player, val location: Location) {
         tempEntity = null
     }
 
-    val Player.isMagable: Boolean
+    private val Player.isMagable: Boolean
         get() = !(player.isInGladiator || player.isInUltimato)
 }

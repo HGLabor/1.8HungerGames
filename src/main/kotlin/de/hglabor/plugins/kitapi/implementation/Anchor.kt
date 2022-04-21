@@ -1,5 +1,8 @@
 package de.hglabor.plugins.kitapi.implementation
 
+import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.phase.GamePhase
+import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
@@ -24,6 +27,7 @@ val Anchor = Kit("Anchor", ::AnchorProperties) {
 
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, _ ->
+        if (GameManager.phase == InvincibilityPhase) return@kitPlayerEvent
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
         if (target is Player) {
             if (target.hasKit(Counter)) return@kitPlayerEvent
@@ -35,6 +39,7 @@ val Anchor = Kit("Anchor", ::AnchorProperties) {
     }
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.entity as? Player }) { it, player ->
+        if (GameManager.phase == InvincibilityPhase) return@kitPlayerEvent
         val damager = it.entity as? LivingEntity ?: return@kitPlayerEvent
         if (damager is Player) {
             if (damager.hasKit(Counter)) return@kitPlayerEvent
