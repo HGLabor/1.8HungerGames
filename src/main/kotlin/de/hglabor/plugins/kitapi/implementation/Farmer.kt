@@ -12,9 +12,8 @@ val Farmer = Kit("Farmer", ::FarmerProperties) {
     displayMaterial = Material.WHEAT
 
     kitPlayerEvent<BlockBreakEvent>({ it.player }) { it, _ ->
-        for (i in it.block.drops) {
+        for (i in it.block.drops.toList()) {
             it.block.drops.add(i)
-            i.amount *= 2
         }
     }
 }
