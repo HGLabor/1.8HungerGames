@@ -31,7 +31,7 @@ import org.bukkit.util.Vector
 class SpiderProperties : CooldownProperties(20000) {
     val effectDuration by int(3)
     val effectMultiplier by int(1)
-    val probability by int(30)
+    val probability by int(20)
 
     val spidernetRadius by int(5)
     val spidernetHeight by int(5)

@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType
 class SquidProperties : KitProperties() {
     val effectDuration by int(3)
     val effectMultiplier by int(0)
-    val probability by int(30)
+    val probability by int(15)
 }
 
 val Squid = Kit("Squid", ::SquidProperties) {

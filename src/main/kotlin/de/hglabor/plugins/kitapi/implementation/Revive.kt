@@ -30,7 +30,7 @@ val Revive = Kit("Revive", ::ReviveProperties) {
                 player.addPotionEffects(
                     listOf(
                         PotionEffect(PotionEffectType.REGENERATION, 10, 9),
-                        PotionEffect(PotionEffectType.ABSORPTION, 200, 2),
+                        PotionEffect(PotionEffectType.ABSORPTION, 200, 4),
                         PotionEffect(PotionEffectType.FIRE_RESISTANCE, 800, 0)
                     )
                 )
@@ -42,11 +42,11 @@ val Revive = Kit("Revive", ::ReviveProperties) {
                 val scaleY = 1
                 val density = 1.0
                 var i = 0.0
-                player.world.playSound(player.location, Sound.ANVIL_BREAK, 3f, 1f)
+                player.world.playSound(player.location, Sound.FIREWORK_BLAST, 3f, 1f)
                 while (i < 2 * Math.PI) {
                     val x = cos(i) * scaleX
                     val y = sin(i) * scaleY
-                    player.world.playEffect(player.location.clone().add(x, 0, y), Effect.HAPPY_VILLAGER, 15)
+                    player.world.playEffect(player.location.clone().add(x, 0, y), Effect.FIREWORKS_SPARK, 15)
                     i += density
                 }
             }

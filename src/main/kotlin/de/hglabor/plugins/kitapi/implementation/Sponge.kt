@@ -32,7 +32,7 @@ class SpongeProperties : MultipleUsesCooldownProperties(15, 30000) {
     val poisonDuration by int(60)
     val poisonAmplifier by int(60)
     val spongesOnKill by int(2)
-    val spongesOnStart by int(12)
+    val spongesOnStart by int(13)
     val spongeBoost by double(1.0)
 }
 

@@ -14,7 +14,7 @@ val Viking = Kit("Viking", ::VikingProperties) {
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, player ->
         when (player.itemInHand.type) {
             Material.DIAMOND_AXE, Material.WOOD_AXE, Material.IRON_AXE, Material.STONE_AXE ->
-                it.damage += 1.5
+                it.damage += 2.0
             else -> {}
         }
     }
