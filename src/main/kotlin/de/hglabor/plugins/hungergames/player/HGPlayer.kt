@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
-    open class HGPlayer(val uuid: UUID, val name: String) {
+open class HGPlayer(val uuid: UUID, val name: String) {
     val bukkitPlayer: Player?
         get() = Bukkit.getPlayer(uuid)
     val isAlive: Boolean
