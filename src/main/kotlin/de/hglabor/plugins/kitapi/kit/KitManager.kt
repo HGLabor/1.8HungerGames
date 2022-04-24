@@ -23,6 +23,7 @@ object KitManager {
         Redstoner,
         //Relaxo,
         Revive,
+        Rogue,
         Smoothyy,
         Snail,
         Spider,
