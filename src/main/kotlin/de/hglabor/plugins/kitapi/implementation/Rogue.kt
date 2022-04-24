@@ -23,11 +23,6 @@ class RogueProperties : CooldownProperties(16000) {
 }
 
 val Rogue = Kit("Rogue", ::RogueProperties) {
-    fun <T> MutableList<T>.without(element: T): List<T> {
-        remove(element)
-        return this
-    }
-
     val scope = CoroutineScope(Dispatchers.IO)
 
     displayMaterial = Material.STICK
@@ -38,7 +33,7 @@ val Rogue = Kit("Rogue", ::RogueProperties) {
         val radius = kit.properties.radius
         val radiusSquared: Double = radius * radius
 
-        val players: List<Player> = player.getNearbyEntities(radius, radius, radius).without(player).filterIsInstance<Player>()
+        val players: List<Player> = player.getNearbyEntities(radius, radius, radius).filterIsInstance<Player>()
 
         applyCooldown(it) {
             players.ifEmpty {
