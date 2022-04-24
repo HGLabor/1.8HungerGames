@@ -25,14 +25,11 @@ val Rogue = Kit("Rogue", ::RogueProperties) {
         if (!it.action.isRightClick) return@clickableItem
         val roguePlayer = it.player
         val radius = kit.properties.radius
-        val players: List<Player> = roguePlayer.getNearbyEntities(radius, radius, radius).filterIsInstance<Player>()
+        val players = roguePlayer.getNearbyEntities(radius, radius, radius)
+            .filterIsInstance<Player>()
+            .ifEmpty { return@clickableItem }
 
         applyCooldown(it) {
-            players.ifEmpty {
-                cancelCooldown()
-                return@clickableItem
-            }
-
             for (player in players) {
                 val hgPlayer = player.hgPlayer
                 if (!hgPlayer.isAlive || player.location.distanceSquared(roguePlayer.location) > radius * radius)
