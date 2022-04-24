@@ -27,7 +27,7 @@ object PlayerKits {
             val playerKit = hgPlayer.kit
             if (item.isKitItem) {
                 val kitKey = item.itemMeta.displayName.split("${ChatColor.DARK_PURPLE}").last()
-                if (playerKit.properties.kitname != kitKey) return@listen
+                if (!event.player.hasKit(KitManager.kits.first { it.properties.kitname == kitKey })) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is ClickableKitItem) {
                     if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase) || GameManager.phase == PvPPhase) {
@@ -45,7 +45,7 @@ object PlayerKits {
             val playerKit = hgPlayer.kit
             if (item.isKitItem) {
                 val kitKey = item.itemMeta.displayName.split("${ChatColor.DARK_PURPLE}").last()
-                if (playerKit.properties.kitname != kitKey) return@listen
+                if (!event.player.hasKit(KitManager.kits.first { it.properties.kitname == kitKey })) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is ClickOnEntityKitItem) {
                     if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
@@ -63,7 +63,7 @@ object PlayerKits {
             val playerKit = hgPlayer.kit
             if (item.isKitItem) {
                 val kitKey = item.itemMeta.displayName.split("${ChatColor.DARK_PURPLE}").last()
-                if (playerKit.properties.kitname != kitKey) return@listen
+                if (!event.player.hasKit(KitManager.kits.first { it.properties.kitname == kitKey })) return@listen
                 val kitItem = playerKit.internal.items.toList().first { it.second.stack == item }.second
                 if (kitItem is PlaceableKitItem) {
                     if (!(!kitItem.useInInvincibility && GameManager.phase == InvincibilityPhase)) {
