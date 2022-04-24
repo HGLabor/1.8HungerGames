@@ -23,6 +23,11 @@ class RogueProperties : CooldownProperties(16000) {
 }
 
 val Rogue = Kit("Rogue", ::RogueProperties) {
+    fun <T> MutableList<T>.without(element: T): List<T> {
+        remove(element)
+        return this
+    }
+
     val scope = CoroutineScope(Dispatchers.IO)
 
     displayMaterial = Material.STICK
@@ -33,25 +38,29 @@ val Rogue = Kit("Rogue", ::RogueProperties) {
         val radius = kit.properties.radius
         val radiusSquared: Double = radius * radius
 
-        val entities: List<Entity> = player.getNearbyEntities(radius, radius, radius) // All entities withing a box
+        val players: List<Player> = player.getNearbyEntities(radius, radius, radius).without(player).filterIsInstance<Player>()
 
         applyCooldown(it) {
-            for (entity in entities) {
-                if (entity.location.distanceSquared(player.location) > radiusSquared) continue  // All entities within a sphere
+            players.ifEmpty {
+                cancelCooldown()
+                return@clickableItem
+            }
 
-                if (entity is Player) {
-                    val hgPlayer = entity.hgPlayer
-                    if (!hgPlayer.isAlive) continue
+            for (entity in players) {
+                if (entity.location.distanceSquared(player.location) > radiusSquared) continue
 
-                    scope.launch {
-                        hgPlayer.disableKit()
-                        hgPlayer.bukkitPlayer?.sendMessage("${Prefix}Your kit has been ${ChatColor.RED}disabled${ChatColor.GRAY}.")
+                val hgPlayer = entity.hgPlayer
 
-                        delay(kit.properties.duration)
+                if (!hgPlayer.isAlive) continue
 
-                        hgPlayer.enableKit()
-                        hgPlayer.bukkitPlayer?.sendMessage("${Prefix}Your kit has been ${ChatColor.GREEN}enabled${ChatColor.GRAY}.")
-                    }
+                scope.launch {
+                    hgPlayer.disableKit()
+                    hgPlayer.bukkitPlayer?.sendMessage("${Prefix}Your kit has been ${ChatColor.RED}disabled${ChatColor.GRAY}.")
+
+                    delay(kit.properties.duration)
+
+                    hgPlayer.enableKit()
+                    hgPlayer.bukkitPlayer?.sendMessage("${Prefix}Your kit has been ${ChatColor.GREEN}enabled${ChatColor.GRAY}.")
                 }
             }
         }
