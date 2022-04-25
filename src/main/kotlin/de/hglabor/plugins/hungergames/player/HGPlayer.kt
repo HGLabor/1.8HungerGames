@@ -5,7 +5,6 @@ import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
-import de.hglabor.plugins.hungergames.game.mechanics.recraft.Recraft
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
@@ -37,7 +36,6 @@ import java.util.concurrent.atomic.AtomicInteger
     var combatTimer: AtomicInteger = AtomicInteger(0)
     val isInCombat: Boolean
         get() = combatTimer.get() > 0 && isAlive
-    val recraft = Recraft()
     var board: Board? = null
     var kit: Kit<*> = None.value
     var isKitEnabled = true
