@@ -7,6 +7,7 @@ import de.hglabor.plugins.hungergames.commands.StartCommand
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.*
+import de.hglabor.plugins.hungergames.game.mechanics.recraft.RecraftNerf
 import net.axay.kspigot.extensions.bukkit.register
 import net.axay.kspigot.main.KSpigot
 import org.bukkit.Bukkit
@@ -67,6 +68,7 @@ class HungerGames: KSpigot() {
         MoreDurability.register()
         MushroomCowNerf.register()
         HungerNerf.register()
+        RecraftNerf.register()
     }
 
     private fun whitelistManager() {
