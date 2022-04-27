@@ -1,6 +1,5 @@
 package de.hglabor.plugins.hungergames.game.mechanics.recraft
 
-import de.hglabor.plugins.hungergames.game.mechanics.recraft.RecraftNerf.realMaterial
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import org.bukkit.Material
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack
 
 // todo: send feedback if events are cancelled or recraft stacks nerfed
 object RecraftNerf {
-    private const val RECRAFT_LIMIT = 128
+    private const val RECRAFT_LIMIT = 64
     private val recraftList = listOf(
         Recraft(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM),
         Recraft(Material.COCOA),
@@ -64,16 +63,32 @@ object RecraftNerf {
 
             val action = e.action
             val clickedInv = e.clickedInventory
+            val topInv = e.view.topInventory
             val playerInv = e.view.bottomInventory
             val recraftComponents = playerInv.contents.recraftComponents()
 
-            if (clickedInv == e.view.topInventory && action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                val recraftInfo = processRecraft(currentItemStack, recraftComponents)
-                if (recraftInfo.needsNerf) {
+            val recraftInfoCurrent = processRecraft(currentItemStack, recraftComponents)
+
+            if (clickedInv == topInv && action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                if (recraftInfoCurrent.needsNerf) {
                     e.isCancelled = true
-                    if (recraftInfo.pickUpAmount > 0) {
-                        e.currentItem = currentItemStack.apply { amount = recraftInfo.remainingAmount }
-                        playerInv.addItem(currentItemStack.clone().apply { amount = recraftInfo.pickUpAmount })
+                    if (recraftInfoCurrent.pickUpAmount > 0) {
+                        e.currentItem = currentItemStack.apply { amount = recraftInfoCurrent.remainingAmount }
+                        playerInv.addItem(currentItemStack.clone().apply { amount = recraftInfoCurrent.pickUpAmount })
+                    }
+                }
+                return@listen
+            }
+
+            if (action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD) {
+                if (e.rawSlot !in (0..topInv.size)) // slot ist nicht im top inv
+                    return@listen
+
+                if (recraftInfoCurrent.needsNerf) {
+                    e.isCancelled = true
+                    if (recraftInfoCurrent.pickUpAmount > 0) {
+                        e.currentItem = currentItemStack.apply { amount = recraftInfoCurrent.remainingAmount }
+                        playerInv.addItem(currentItemStack.clone().apply { amount = recraftInfoCurrent.pickUpAmount })
                     }
                 }
                 return@listen
@@ -178,6 +193,7 @@ object RecraftNerf {
 
     private val recraftMaterials =
         listOf(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.CACTUS, Material.COCOA)
+
     private fun ItemStack.isCocoa() = type == Material.INK_SACK && data.data.toInt() == 3
     private fun ItemStack.realMaterial() = if (isCocoa()) Material.COCOA else type
     private fun ItemStack.isRecraftMaterial() = recraftMaterials.contains(realMaterial())
