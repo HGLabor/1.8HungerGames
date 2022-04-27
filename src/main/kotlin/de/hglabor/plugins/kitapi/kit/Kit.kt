@@ -1,6 +1,5 @@
 package de.hglabor.plugins.kitapi.kit
 
-import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.player.hgPlayer
@@ -63,7 +62,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
 
         fun givePlayer(player: Player) {
             player.hgPlayer.enableKit()
-            for ((_: Int, item: KitItem) in items) {
+            for (item in items.values) {
                 val kitItemStack = item.stack.apply {
                     meta {
                         displayName = "${ChatColor.DARK_PURPLE}${properties.kitname}"
