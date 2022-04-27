@@ -4,26 +4,35 @@ import org.bukkit.Material
 import kotlin.reflect.KProperty
 
 abstract class KitProperties {
+    val propertyList = mutableListOf<KitProperty<*>>()
     lateinit var kitname: String
         internal set
 
     abstract class KitProperty<T> {
         abstract val defaultValue: T
+        lateinit var kProperty: KProperty<*>
 
         protected var value: T? = null
 
-        abstract operator fun getValue(thisRef: Any, property: KProperty<*>): T
+        operator fun getValue(thisRef: Any, property: KProperty<*>): T {
+            return value ?: defaultValue
+        }
 
         operator fun setValue(thisRef: Any?, property: KProperty<*>, newValue: T) {
             value = newValue
         }
+
+        operator fun provideDelegate(thisRef: Any?, property: KProperty<*>): KitProperty<T> {
+            kProperty = property
+            return this
+        }
     }
 
-    inline fun <reified T : Any> any(default: T) = object : KitProperty<T>() {
+    private inline fun <reified T : Any> any(default: T) = object : KitProperty<T>() {
         override val defaultValue = default
 
-        override fun getValue(thisRef: Any, property: KProperty<*>): T {
-            return value ?: defaultValue
+        init {
+            propertyList += this
         }
     }
 
