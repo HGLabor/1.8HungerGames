@@ -1,9 +1,6 @@
 package de.hglabor.plugins.hungergames
 
-import de.hglabor.plugins.hungergames.commands.FeastCommand
-import de.hglabor.plugins.hungergames.commands.KitCommand
-import de.hglabor.plugins.hungergames.commands.ReviveCommand
-import de.hglabor.plugins.hungergames.commands.StartCommand
+import de.hglabor.plugins.hungergames.commands.*
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
 import de.hglabor.plugins.hungergames.game.mechanics.*
@@ -44,6 +41,7 @@ class HungerGames: KSpigot() {
             executor = KitCommand
             tabCompleter = KitCommand
         }
+        KitSettingsCommand.register("kitsettings")
     }
 
     private fun registerListeners() {

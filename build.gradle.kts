@@ -9,7 +9,7 @@ version = "${mcVersion}_v1"
 description = "Minecraft Hunger Games in $mcVersion"
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.21"
     kotlin("plugin.serialization") version "1.6.0"
 
     `java-library`
@@ -74,6 +74,9 @@ bukkit {
         }
         register("revive") {
             description = "Revive a player"
+        }
+        register("kitsettings") {
+            description = "Change kit settings"
         }
     }
 }
