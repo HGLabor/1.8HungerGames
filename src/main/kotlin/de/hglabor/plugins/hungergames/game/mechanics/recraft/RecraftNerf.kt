@@ -150,14 +150,14 @@ object RecraftNerf {
         val default = RecraftInfo(false, -1, -1)
         if (!itemStackToAdd.isRecraftMaterial())
             return default
-        recraftComponents.forEach { broadcast("$it") } // debug
+        // recraftComponents.forEach { broadcast("$it") } // debug
         recraftComponents.add(RecraftComponent(itemStackToAdd.realMaterial(), itemStackToAdd.amount))
         val futureSoups = recraftList.sumOf { it.soups(recraftComponents) }
         if (futureSoups > RECRAFT_LIMIT) {
             val remainingAmount = futureSoups - RECRAFT_LIMIT // differenz, die gelöscht werden muss
             val pickUpAmount = max(0, itemStackToAdd.amount - remainingAmount) // wie viel der spieler aufnehmen darf
-            broadcast("futureSoups=$futureSoups | RECRAFT_LIMIT=$RECRAFT_LIMIT | needsNerf=true") // debug
-            broadcast("pickUpAmount=$pickUpAmount | remainingAmount=$remainingAmount") // debug
+            // broadcast("futureSoups=$futureSoups | RECRAFT_LIMIT=$RECRAFT_LIMIT | needsNerf=true") // debug
+            // broadcast("pickUpAmount=$pickUpAmount | remainingAmount=$remainingAmount") // debug
             return RecraftInfo(true, remainingAmount, pickUpAmount)
         }
         return default
