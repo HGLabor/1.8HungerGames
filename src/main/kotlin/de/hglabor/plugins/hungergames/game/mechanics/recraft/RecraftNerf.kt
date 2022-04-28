@@ -2,7 +2,6 @@ package de.hglabor.plugins.hungergames.game.mechanics.recraft
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
-import net.axay.kspigot.extensions.geometry.toSimpleString
 import org.bukkit.Material
 import org.bukkit.event.EventPriority
 import org.bukkit.event.inventory.InventoryAction
@@ -10,34 +9,46 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
-import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import kotlin.math.max
 
 // todo: send feedback if events are cancelled or recraft stacks nerfed
 object RecraftNerf {
-    private const val RECRAFT_LIMIT = 96
-    val recraftList = listOf(
+    private const val RECRAFT_LIMIT = 64
+    private val recraftList = listOf(
         Recraft(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM),
         Recraft(Material.COCOA),
         Recraft(Material.CACTUS)
     )
 
-    var isRegistered = false
     fun register() {
-        isRegistered = true
+        // todo: einzelne pilz itemstacks daran hindern das rc limit zu überschreiten,
+        //  auch wenn man sich erst mit 2 itemstacks suppen bauen kann
 
-        // bug: wrong calculation if recraft is dragged over other recraft
+        // todo: compatibility with NoInvDropOnClose
+        // cursorStack ; inventory contents ; set NoInvDropOnClose priority to normal
+/*        listen<InventoryCloseEvent>(EventPriority.LOW) { e ->
+            val cursorItemStack = e.view.cursor ?: return@listen
+            val recraftComponents = e.player.inventory.contents.recraftComponents()
+            val recraftInfo = processRecraft(cursorItemStack, recraftComponents)
+
+            if (recraftInfo.needsNerf) {
+                if (recraftInfo.pickUpAmount > 0) {
+                    val stack = cursorItemStack.clone().apply { amount = recraftInfo.remainingAmount }
+                    e.player.world.dropItemNaturally(e.player.location, stack) // does not spawn?
+                    e.view.cursor = null // sets it to ItemStack(Material.AIR, 0) anyway NoInvDrop should not process it
+                    e.player.inventory.addItem(cursorItemStack.clone().apply { amount = recraftInfo.pickUpAmount })
+                }
+            }
+            // val recraftInfoContents = processRecraft(inventoryContents, recraftComponents)
+        }*/
+
         listen<InventoryDragEvent> { e ->
-            val oldCursorStack = e.oldCursor
-            if (!oldCursorStack.isRecraftMaterial())
-                return@listen
-
             val topInvSlots: IntRange = (0 until e.view.topInventory.size)
-            val newItemStacks = e.newItems.filter { it.key !in topInvSlots }.map { it.value }
-            val amountPlaced = newItemStacks.sumOf { it.amount }
-            val stack = oldCursorStack.clone().apply { amount = amountPlaced }
-            val recraftInfo = processRecraft(stack, e.view.bottomInventory.recraftComponents())
+            val playerInvContents = e.newItems.filter { it.key !in topInvSlots }.map { it.value }
+            val amountPlaced = playerInvContents.sumOf { it.amount }
+            val stack = e.oldCursor.clone().apply { amount = amountPlaced }
+            val recraftComponents = playerInvContents.recraftComponents()
+            val recraftInfo = processRecraft(stack, recraftComponents)
 
             if (recraftInfo.needsNerf)
                 e.isCancelled = true
@@ -46,6 +57,7 @@ object RecraftNerf {
         listen<InventoryClickEvent> { e ->
             val currentItemStack = e.currentItem ?: ItemStack(Material.AIR)
             val cursorItemStack = e.cursor ?: ItemStack(Material.AIR)
+
             if (!currentItemStack.isRecraftMaterial() && !cursorItemStack.isRecraftMaterial())
                 return@listen
 
@@ -53,31 +65,30 @@ object RecraftNerf {
             val clickedInv = e.clickedInventory
             val topInv = e.view.topInventory
             val playerInv = e.view.bottomInventory
+            val recraftComponents = playerInv.contents.recraftComponents()
 
-            fun applyProcessRecraft(
-                itemStackToAdd: ItemStack,
-                recraftComponents: MutableList<RecraftComponent> = playerInv.recraftComponents(),
-                block: (RecraftInfo) -> Unit = {},
-            ) {
-                val recraftInfo = processRecraft(itemStackToAdd, recraftComponents)
-                if (recraftInfo.needsNerf) {
+            val recraftInfoCurrent = processRecraft(currentItemStack, recraftComponents)
+
+            if (clickedInv == topInv && action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                if (recraftInfoCurrent.needsNerf) {
                     e.isCancelled = true
-                    if (recraftInfo.pickUpAmount > 0) block(recraftInfo)
+                    if (recraftInfoCurrent.pickUpAmount > 0) {
+                        e.currentItem = currentItemStack.apply { amount = recraftInfoCurrent.remainingAmount }
+                        playerInv.addItem(currentItemStack.clone().apply { amount = recraftInfoCurrent.pickUpAmount })
+                    }
                 }
+                return@listen
             }
 
-            // bug: wenn pickUpAmount > inventarPlatz, wird der angeklickte stack vermindert (remaining), obwohl
-            // man ja gar nicht alle suppen von pickUpAmount genommen hat
-            if (clickedInv == topInv && action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                applyProcessRecraft(currentItemStack) {
-                    currentItemStack.apply { amount = it.remainingAmount }
-                    playerInv.addItem(currentItemStack.clone().apply { amount = it.pickUpAmount })
-                }
-            } else if (action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD) {
-                if (e.rawSlot in (0..topInv.size)) { // slot ist im top inv
-                    applyProcessRecraft(currentItemStack) {
-                        currentItemStack.apply { amount = it.remainingAmount }
-                        playerInv.addItem(currentItemStack.clone().apply { amount = it.pickUpAmount })
+            if (action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD) {
+                if (e.rawSlot !in (0..topInv.size)) // slot ist nicht im top inv
+                    return@listen
+
+                if (recraftInfoCurrent.needsNerf) {
+                    e.isCancelled = true
+                    if (recraftInfoCurrent.pickUpAmount > 0) {
+                        e.currentItem = currentItemStack.apply { amount = recraftInfoCurrent.remainingAmount }
+                        playerInv.addItem(currentItemStack.clone().apply { amount = recraftInfoCurrent.pickUpAmount })
                     }
                 }
                 return@listen
@@ -86,36 +97,43 @@ object RecraftNerf {
             if (clickedInv != playerInv)
                 return@listen
 
+            val recraftInfo: RecraftInfo?
             when (action) {
                 InventoryAction.PLACE_ALL -> {
-                    applyProcessRecraft(cursorItemStack) {
-                        cursorItemStack.apply { amount = it.remainingAmount }
-                        playerInv.addItem(cursorItemStack.clone().apply { amount = it.pickUpAmount })
+                    recraftInfo = processRecraft(cursorItemStack, recraftComponents)
+                    if (recraftInfo.needsNerf) {
+                        e.isCancelled = true
+                        if (recraftInfo.pickUpAmount > 0) {
+                            e.cursor = cursorItemStack.apply { amount = recraftInfo.remainingAmount }
+                            playerInv.addItem(cursorItemStack.clone().apply { amount = recraftInfo.pickUpAmount })
+                        }
                     }
                 }
 
                 InventoryAction.PLACE_SOME -> {
                     val amountToPlace = currentItemStack.maxStackSize - currentItemStack.amount
                     val itemStackToPlace = cursorItemStack.clone().apply { amount = amountToPlace }
-                    applyProcessRecraft(itemStackToPlace) {
-                        // subtract what we placed, add the remaining to the cursor
-                        val remaining = (cursorItemStack.amount - amountToPlace) + it.remainingAmount
-                        itemStackToPlace.apply { amount = remaining }
-                        playerInv.addItem(cursorItemStack.clone().apply { amount = it.pickUpAmount })
+                    recraftInfo = processRecraft(itemStackToPlace, recraftComponents)
+                    if (recraftInfo.needsNerf) {
+                        e.isCancelled = true
+                        if (recraftInfo.pickUpAmount > 0) {
+                            // subtract what we placed, add the remaining to the cursor
+                            val remaining = (cursorItemStack.amount - amountToPlace) + recraftInfo.remainingAmount
+                            e.cursor = cursorItemStack.apply { amount = remaining }
+                            playerInv.addItem(cursorItemStack.clone().apply { amount = recraftInfo.pickUpAmount })
+                        }
                     }
                 }
 
                 InventoryAction.PLACE_ONE -> {
                     val itemStackToPlace = cursorItemStack.clone().apply { amount = 1 }
-                    applyProcessRecraft(itemStackToPlace)
+                    recraftInfo = processRecraft(itemStackToPlace, recraftComponents)
+                    if (recraftInfo.needsNerf) e.isCancelled = true // add 1, if too much do not add
                 }
 
                 InventoryAction.SWAP_WITH_CURSOR -> {
-                    val newCursorStack = clickedInv.getItem(e.slot)
-                    if (newCursorStack.isRecraftMaterial()) {
-                        val recraftComponent = RecraftComponent(newCursorStack.type, newCursorStack.amount)
-                        applyProcessRecraft(newCursorStack, playerInv.recraftComponents().apply { remove(recraftComponent) })
-                    } else applyProcessRecraft(newCursorStack)
+                    recraftInfo = processRecraft(cursorItemStack, recraftComponents.apply { removeAt(e.slot) })
+                    if (recraftInfo.needsNerf) e.isCancelled = true
                 }
 
                 else -> {}
@@ -124,53 +142,59 @@ object RecraftNerf {
 
         listen<PlayerPickupItemEvent> { e ->
             val eventItemStack = e.item.itemStack
-            if (!eventItemStack.isRecraftMaterial())
-                return@listen
-
-            val recraftComponents = e.player.inventory.recraftComponents()
+            val recraftComponents = e.player.inventory.contents.recraftComponents()
             val recraftInfo = processRecraft(eventItemStack, recraftComponents)
             if (recraftInfo.needsNerf) {
                 e.isCancelled = true
                 if (recraftInfo.pickUpAmount == 0) e.item.remove()
                 else e.item.itemStack = eventItemStack.apply { amount = recraftInfo.pickUpAmount }
-                // next pick up will be successful
+                // beim nächsten aufheben ist es also okay
             }
         }
     }
 
     data class RecraftInfo(val needsNerf: Boolean, val remainingAmount: Int, val pickUpAmount: Int)
-    data class RecraftComponent(val material: Material, val amount: Int)
-    class Recraft(vararg _material: Material) {
-        val materials = _material.toList()
-        fun soups(recraftComponents: List<RecraftComponent>) =
-            materials.map { material -> recraftComponents.filter { it.material == material }.sumOf { it.amount } }.minOf { it }
-    }
 
-    fun processRecraft(
-        itemStackToAdd: ItemStack,
+    private fun processRecraft(
+        eventItemStack: ItemStack,
         recraftComponents: MutableList<RecraftComponent>
     ): RecraftInfo {
         val default = RecraftInfo(false, -1, -1)
-        if (!itemStackToAdd.isRecraftMaterial())
+        if (!eventItemStack.isRecraftMaterial())
             return default
-        // recraftComponents.forEach { broadcast("$it") } // debug
-        recraftComponents.add(RecraftComponent(itemStackToAdd.realMaterial(), itemStackToAdd.amount))
+
+        recraftComponents.forEach { broadcast("$it") }
+
+        recraftComponents.add(RecraftComponent(eventItemStack.realMaterial(), eventItemStack.amount))
         val futureSoups = recraftList.sumOf { it.soups(recraftComponents) }
         if (futureSoups > RECRAFT_LIMIT) {
             val remainingAmount = futureSoups - RECRAFT_LIMIT // differenz, die gelöscht werden muss
-            val pickUpAmount = max(0, itemStackToAdd.amount - remainingAmount) // wie viel der spieler aufnehmen darf
-            // broadcast("futureSoups=$futureSoups | RECRAFT_LIMIT=$RECRAFT_LIMIT | needsNerf=true") // debug
-            // broadcast("$pickUpAmount=$pickUpAmount | $remainingAmount=$remainingAmount") // debug
+            val pickUpAmount = eventItemStack.amount - remainingAmount // wie viel der spieler aufnehmen darf
+            broadcast("futureSoups=$futureSoups | RECRAFT_LIMIT=$RECRAFT_LIMIT » needsNerf=true")
+            broadcast("aufnehmenAmount=$pickUpAmount | uebrigAmount=$remainingAmount")
             return RecraftInfo(true, remainingAmount, pickUpAmount)
         }
         return default
     }
+
+    data class RecraftComponent(val material: Material, val amount: Int)
+    class Recraft(vararg _material: Material) {
+        private val materials = _material.toList()
+        fun soups(recraftComponents: List<RecraftComponent>) =
+            materials.map { material -> recraftComponents.filter { it.material == material }.sumOf { it.amount } }
+                .minOf { it }
+    }
+
+    private fun Array<ItemStack>.recraftComponents() =
+        filterNotNull().map { RecraftComponent(it.realMaterial(), it.amount) }.toMutableList()
+
+    private fun Collection<ItemStack>.recraftComponents() =
+        filterNotNull().map { RecraftComponent(it.realMaterial(), it.amount) }.toMutableList()
+
+    private val recraftMaterials =
+        listOf(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.CACTUS, Material.COCOA)
+
+    private fun ItemStack.isCocoa() = type == Material.INK_SACK && data.data.toInt() == 3
+    private fun ItemStack.realMaterial() = if (isCocoa()) Material.COCOA else type
+    private fun ItemStack.isRecraftMaterial() = recraftMaterials.contains(realMaterial())
 }
-
-private fun ItemStack.isCocoa() = type == Material.INK_SACK && data.data.toInt() == 3
-private fun ItemStack.realMaterial() = if (isCocoa()) Material.COCOA else type
-private val recraftMaterials = RecraftNerf.recraftList.flatMap { it.materials }
-fun ItemStack.isRecraftMaterial() = recraftMaterials.contains(realMaterial())
-
-fun Inventory.recraftComponents() = contents.filterNotNull().filter { it.isRecraftMaterial() }
-    .map { RecraftNerf.RecraftComponent(it.realMaterial(), it.amount) }.toMutableList()
