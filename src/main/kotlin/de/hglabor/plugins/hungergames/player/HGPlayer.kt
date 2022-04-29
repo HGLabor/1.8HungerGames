@@ -1,4 +1,4 @@
-    package de.hglabor.plugins.hungergames.player
+package de.hglabor.plugins.hungergames.player
 
 import de.hglabor.plugins.hungergames.event.KitDisableEvent
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
@@ -42,7 +42,10 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     var kit: Kit<*> = None.value
     var changedKitBefore: Boolean = false
     var isKitEnabled = true
+    var isKitByRogueDisabled: Boolean = false
     var wasInAgnikai: Boolean = false
+    val roguePrefix: String
+        get() = if(isKitByRogueDisabled) "${ChatColor.STRIKETHROUGH}" else ""
 
     fun login() {
         OfflineTimer.stopTimer(this)
@@ -62,7 +65,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             content {
                 +" "
                 +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
-                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${ChatColor.WHITE}${kit.properties.kitname}" }
+                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${roguePrefix}${ChatColor.WHITE}${kit.properties.kitname}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Kills:#${ChatColor.WHITE}${kills.get()}" }
                 +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
                 +{ if (isInCombat) "${ChatColor.RED}${ChatColor.BOLD}IN COMBAT" else " " }
@@ -100,11 +103,13 @@ open class HGPlayer(val uuid: UUID, val name: String) {
 
     fun enableKit() {
         isKitEnabled = true
+        isKitByRogueDisabled = false
         Bukkit.getPluginManager().callEvent(KitEnableEvent(bukkitPlayer ?: return, kit))
     }
 
-    fun disableKit() {
+    fun disableKit(isByRogue: Boolean = false) {
         isKitEnabled = false
+        isKitByRogueDisabled = isByRogue
         Bukkit.getPluginManager().callEvent(KitDisableEvent(bukkitPlayer ?: return, kit))
     }
 }

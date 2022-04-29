@@ -36,7 +36,7 @@ val Rogue = Kit("Rogue", ::RogueProperties) {
                     continue
 
                 coroutineScope.launch {
-                    hgPlayer.disableKit()
+                    hgPlayer.disableKit(isByRogue = true)
                     player.sendMessage("${Prefix}Your kit has been ${ChatColor.RED}disabled${ChatColor.GRAY}.")
 
                     delay(kit.properties.duration)
