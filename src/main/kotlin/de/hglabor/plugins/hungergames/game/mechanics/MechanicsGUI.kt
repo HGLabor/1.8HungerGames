@@ -39,7 +39,9 @@ class MechanicsGUI(vararg mechanics: Lazy<Mechanic>) {
                             if (mechanic.internal.isEnabled) {
                                 addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1)
                             }
-                            lore = mechanic.description?.toLoreList()
+                            mechanic.description?.let { description ->
+                                lore = description.toLoreList()
+                            }
                         }
                     }
                 },
