@@ -7,8 +7,6 @@ import de.hglabor.plugins.hungergames.utils.BlockQueue
 import de.hglabor.plugins.hungergames.utils.RandomCollection
 import de.hglabor.plugins.hungergames.utils.TimeConverter
 import de.hglabor.plugins.hungergames.utils.WorldUtils
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.sync
 import net.axay.kspigot.runnables.task
@@ -140,30 +138,22 @@ class Feast(val world: World) : Listener {
     }
 
     private fun startCountDown() {
-        runBlocking {
-            launch {
-                task(false, 0, 20) {
-                    if (timer.decrementAndGet() <= 0) {
-                        //CHEST SPAWNING
-                        inPreparation = false
-                        isFinished = true
-                        feastBlocks.forEach { feastBlock: Block ->
-                            feastBlock.removeMetadata(BLOCK_KEY, Manager)
-                        }
-                        sync {
-                            announceFeast()
-                            spawnFeastLoot()
-                        }
-                        it.cancel()
-                    } else {
-                        if (timer.get() % 60 == 0 || when (timer.get()) {
-                                30, 15, 10, 5, 3, 2, 1 -> true
-                                else -> false
-                            }
-                        ) {
-                            announceFeast()
-                        }
-                    }
+        task(false, 0, 20) {
+            if (timer.decrementAndGet() <= 0) {
+                //CHEST SPAWNING
+                inPreparation = false
+                isFinished = true
+                feastBlocks.forEach { feastBlock: Block ->
+                    feastBlock.removeMetadata(BLOCK_KEY, Manager)
+                }
+                sync {
+                    announceFeast()
+                    spawnFeastLoot()
+                }
+                it.cancel()
+            } else {
+                if (timer.get() % 60 == 0 || timer.get() in listOf(30, 15, 10, 5, 3, 2, 1)) {
+                    announceFeast()
                 }
             }
         }

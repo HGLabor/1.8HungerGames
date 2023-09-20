@@ -3,7 +3,7 @@ package de.hglabor.plugins.hungergames.game
 import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
-import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
+import de.hglabor.plugins.hungergames.game.arena.Arena
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
@@ -11,8 +11,6 @@ import de.hglabor.plugins.hungergames.game.phase.phases.LobbyPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.utils.TimeConverter
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.title
@@ -50,13 +48,7 @@ object GameManager {
                 else -> {}
             }
         }
-
-        runBlocking {
-            launch {
-                startTimer()
-            }
-        }
-        task(true, 20, 20) { phase.tick(phase.tickCount++) }
+        startTimer()
     }
 
     fun startNextPhase() {
@@ -68,8 +60,9 @@ object GameManager {
         elapsedTime.set(0)
     }
 
-    private suspend fun startTimer() {
+    private fun startTimer() {
         task(false, 20, 20) {
+            sync { phase.tick(phase.tickCount++) }
             if (elapsedTime.get() == phase.maxDuration) {
                 sync {
                     startNextPhase()
@@ -103,11 +96,11 @@ object GameManager {
                     60, 30, 20, 10, 3, 2, 1 -> broadcast("${Prefix}The player with the most eliminations wins in ${remaining}.")
                 }
 
-                if (Agnikai.isOpen && elapsedTime.toInt() > 900) {
-                    Agnikai.isOpen = false
-                    broadcast("${Agnikai.Prefix}${ChatColor.RED}The Agnikai has been closed!")
-                    Agnikai.task?.cancel()
-                    Agnikai.task = null
+                if (Arena.isOpen && elapsedTime.toInt() > 900) {
+                    Arena.isOpen = false
+                    broadcast("${Arena.Prefix}${ChatColor.RED}The arena has been closed!")
+                    Arena.task?.cancel()
+                    Arena.task = null
                 }
             }
         }
