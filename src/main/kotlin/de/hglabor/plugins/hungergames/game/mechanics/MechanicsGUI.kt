@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack
 
 class MechanicsGUI(vararg mechanics: Lazy<Mechanic>) {
     companion object {
-        val mechanicsGuiItem = itemStack(Material.CHEST) { meta { name = "${PrimaryColor}Mechanics" } }
+        val mechanicsGuiItem = itemStack(Material.BEACON) { meta { name = "${PrimaryColor}Game Mechanics" } }
     }
 
     val gui = kSpigotGUI(GUIType.FIVE_BY_NINE) {
