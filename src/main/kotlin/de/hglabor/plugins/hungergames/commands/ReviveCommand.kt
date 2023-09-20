@@ -27,7 +27,6 @@ object ReviveCommand : CommandExecutor {
         }
 
         if (args.size != 1) {
-            player.openGUI(KitSelector.gui)
             sender.sendMessage("${Prefix}Please use ${ChatColor.WHITE}/revive ${ChatColor.GRAY}<${SecondaryColor}Player${ChatColor.GRAY}>.")
             return false
         }
