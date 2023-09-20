@@ -12,6 +12,7 @@ import de.hglabor.plugins.hungergames.utils.TimeConverter
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.bukkit.give
+import net.axay.kspigot.extensions.bukkit.isFeetInWater
 import net.axay.kspigot.extensions.bukkit.title
 import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.KSpigotRunnable
@@ -34,9 +35,9 @@ import java.util.concurrent.atomic.AtomicInteger
 object Arena {
     val Prefix = " ${ChatColor.DARK_GRAY}| ${ChatColor.RED}Arena ${ChatColor.DARK_GRAY}» ${ChatColor.GRAY}"
     val world: World = Bukkit.getWorld("arena")
-    private val queueLocation = Location(world, 1230.5, 13.0, 309.5, 0f, 0F)
-    private val spawn1Location = Location(world, 1230.5, 5.0, 313.5, 0f, 0F)
-    private val spawn2Location = Location(world, 1230.5, 5.0, 328.5, 180f, 0F)
+    private val queueLocation = Location(world, 247.5, 76.5, 281.5, 90f, 0F)
+    private val spawn1Location = Location(world, 221.5, 75.5, 261.5, 0f, 0F)
+    private val spawn2Location = Location(world, 221.5, 75.5, 301.5, -180f, 0F)
 
     var isOpen = true
     val queuedPlayers = mutableListOf<HGPlayer>()
@@ -164,6 +165,9 @@ object Arena {
                             }
                         )
 
+                        if (fighting.bukkitPlayer?.isFeetInWater == true) {
+                            endFight(fighting.bukkitPlayer)
+                        }
                     }
                 }
 
