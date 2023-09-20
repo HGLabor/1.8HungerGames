@@ -3,8 +3,8 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
-import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
+import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
@@ -58,7 +58,7 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
         }
 
         // Winner
-        if (PlayerList.alivePlayers.size <= 1 && Agnikai.currentlyFighting.isEmpty() && Agnikai.queuedPlayers.size < 2) {
+        if (PlayerList.alivePlayers.size <= 1 && Arena.currentlyFighting.isEmpty() && Arena.queuedPlayers.size < 2) {
             GameManager.startNextPhase()
         }
     }

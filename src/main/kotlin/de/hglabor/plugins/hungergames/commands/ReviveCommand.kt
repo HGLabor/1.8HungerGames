@@ -2,8 +2,8 @@ package de.hglabor.plugins.hungergames.commands
 
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
-import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
-import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
+import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import net.axay.kspigot.gui.openGUI
 import org.bukkit.Bukkit
@@ -43,15 +43,15 @@ object ReviveCommand : CommandExecutor {
             return false
         }
 
-        if (Agnikai.currentlyFighting.contains(target.hgPlayer)) {
-            sender.sendMessage("${Prefix}${ChatColor.GRAY}${target.name} is currently fighting in agnikai.")
+        if (Arena.currentlyFighting.contains(target.hgPlayer)) {
+            sender.sendMessage("${Prefix}${ChatColor.GRAY}${target.name} is currently fighting in arena.")
             return false
         }
         sender.sendMessage("${Prefix}${SecondaryColor}${target.name}${ChatColor.GRAY} has been ${ChatColor.GREEN}revived${ChatColor.GRAY}.")
         target.hgPlayer.makeGameReady()
-        target.hgPlayer.wasInAgnikai = false
+        target.hgPlayer.wasInArena = false
         target.hgPlayer.setGameScoreboard(true)
-        Agnikai.queuedPlayers.remove(target.hgPlayer)
+        Arena.queuedPlayers.remove(target.hgPlayer)
         target.sendMessage("${Prefix}You have been ${ChatColor.GREEN}revived${ChatColor.GRAY}.")
         return true
     }

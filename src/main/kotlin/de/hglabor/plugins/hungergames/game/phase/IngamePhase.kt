@@ -3,18 +3,16 @@ package de.hglabor.plugins.hungergames.game.phase
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.event.PlayerKilledEntityEvent
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
-import de.hglabor.plugins.hungergames.game.mechanics.DeathMessages
-import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
+import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.DeathMessages
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.OfflineTimer
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.kit.isKitItem
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -33,10 +31,10 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
 
-        if (player.hgPlayer.status == PlayerStatus.INGAME && Agnikai.isOpen && !player.hgPlayer.wasInAgnikai) {
+        if (player.hgPlayer.status == PlayerStatus.INGAME && Arena.isOpen && !player.hgPlayer.wasInArena) {
             DeathMessages.announce(event, true)
             taskRunLater(1) {
-                Agnikai.queuePlayer(player)
+                Arena.queuePlayer(player)
             }
         } else {
             taskRunLater(1) { player.spigot().respawn() }

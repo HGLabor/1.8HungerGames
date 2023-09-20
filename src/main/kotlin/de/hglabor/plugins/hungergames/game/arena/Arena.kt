@@ -1,7 +1,7 @@
-package de.hglabor.plugins.hungergames.game.agnikai
+package de.hglabor.plugins.hungergames.game.arena
 
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.mechanics.DeathMessages
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.DeathMessages
 import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
@@ -31,8 +31,8 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import java.util.concurrent.atomic.AtomicInteger
 
-object Agnikai {
-    val Prefix = " ${ChatColor.DARK_GRAY}| ${ChatColor.AQUA}Agnikai ${ChatColor.DARK_GRAY}» ${ChatColor.GRAY}"
+object Arena {
+    val Prefix = " ${ChatColor.DARK_GRAY}| ${ChatColor.RED}Arena ${ChatColor.DARK_GRAY}» ${ChatColor.GRAY}"
     val world: World = Bukkit.getWorld("arena")
     private val queueLocation = Location(world, 1230.5, 13.0, 309.5, 0f, 0F)
     private val spawn1Location = Location(world, 1230.5, 5.0, 313.5, 0f, 0F)
@@ -50,7 +50,7 @@ object Agnikai {
         player.teleport(queueLocation)
         player.hgPlayer.status = PlayerStatus.GULAG
         queuedPlayers += player.hgPlayer
-        player.hgPlayer.wasInAgnikai = true
+        player.hgPlayer.wasInArena = true
         player.inventory.clear()
 
         player.setScoreboard {
@@ -103,7 +103,7 @@ object Agnikai {
         currentlyFighting.forEach { it.setGameScoreboard(true) }
         if (loser != null) {
             val winner = currentlyFighting.first { op -> op != loser.hgPlayer }
-            DeathMessages.announceAgnikaiDeath(winner, loser.hgPlayer)
+            DeathMessages.announceArenaDeath(winner, loser.hgPlayer)
             winner.makeGameReady()
             winner.bukkitPlayer?.inventory?.apply {
                 addItem(ItemStack(Material.STONE_SWORD))

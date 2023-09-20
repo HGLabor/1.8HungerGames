@@ -3,8 +3,8 @@
 import de.hglabor.plugins.hungergames.event.KitDisableEvent
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
-import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.OfflineTimer
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
@@ -42,7 +42,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     var kit: Kit<*> = None.value
     var changedKitBefore: Boolean = false
     var isKitEnabled = true
-    var wasInAgnikai: Boolean = false
+    var wasInArena: Boolean = false
 
     fun login() {
         OfflineTimer.stopTimer(this)
