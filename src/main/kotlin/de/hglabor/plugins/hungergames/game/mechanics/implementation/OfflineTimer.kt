@@ -1,4 +1,4 @@
-package de.hglabor.plugins.hungergames.game.mechanics
+package de.hglabor.plugins.hungergames.game.mechanics.implementation
 
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor

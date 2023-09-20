@@ -15,32 +15,42 @@ import net.axay.kspigot.gui.openGUI
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
+import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
-object KitSelector {
-    val kitSelectorItem = itemStack(Material.CHEST) { meta { name = "${SecondaryColor}Kit Selector" } }
+class MechanicsGUI(vararg mechanics: Lazy<Mechanic>) {
+    companion object {
+        val mechanicsGuiItem = itemStack(Material.CHEST) { meta { name = "${PrimaryColor}Mechanics" } }
+    }
+
     val gui = kSpigotGUI(GUIType.FIVE_BY_NINE) {
-        title = "${SecondaryColor}Kitselector"
+        title = "${PrimaryColor}Mechanics"
+
         page(1) {
-            val compound = createRectCompound<Kit<*>>(Slots.RowOneSlotTwo, Slots.RowFiveSlotEight,
-                iconGenerator = { kit ->
-                    kit.internal.displayItem.clone().apply {
+            val compound = createRectCompound<Mechanic>(Slots.RowOneSlotTwo, Slots.RowFiveSlotEight,
+                iconGenerator = { mechanic ->
+                    mechanic.internal.displayItem.clone().apply {
                         meta {
-                            name = "${SecondaryColor}${kit.properties.kitname}"
+                            name = "${if (mechanic.internal.isEnabled) ChatColor.GREEN else ChatColor.RED}${mechanic.name}"
                             addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+                            addItemFlags(ItemFlag.HIDE_ENCHANTS)
+                            if (mechanic.internal.isEnabled) {
+                                addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1)
+                            }
                         }
                     }
                 },
-                onClick = { clickEvent, kit ->
+                onClick = { clickEvent, mechanic ->
                     clickEvent.bukkitEvent.isCancelled = true
-                    clickEvent.player.chooseKit(kit)
-                    clickEvent.player.closeInventory()
+                    mechanic.internal.isEnabled = !mechanic.internal.isEnabled
+                    clickEvent.guiInstance.reloadCurrentPage()
                 })
-            compound.sortContentBy { kit -> kit.properties.kitname.lowercase() }
+            compound.sortContentBy { mechanic -> mechanic.name.lowercase() }
             compoundScroll(
                 Slots.RowThreeSlotNine,
                 ItemStack(Material.STAINED_GLASS_PANE, 1, 5).apply {
@@ -57,15 +67,15 @@ object KitSelector {
                     }
                 }, compound, 7 * 4
             )
-            compound.setContent(KitManager.kits)
+            compound.setContent(mechanics.map { it.value })
         }
     }
 
     fun register() {
         listen<PlayerInteractEvent> {
-            if (it.item == kitSelectorItem) {
+            if (it.item == mechanicsGuiItem) {
                 if (GameManager.phase == PvPPhase) {
-                    it.player.inventory.remove(kitSelectorItem)
+                    it.player.inventory.remove(mechanicsGuiItem)
                 } else {
                     it.player.openGUI(gui)
                 }
@@ -73,7 +83,7 @@ object KitSelector {
         }
 
         listen<BlockPlaceEvent> {
-            if (it.player.itemInHand == kitSelectorItem) {
+            if (it.player.itemInHand == mechanicsGuiItem) {
                 it.isCancelled = true
             }
         }
