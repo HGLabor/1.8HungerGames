@@ -37,6 +37,7 @@ private val whoMaged = mutableMapOf<UUID, UUID>()
 
 val Endermage = Kit("Endermage", ::EndermageProperties) {
     displayMaterial = Material.ENDER_PORTAL_FRAME
+    description = "Place your kit-item to teleport other player to you. After teleporting you are invulnerable for 5 seconds"
 
     val mageInstances = mutableMapOf<UUID, EndermageSearch>()
 

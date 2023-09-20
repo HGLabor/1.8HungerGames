@@ -19,6 +19,8 @@ class ZickZackProperties : KitProperties() {
 
 val ZickZack = Kit("ZickZack", ::ZickZackProperties) {
     displayMaterial = Material.DIAMOND_BLOCK
+    description = "After having a combo on a player, you will have a shield, blocking incoming damage"
+
     val comboMap: HashMap<UUID, AtomicInteger> = hashMapOf()
     val shieldMap: HashMap<UUID, AtomicInteger> = hashMapOf()
 

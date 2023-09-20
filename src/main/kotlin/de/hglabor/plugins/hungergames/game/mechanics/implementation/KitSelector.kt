@@ -15,6 +15,7 @@ import net.axay.kspigot.gui.openGUI
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
+import net.axay.kspigot.items.toLoreList
 import org.bukkit.Material
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -32,6 +33,7 @@ object KitSelector {
                         meta {
                             name = "${SecondaryColor}${kit.properties.kitname}"
                             addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+                            lore = kit.internal.description.toLoreList()
                         }
                     }
                 },

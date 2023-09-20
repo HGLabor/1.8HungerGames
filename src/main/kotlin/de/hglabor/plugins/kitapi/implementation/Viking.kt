@@ -10,6 +10,7 @@ class VikingProperties : KitProperties()
 
 val Viking = Kit("Viking", ::VikingProperties) {
     displayMaterial = Material.IRON_AXE
+    description = "Deal increased damage using axes"
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, player ->
         when (player.itemInHand.type) {

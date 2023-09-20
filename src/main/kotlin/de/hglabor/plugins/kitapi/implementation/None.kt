@@ -8,4 +8,5 @@ class NoneProperties : KitProperties()
 
 val None = Kit("None", ::NoneProperties) {
     displayMaterial = Material.BARRIER
+    description = "Nothing?"
 }

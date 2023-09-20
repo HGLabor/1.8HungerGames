@@ -23,6 +23,7 @@ class SquidProperties : KitProperties() {
 
 val Squid = Kit("Squid", ::SquidProperties) {
     displayMaterial = Material.INK_SACK
+    description = "Hit an enemy to give them blindness. You receive permanent water-breathing"
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, _ ->
         if (it.isCancelled) return@kitPlayerEvent

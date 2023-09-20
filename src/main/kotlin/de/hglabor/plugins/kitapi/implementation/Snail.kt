@@ -19,6 +19,7 @@ class SnailProperties : KitProperties() {
 
 val Snail = Kit("Snail", ::SnailProperties) {
     displayMaterial = Material.SLIME_BALL
+    description = "Hit an enemy to give them slowness. Sneak to retreat into your shell, while sneaking you deal and take half a heart of damage"
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, damager ->
         if (damager.isSneaking) {

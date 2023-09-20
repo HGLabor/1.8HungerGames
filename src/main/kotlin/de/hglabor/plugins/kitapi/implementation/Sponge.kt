@@ -38,6 +38,7 @@ class SpongeProperties : MultipleUsesCooldownProperties(15, 30000) {
 
 val Sponge = Kit("Sponge", ::SpongeProperties) {
     displayMaterial = Material.SPONGE
+    description = "Place your sponges to launch players into the air! Right-click a block to water it"
 
     val waterBlocks = ArrayList<Block>()
     val waterTasks = OnlinePlayerMap<KSpigotRunnable?>()

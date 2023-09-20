@@ -17,6 +17,7 @@ class MagmaProperties : KitProperties() {
 
 val Magma = Kit("Magma", ::MagmaProperties) {
     displayMaterial = Material.FIREBALL
+    description = "Ignite players when hitting them. You are immune to lava and fire damage"
 
     kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, _ ->
         val isFireDamage = when (it.cause) {

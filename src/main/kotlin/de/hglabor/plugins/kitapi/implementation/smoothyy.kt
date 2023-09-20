@@ -15,6 +15,7 @@ class SmoothyyProperties : KitProperties()
 
 val Smoothyy = Kit("smoothyy", ::SmoothyyProperties) {
     displayMaterial = Material.COOKED_CHICKEN
+    description = "Taitos erstes kit! Es geht aber nichts haha"
 
     simpleItem(ItemStack(Material.STAINED_CLAY, 1, 2))
     simpleItem(ItemStack(Material.STAINED_CLAY, 9, 4))

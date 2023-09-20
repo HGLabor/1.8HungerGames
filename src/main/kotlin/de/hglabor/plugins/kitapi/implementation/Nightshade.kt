@@ -25,6 +25,7 @@ class NightshadeProperties  : CooldownProperties(20000) {
 
 val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
     displayMaterial = Material.NETHER_BRICK_ITEM
+    description = "Right-click players with your kit-item to infect 1-2 soups and reduce their health for ${kit.properties.duration / 20} seconds. If your enemy presoups during this time or if they eat an infected soup, they will receive wither 3 for 4 seconds."
 
     clickOnEntityItem(ItemStack(Material.NETHER_BRICK_ITEM)) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem

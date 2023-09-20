@@ -22,6 +22,7 @@ class ReviveProperties : CooldownProperties(50000)
 
 val Revive = Kit("Revive", ::ReviveProperties) {
     displayMaterial = Material.GOLDEN_APPLE
+    description = "Instead of dieing, you will receive effect to keep you alive"
 
     kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, player ->
         if (player.health - it.finalDamage <= 0.0) {

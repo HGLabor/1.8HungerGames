@@ -15,6 +15,7 @@ class StomperProperties : KitProperties() {
 
 val Stomper = Kit("Stomper", ::StomperProperties) {
     displayMaterial = Material.DIAMOND_BOOTS
+    description = "Your falldamage will be reflected to nearby players"
 
     kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, player ->
         if (it.cause != EntityDamageEvent.DamageCause.FALL) return@kitPlayerEvent

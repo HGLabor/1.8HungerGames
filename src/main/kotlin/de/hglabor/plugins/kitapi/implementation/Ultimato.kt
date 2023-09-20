@@ -110,6 +110,7 @@ class UltimatoInstance(private val ultimato: Player) {
 
 val Ultimato = Kit("Ultimato", ::UltimatoProperties) {
     displayItem = ItemStack(Material.STAINED_GLASS_PANE, 1, 14)
+    description = "Create an arena to fight nearby players"
 
     clickableItem(ItemStack(Material.STAINED_GLASS_PANE, 1, 14), useInInvincibility = false) {
         if (it.player.isInUltimato || it.player.isInGladiator) return@clickableItem
