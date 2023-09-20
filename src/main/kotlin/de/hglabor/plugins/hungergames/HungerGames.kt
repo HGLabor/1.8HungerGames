@@ -1,9 +1,6 @@
 package de.hglabor.plugins.hungergames
 
-import de.hglabor.plugins.hungergames.commands.FeastCommand
-import de.hglabor.plugins.hungergames.commands.KitCommand
-import de.hglabor.plugins.hungergames.commands.ReviveCommand
-import de.hglabor.plugins.hungergames.commands.StartCommand
+import de.hglabor.plugins.hungergames.commands.*
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.arena.Arena
 import de.hglabor.plugins.hungergames.game.mechanics.MechanicsGUI
@@ -13,6 +10,7 @@ import net.axay.kspigot.main.KSpigot
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.WorldCreator
+import java.io.File
 import java.util.*
 
 class HungerGames : KSpigot() {
@@ -21,6 +19,9 @@ class HungerGames : KSpigot() {
     }
 
     override fun load() {
+        File("world/").let { file ->
+            if (file.exists() && file.isDirectory) file.deleteRecursively()
+        }
         INSTANCE = this
     }
 
@@ -40,6 +41,7 @@ class HungerGames : KSpigot() {
         StartCommand.register("start")
         FeastCommand.register("feast")
         ReviveCommand.register("revive")
+        ArenaTpCommand.register("arenatp")
         KitCommand.register("kit")
         getCommand("kit").apply {
             executor = KitCommand
