@@ -1,12 +1,8 @@
 package de.hglabor.plugins.hungergames.game.mechanics
 
 import de.hglabor.plugins.hungergames.PrimaryColor
-import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
-import de.hglabor.plugins.kitapi.kit.Kit
-import de.hglabor.plugins.kitapi.kit.KitManager
-import de.hglabor.plugins.kitapi.player.PlayerKits.chooseKit
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.gui.GUIType
 import net.axay.kspigot.gui.Slots
@@ -15,6 +11,7 @@ import net.axay.kspigot.gui.openGUI
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
+import net.axay.kspigot.items.toLoreList
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -42,6 +39,7 @@ class MechanicsGUI(vararg mechanics: Lazy<Mechanic>) {
                             if (mechanic.internal.isEnabled) {
                                 addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1)
                             }
+                            lore = mechanic.description?.toLoreList()
                         }
                     }
                 },
