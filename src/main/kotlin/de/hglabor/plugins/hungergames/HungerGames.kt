@@ -2,8 +2,8 @@ package de.hglabor.plugins.hungergames
 
 import de.hglabor.plugins.hungergames.commands.*
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.arena.Arena
 import de.hglabor.plugins.hungergames.game.mechanics.MechanicsGUI
+import de.hglabor.plugins.hungergames.game.mechanics.MechanicsManager
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.*
 import net.axay.kspigot.extensions.bukkit.register
 import net.axay.kspigot.main.KSpigot
@@ -55,24 +55,12 @@ class HungerGames : KSpigot() {
     }
 
     private fun registerMechanics() {
-        Arena.register()
         GameManager.enable()
         SoupHealing.register()
         PlayerTracker.register()
         KitSelector.register()
         RecraftRecipes.register()
-        MechanicsGUI(
-            BuildHeightLimit,
-            DamageNerf,
-            OreNerf,
-            LapisInEnchanter,
-            BlocksToInv,
-            RemoveFishingRod,
-            NoInvDropOnClose,
-            MoreDurability,
-            MushroomCowNerf,
-            HungerNerf
-        ).register()
+        MechanicsGUI(MechanicsManager.mechanics).register()
     }
 
     private fun whitelistManager() {

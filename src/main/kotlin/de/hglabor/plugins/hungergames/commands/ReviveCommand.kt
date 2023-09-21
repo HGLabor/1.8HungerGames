@@ -2,10 +2,8 @@ package de.hglabor.plugins.hungergames.commands
 
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
-import de.hglabor.plugins.hungergames.game.arena.Arena
-import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.player.hgPlayer
-import net.axay.kspigot.gui.openGUI
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -42,7 +40,7 @@ object ReviveCommand : CommandExecutor {
             return false
         }
 
-        if (Arena.currentlyFighting.contains(target.hgPlayer)) {
+        if (Arena.currentMatch?.players?.contains(target.hgPlayer) == true) {
             sender.sendMessage("${Prefix}${ChatColor.GRAY}${target.name} is currently fighting in arena.")
             return false
         }

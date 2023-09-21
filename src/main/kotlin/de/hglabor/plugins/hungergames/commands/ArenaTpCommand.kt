@@ -1,7 +1,7 @@
 package de.hglabor.plugins.hungergames.commands
 
 import de.hglabor.plugins.hungergames.Prefix
-import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.ArenaWorld
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.command.Command
@@ -22,7 +22,7 @@ object ArenaTpCommand : CommandExecutor {
             return false
         }
 
-        player.teleport(Location(Arena.world, 0.0, 10.0, 0.0))
+        player.teleport(Location(ArenaWorld.world, 0.0, 10.0, 0.0))
         return true
     }
 }

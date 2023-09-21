@@ -4,7 +4,6 @@ import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.Mechanic
 import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
 import net.axay.kspigot.extensions.broadcast
-import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -38,6 +37,11 @@ val ArenaMechanic by Mechanic("Arena") {
                 Arena.currentMatch?.tick()
             } else {
                 Arena.startNewMatch()
+            }
+
+            if (!Arena.isOpen && Arena.currentMatch == null && Arena.queuedPlayers.size == 0) {
+                it.cancel()
+                return@task
             }
         }
     }

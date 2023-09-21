@@ -1,41 +1,14 @@
 package de.hglabor.plugins.hungergames.game.mechanics.implementation.arena
 
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.mechanics.implementation.DeathMessages
-import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
 import de.hglabor.plugins.hungergames.utils.TimeConverter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.broadcast
-import net.axay.kspigot.extensions.bukkit.give
-import net.axay.kspigot.extensions.bukkit.isFeetInWater
-import net.axay.kspigot.extensions.bukkit.title
-import net.axay.kspigot.extensions.geometry.add
-import net.axay.kspigot.runnables.KSpigotRunnable
-import net.axay.kspigot.runnables.sync
-import net.axay.kspigot.runnables.task
-import org.bukkit.*
-import org.bukkit.entity.LivingEntity
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
-import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.block.BlockPlaceEvent
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntitySpawnEvent
-import org.bukkit.event.entity.FoodLevelChangeEvent
-import org.bukkit.event.entity.ItemSpawnEvent
-import org.bukkit.event.entity.PlayerDeathEvent
-import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.inventory.ItemStack
-import java.util.concurrent.atomic.AtomicInteger
 
 object Arena {
     val Prefix = " ${ChatColor.DARK_GRAY}| ${ChatColor.RED}Arena ${ChatColor.DARK_GRAY}» ${ChatColor.GRAY}"
@@ -83,9 +56,5 @@ object Arena {
                 it.start()
             }
         }
-    }
-
-    fun register() {
-
     }
 }

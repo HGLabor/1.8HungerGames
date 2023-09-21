@@ -3,7 +3,7 @@ package de.hglabor.plugins.hungergames.game
 import de.hglabor.plugins.hungergames.Manager
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
-import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
@@ -99,8 +99,6 @@ object GameManager {
                 if (Arena.isOpen && elapsedTime.toInt() > 900) {
                     Arena.isOpen = false
                     broadcast("${Arena.Prefix}${ChatColor.RED}The arena has been closed!")
-                    Arena.task?.cancel()
-                    Arena.task = null
                 }
             }
         }

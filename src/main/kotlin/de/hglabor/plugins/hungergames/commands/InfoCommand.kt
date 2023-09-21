@@ -1,7 +1,7 @@
 package de.hglabor.plugins.hungergames.commands
 
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.player.PlayerList
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -20,7 +20,7 @@ object InfoCommand : CommandExecutor {
         sender.sendMessage("")
         sender.sendMessage("${ChatColor.RED}${ChatColor.BOLD}Arena: ${ChatColor.WHITE}${if (Arena.isOpen) "Open" else "Closed"}")
         sender.sendMessage("${ChatColor.RED}${ChatColor.BOLD}Waiting: ${ChatColor.WHITE}${Arena.queuedPlayers.size}")
-        sender.sendMessage("${ChatColor.RED}${ChatColor.BOLD}Fighting: ${ChatColor.WHITE}${Arena.currentlyFighting.size}")
+        sender.sendMessage("${ChatColor.RED}${ChatColor.BOLD}Fighting: ${ChatColor.WHITE}${Arena.currentMatch?.players?.size ?: 0}")
         return true
     }
 }
