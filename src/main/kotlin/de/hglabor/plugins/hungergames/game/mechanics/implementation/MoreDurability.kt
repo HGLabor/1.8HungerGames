@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerItemDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.material.MaterialData
 
-val MoreDurability = Mechanic("More Durability") {
+val MoreDurability by Mechanic("More Durability") {
     description = "Items (excluding armor) will have more durability"
     displayMaterial = Material.ANVIL
 

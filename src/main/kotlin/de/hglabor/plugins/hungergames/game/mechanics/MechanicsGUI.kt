@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
-class MechanicsGUI(vararg mechanics: Lazy<Mechanic>) {
+class MechanicsGUI(val mechanics: List<Mechanic>) {
     companion object {
         val mechanicsGuiItem = itemStack(Material.BEACON) { meta { name = "${PrimaryColor}Game Mechanics" } }
     }
@@ -67,7 +67,7 @@ class MechanicsGUI(vararg mechanics: Lazy<Mechanic>) {
                     }
                 }, compound, 7 * 4
             )
-            compound.setContent(mechanics.map { it.value })
+            compound.setContent(mechanics)
         }
     }
 

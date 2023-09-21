@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.inventory.EnchantingInventory
 import org.bukkit.material.Dye
 
-val LapisInEnchanter = Mechanic("Lapis in Enchanter") {
+val LapisInEnchanter by Mechanic("Lapis in Enchanter") {
     displayMaterial = Material.LAPIS_ORE
 
     mechanicEvent<InventoryOpenEvent> {

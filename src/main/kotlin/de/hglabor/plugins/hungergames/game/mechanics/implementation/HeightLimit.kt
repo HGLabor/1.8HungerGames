@@ -5,7 +5,7 @@ import net.axay.kspigot.event.listen
 import org.bukkit.Material
 import org.bukkit.event.block.BlockPlaceEvent
 
-val BuildHeightLimit = Mechanic("Height Limit") {
+val BuildHeightLimit by Mechanic("Height Limit") {
     description = "Players won't be able to place blocks above Y-Level 120"
     displayMaterial = Material.GLASS
 

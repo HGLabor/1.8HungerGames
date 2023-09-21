@@ -9,7 +9,7 @@ import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
-val RemoveFishingRod = Mechanic("No Fishing Rod") {
+val RemoveFishingRod by Mechanic("No Fishing Rod") {
     displayMaterial = Material.FISHING_ROD
 
     onEnable {

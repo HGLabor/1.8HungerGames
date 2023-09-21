@@ -5,7 +5,7 @@ import de.hglabor.plugins.hungergames.player.hgPlayer
 import org.bukkit.Material
 import org.bukkit.event.block.BlockBreakEvent
 
-val BlocksToInv = Mechanic("Blocks to Inv") {
+val BlocksToInv by Mechanic("Blocks to Inv") {
     description = "Blocks broken by a player will go directly into their inventory"
     displayMaterial = Material.DIRT
 

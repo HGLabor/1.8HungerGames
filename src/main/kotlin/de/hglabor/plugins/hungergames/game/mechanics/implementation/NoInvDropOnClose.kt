@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.inventory.meta.ItemMeta
 import java.util.UUID
 
-val NoInvDropOnClose = Mechanic("No Inv Drop on Close") {
+val NoInvDropOnClose by Mechanic("No Inv Drop on Close") {
     description = "Items won't be dropped when closing your inventory. Just like in newer versions!"
     displayMaterial = Material.CHEST
 

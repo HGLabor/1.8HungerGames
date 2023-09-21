@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.potion.PotionEffectType
 
 
-val DamageNerf = Mechanic("Damage Nerf") {
+val DamageNerf by Mechanic("Damage Nerf") {
     displayMaterial = Material.STONE_SWORD
 
     fun isCritical(player: Player): Boolean {

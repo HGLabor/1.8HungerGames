@@ -9,7 +9,7 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.event.block.BlockBreakEvent
 
-val OreNerf = Mechanic("Ore Nerf") {
+val OreNerf by Mechanic("Ore Nerf") {
     description = "Diamonds are not breakable. Iron can only be mined 3 minutes after PvPPhase has started"
     displayMaterial = Material.IRON_ORE
 

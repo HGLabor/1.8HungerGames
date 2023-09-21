@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import java.util.*
 
-val MushroomCowNerf = Mechanic("Mushroom Cow Nerf") {
+val MushroomCowNerf by Mechanic("Mushroom Cow Nerf") {
     description = "Mushroom Cows will turn into normal cows after milking it 16 times"
     displayMaterial = Material.RED_MUSHROOM
 

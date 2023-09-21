@@ -7,7 +7,7 @@ import org.bukkit.Material
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerItemDamageEvent
 
-val HungerNerf = Mechanic("Hunger Nerf") {
+val HungerNerf by Mechanic("Hunger Nerf") {
     description = "Hunger will be nerfed by 40%"
     displayMaterial = Material.BAKED_POTATO
 

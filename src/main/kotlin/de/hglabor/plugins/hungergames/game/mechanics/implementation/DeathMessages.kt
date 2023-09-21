@@ -1,7 +1,7 @@
 package de.hglabor.plugins.hungergames.game.mechanics.implementation
 
 import de.hglabor.plugins.hungergames.Prefix
-import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.player.hgPlayer
