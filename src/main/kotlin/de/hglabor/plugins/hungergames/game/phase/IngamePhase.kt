@@ -3,9 +3,10 @@ package de.hglabor.plugins.hungergames.game.phase
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.event.PlayerKilledEntityEvent
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.DeathMessages
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.OfflineTimer
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.ArenaMechanic
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.PlayerStatus
@@ -30,8 +31,10 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
+        val isArenaAllowed = ArenaMechanic.internal.isEnabled && Arena.isOpen
+        val isEligibleForArena = player.hgPlayer.status == PlayerStatus.INGAME && !player.hgPlayer.wasInArena
 
-        if (player.hgPlayer.status == PlayerStatus.INGAME && Arena.isOpen && !player.hgPlayer.wasInArena) {
+        if (isArenaAllowed && isEligibleForArena) {
             DeathMessages.announce(event, true)
             taskRunLater(1) {
                 Arena.queuePlayer(player)
