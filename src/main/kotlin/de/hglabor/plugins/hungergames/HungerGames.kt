@@ -42,7 +42,7 @@ class HungerGames : KSpigot() {
         FeastCommand.register("feast")
         ReviveCommand.register("revive")
         ArenaTpCommand.register("arenatp")
-        ArenaTpCommand.register("info")
+        InfoCommand.register("info")
         KitCommand.register("kit")
         getCommand("kit").apply {
             executor = KitCommand
