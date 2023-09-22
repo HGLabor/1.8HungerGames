@@ -13,6 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 object DeathMessages {
     fun announceArenaDeath(winner: HGPlayer, loser: HGPlayer) {
         broadcast("${Arena.Prefix}${ChatColor.GREEN}${winner.name} ${ChatColor.GRAY}won the fight against ${ChatColor.RED}${loser.name}${ChatColor.GRAY}.")
+        broadcast("${Arena.Prefix}${winner.name} has been revived.")
     }
 
     fun announce(event: PlayerDeathEvent, enteredArena: Boolean) {
@@ -55,7 +56,7 @@ object DeathMessages {
 
     private fun announcePlayerCount(enteredArena: Boolean) {
         if (enteredArena) {
-            broadcast("${Arena.Prefix}They have entered the ${ChatColor.AQUA}Arena${ChatColor.GRAY}.")
+            broadcast("${Arena.Prefix}They have entered the ${ChatColor.RED}Arena${ChatColor.GRAY}.")
         } else {
             broadcast("${Prefix}There are ${ChatColor.WHITE}${PlayerList.alivePlayers.size} ${ChatColor.GRAY}players left.")
         }

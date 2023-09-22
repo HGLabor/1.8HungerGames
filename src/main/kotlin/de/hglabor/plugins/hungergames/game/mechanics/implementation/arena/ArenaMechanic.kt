@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.Mechanic
 import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
+import de.hglabor.plugins.hungergames.player.PlayerList
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.task
 import org.bukkit.ChatColor
@@ -40,9 +41,11 @@ val ArenaMechanic by Mechanic("Arena") {
                 Arena.startNewMatch()
             }
 
-            if (Arena.isOpen && GameManager.phase == PvPPhase && GameManager.elapsedTime.toInt() > 900) {
-                Arena.isOpen = false
-                broadcast("${Arena.Prefix}${ChatColor.RED}${ChatColor.BOLD}The Arena has been closed!")
+            // 15 minutes into pvp phase
+            val isTimeOver = GameManager.phase == PvPPhase && GameManager.elapsedTime.toInt() > 900
+            val cantStartNewFightBecauseOfPlayerCount = Arena.queuedPlayers.isEmpty() && PlayerList.alivePlayers.size <= 2
+            if (Arena.isOpen && (isTimeOver || cantStartNewFightBecauseOfPlayerCount)) {
+                Arena.close()
             }
 
             if (!Arena.isOpen && Arena.currentMatch == null && Arena.queuedPlayers.size == 0) {

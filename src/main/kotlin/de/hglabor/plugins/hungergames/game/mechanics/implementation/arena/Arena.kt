@@ -7,6 +7,7 @@ import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
 import de.hglabor.plugins.hungergames.utils.TimeConverter
+import net.axay.kspigot.extensions.broadcast
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 
@@ -37,7 +38,7 @@ object Arena {
                 +" "
                 +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
                 +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
-                +" "
+                +"${ChatColor.GRAY}${ChatColor.STRIKETHROUGH}          #${ChatColor.GRAY}${ChatColor.STRIKETHROUGH}          "
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Waiting:#${ChatColor.WHITE}${queuedPlayers.size}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Fighting:#${ChatColor.WHITE}${fightDuration()}" }
                 +{ "  ${ChatColor.GRAY}-#${(currentMatch?.players?.firstOrNull()?.name ?: "None").take(15)}" }
@@ -56,5 +57,10 @@ object Arena {
                 it.start()
             }
         }
+    }
+
+    fun close() {
+        isOpen = false
+        broadcast("$Prefix${ChatColor.RED}${ChatColor.BOLD}The Arena has been closed!")
     }
 }

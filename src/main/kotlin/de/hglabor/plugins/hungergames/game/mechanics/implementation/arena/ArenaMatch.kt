@@ -11,9 +11,7 @@ import net.axay.kspigot.event.SingleListener
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.axay.kspigot.extensions.broadcast
-import net.axay.kspigot.extensions.bukkit.give
-import net.axay.kspigot.extensions.bukkit.isFeetInWater
-import net.axay.kspigot.extensions.bukkit.title
+import net.axay.kspigot.extensions.bukkit.*
 import net.axay.kspigot.extensions.geometry.add
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -29,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ArenaMatch(vararg val players: HGPlayer) {
     companion object {
-        const val MAX_DURATION = 60
+        const val MAX_DURATION = 20
         private val coroutineScope = CoroutineScope(Dispatchers.IO)
     }
 
@@ -43,6 +41,9 @@ class ArenaMatch(vararg val players: HGPlayer) {
         players.forEachIndexed { index, hgPlayer ->
             hgPlayer.bukkitPlayer?.let { player ->
                 val loc = if (index == 1) ArenaWorld.spawn1Location else ArenaWorld.spawn2Location
+                player.gameMode = GameMode.SURVIVAL
+                player.heal()
+                player.feedSaturate()
                 player.teleport(loc)
                 player.give(ItemStack(Material.STONE_SWORD))
                 repeat(8) {
@@ -55,8 +56,8 @@ class ArenaMatch(vararg val players: HGPlayer) {
     fun tick() {
         val currentTimer = timer.getAndIncrement()
         sendCountdown(currentTimer)
-        if (checkIfPlayerIsInWater())
-            if (currentTimer >= MAX_DURATION) end(null)
+        checkIfPlayerIsInWater()?.let { player -> end(player.bukkitPlayer) }
+        if (currentTimer >= MAX_DURATION) end(null)
     }
 
     private fun sendCountdown(time: Int) {
@@ -74,18 +75,19 @@ class ArenaMatch(vararg val players: HGPlayer) {
         }
     }
 
-    private fun checkIfPlayerIsInWater(): Boolean {
+    private fun checkIfPlayerIsInWater(): HGPlayer? {
         players.forEach { hgPlayer ->
-            if (hgPlayer.bukkitPlayer?.isFeetInWater == true) {
-                end(hgPlayer.bukkitPlayer)
-                return true
+            if (hgPlayer.bukkitPlayer?.location?.block?.type == Material.STATIONARY_WATER ||
+                hgPlayer.bukkitPlayer?.eyeLocation?.block?.type == Material.STATIONARY_WATER) {
+                return hgPlayer
             }
         }
-        return false
+        return null
     }
 
     private fun end(loser: Player?) {
         isEnded = true
+        Arena.currentMatch = null
         players.forEach { it.setGameScoreboard(true) }
 
         if (loser != null) {
@@ -98,6 +100,10 @@ class ArenaMatch(vararg val players: HGPlayer) {
                     addItem(ItemStack(Material.MUSHROOM_SOUP))
                 }
             }
+
+            loser.inventory.clear()
+            loser.gameMode = GameMode.SPECTATOR
+            loser.teleport(GameManager.world.spawnLocation.clone().add(0, 10, 0))
         } else {
             broadcast(
                 "${Arena.Prefix}Current fight ${ChatColor.RED}timed out${ChatColor.GRAY}. Eliminating both, ${
