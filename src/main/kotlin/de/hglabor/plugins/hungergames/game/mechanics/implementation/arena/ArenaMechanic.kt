@@ -25,6 +25,7 @@ val ArenaMechanic by Mechanic("Arena") {
             // Revive single player if arena is closed
             if (!Arena.isOpen && Arena.queuedPlayers.size == 1) {
                 val revived = Arena.queuedPlayers.single()
+                Arena.queuedPlayers -= revived
                 revived.makeGameReady()
                 revived.bukkitPlayer?.inventory?.apply {
                     addItem(ItemStack(Material.STONE_SWORD))
