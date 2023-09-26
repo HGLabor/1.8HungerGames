@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ArenaMatch(vararg val players: HGPlayer) {
     companion object {
-        const val MAX_DURATION = 20
+        const val MAX_DURATION = 60
         private val coroutineScope = CoroutineScope(Dispatchers.IO)
     }
 
