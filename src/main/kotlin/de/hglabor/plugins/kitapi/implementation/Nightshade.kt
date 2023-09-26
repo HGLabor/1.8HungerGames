@@ -20,7 +20,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 class NightshadeProperties  : CooldownProperties(20000) {
-    val duration by long(12*20)
+    val duration by long(8*20)
 }
 
 val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
@@ -36,7 +36,7 @@ val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
                 return@clickOnEntityItem
             }
 
-            rightClicked.healthScale -= 4.0
+            rightClicked.healthScale -= 2.0
             rightClicked.mark("nightshadeHealth")
 
             repeat(if (GameManager.feast?.isFinished == true) 2 else 1) {
@@ -56,7 +56,7 @@ val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
             }
 
             taskRunLater(kit.properties.duration) {
-                rightClicked.healthScale += 4.0
+                rightClicked.healthScale += 2.0
                 rightClicked.unmark("nightshadeHealth")
             }
         }
