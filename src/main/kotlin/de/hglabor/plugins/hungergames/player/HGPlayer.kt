@@ -66,7 +66,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             content {
                 +" "
                 +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()} ${ChatColor.GRAY}(${Arena.queuedPlayers.size + (Arena.currentMatch?.players?.size ?: 0)})" }
-                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${roguePrefix}${ChatColor.WHITE}${kit.properties.kitname}" }
+                +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${ChatColor.WHITE}${roguePrefix}${kit.properties.kitname}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Kills:#${ChatColor.WHITE}${kills.get()}" }
                 +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }
                 +{ if (isInCombat) "${ChatColor.RED}${ChatColor.BOLD}IN COMBAT" else " " }
