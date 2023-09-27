@@ -22,7 +22,7 @@ object EndPhase : GamePhase(25, null) {
     var winner: HGPlayer? = null
 
     private fun getWinner() {
-        winner = PlayerList.alivePlayers.singleOrNull() ?: Arena.queuedPlayers.singleOrNull()
+        winner = PlayerList.alivePlayers.singleOrNull() ?: Arena.queuedPlayers.singleOrNull() ?: PlayerList.alivePlayers.maxByOrNull { it.kills.get() }
     }
 
     override fun onStart() {
