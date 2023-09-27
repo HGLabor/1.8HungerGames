@@ -24,7 +24,7 @@ fun rand(min: Int, max: Int): Int {
 
 val Toblerone = Kit("Toblerone", ::TobleroneProperties) {
     displayItem = ItemStack(Material.INK_SACK, 1, 3)
-
+    description = "Eat your chocolate to receive speed and jump boost"
 
     clickableItem(ItemStack(Material.INK_SACK, 1, 3)) {
         it.isCancelled = true

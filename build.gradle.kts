@@ -75,5 +75,11 @@ bukkit {
         register("revive") {
             description = "Revive a player"
         }
+        register("arenatp") {
+            description = "Teleport into arena world"
+        }
+        register("info") {
+            description = "Info about the game"
+        }
     }
 }

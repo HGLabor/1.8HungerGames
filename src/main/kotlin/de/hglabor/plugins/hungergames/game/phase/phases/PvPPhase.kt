@@ -3,8 +3,8 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
-import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
@@ -18,7 +18,7 @@ import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.onlinePlayers
 import org.bukkit.ChatColor
 
-object PvPPhase : IngamePhase(1800, EndPhase) {
+object PvPPhase : IngamePhase(3600, EndPhase) {
     override val timeName = "Time"
     override fun getTimeString() = TimeConverter.stringify((GameManager.elapsedTime.get()).toInt())
 
@@ -41,24 +41,24 @@ object PvPPhase : IngamePhase(1800, EndPhase) {
             alive.combatTimer.decrementAndGet()
         }
 
-        // Bordershrink
-        if ((maxDuration - GameManager.elapsedTime.get()).toInt() == 10 * 60) {
+        // Bordershrink - 20 min vor ende
+        if (remainingTime.toInt() == 20 * 60) {
             broadcast("${Prefix}${ChatColor.WHITE}${ChatColor.BOLD}The border starts shrinking now.")
             GameManager.world.worldBorder.setSize(25.0 * 2, 10 * 60)
         }
 
-        // Feast
-        if (tickCount == 600) {
+        // Feast - nach 15 minuten
+        if (tickCount == 900) {
             val world = GameManager.world
 
             GameManager.feast = Feast(world).apply {
                 feastCenter = LocationUtils.getHighestBlock(world, (world.worldBorder.size / 4).toInt(), 0)
+                spawn()
             }
-            GameManager.feast?.spawn()
         }
 
         // Winner
-        if (PlayerList.alivePlayers.size <= 1 && Agnikai.currentlyFighting.isEmpty() && Agnikai.queuedPlayers.size < 2) {
+        if (PlayerList.alivePlayers.size <= 1 && Arena.currentMatch == null && Arena.queuedPlayers.size < 2) {
             GameManager.startNextPhase()
         }
     }

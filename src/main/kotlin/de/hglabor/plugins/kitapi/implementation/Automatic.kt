@@ -14,6 +14,7 @@ class AutomaticProperties : KitProperties() {
 
 val Automatic = Kit("Automatic", ::AutomaticProperties) {
     displayMaterial = Material.MUSHROOM_SOUP
+    description = "The soups in your hotbar will automatically be consumed when needed"
 
     kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { _, player ->
         val maxHealth = player.maxHealth

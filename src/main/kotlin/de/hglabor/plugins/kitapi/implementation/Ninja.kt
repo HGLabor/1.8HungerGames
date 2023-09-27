@@ -21,6 +21,7 @@ class NinjaProperties : CooldownProperties(10000) {
 
 val Ninja = Kit("Ninja", ::NinjaProperties) {
     displayMaterial = Material.EMERALD
+    description = "Sneak to teleport to your latest enemy"
 
     val lastDamaged = OnlinePlayerMap<Player?>()
     val lastDamagedTask = OnlinePlayerMap<KSpigotRunnable?>()

@@ -3,18 +3,17 @@ package de.hglabor.plugins.hungergames.game.phase
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.event.PlayerKilledEntityEvent
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.agnikai.Agnikai
-import de.hglabor.plugins.hungergames.game.mechanics.DeathMessages
-import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.DeathMessages
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.OfflineTimer
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.ArenaMechanic
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.PlayerStatus
 import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.kit.isKitItem
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.taskRunLater
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -32,11 +31,13 @@ open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxD
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
         val player = event.entity
+        val isArenaAllowed = ArenaMechanic.internal.isEnabled && Arena.isOpen
+        val isEligibleForArena = player.hgPlayer.status == PlayerStatus.INGAME && !player.hgPlayer.wasInArena
 
-        if (player.hgPlayer.status == PlayerStatus.INGAME && Agnikai.isOpen && !player.hgPlayer.wasInAgnikai) {
+        if (isArenaAllowed && isEligibleForArena) {
             DeathMessages.announce(event, true)
             taskRunLater(1) {
-                Agnikai.queuePlayer(player)
+                Arena.queuePlayer(player)
             }
         } else {
             taskRunLater(1) { player.spigot().respawn() }

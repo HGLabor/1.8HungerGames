@@ -57,6 +57,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
     }
 
     inner class Internal internal constructor() {
+        var description: String = ""
         val items = HashMap<Int, KitItem>()
         val kitPlayerEvents = HashSet<Listener>()
         var displayItem: ItemStack = ItemStack(Material.BARRIER)

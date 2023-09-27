@@ -3,8 +3,9 @@ package de.hglabor.plugins.hungergames.player
 import de.hglabor.plugins.hungergames.event.KitDisableEvent
 import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
-import de.hglabor.plugins.hungergames.game.mechanics.OfflineTimer
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.OfflineTimer
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
 import de.hglabor.plugins.hungergames.scoreboard.setScoreboard
@@ -43,7 +44,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     var changedKitBefore: Boolean = false
     var isKitEnabled = true
     var isKitByRogueDisabled: Boolean = false
-    var wasInAgnikai: Boolean = false
+    var wasInArena: Boolean = false
     val roguePrefix: String
         get() = if(isKitByRogueDisabled) "${ChatColor.STRIKETHROUGH}" else ""
 
@@ -64,7 +65,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             period = 20
             content {
                 +" "
-                +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()}" }
+                +{ "${ChatColor.GREEN}${ChatColor.BOLD}Players:#${ChatColor.WHITE}${PlayerList.getShownPlayerCount()} ${ChatColor.GRAY}(${Arena.queuedPlayers.size + (Arena.currentMatch?.players?.size ?: 0)})" }
                 +{ "${ChatColor.AQUA}${ChatColor.BOLD}Kit:#${roguePrefix}${ChatColor.WHITE}${kit.properties.kitname}" }
                 +{ "${ChatColor.RED}${ChatColor.BOLD}Kills:#${ChatColor.WHITE}${kills.get()}" }
                 +{ "${ChatColor.YELLOW}${ChatColor.BOLD}${GameManager.phase.timeName}:#${ChatColor.WHITE}${GameManager.phase.getTimeString()}" }

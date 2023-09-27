@@ -18,6 +18,7 @@ class DiggerProperties : CooldownProperties(12000) {
 
 val Digger = Kit("Digger", ::DiggerProperties) {
     displayMaterial = Material.DRAGON_EGG
+    description = "Place your kit-item to create a ${kit.properties.radius}x${kit.properties.radius}x${kit.properties.radius} hole"
 
     fun Block.isReplaceable(): Boolean =
         when {

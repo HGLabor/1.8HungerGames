@@ -40,6 +40,8 @@ class SpiderProperties : CooldownProperties(20000) {
 
 val Spider = Kit("Spider", ::SpiderProperties) {
     displayMaterial = Material.SPIDER_EYE
+    description = "Hit your enemy to give them poison. Hold your kit-item to climb walls. Throw your snowball to create a sphere of cobwebs"
+
     val spiderSnowball = "spidersb"
 
     // Viper ability

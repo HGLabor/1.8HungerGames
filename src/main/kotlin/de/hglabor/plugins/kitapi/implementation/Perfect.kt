@@ -9,12 +9,13 @@ import org.bukkit.inventory.ItemStack
 import java.util.*
 
 class PerfectProperties : KitProperties() {
-    val soupsForReward by int(8);
-    val soupsAsReward by int(5);
+    val soupsForReward by int(8)
+    val soupsAsReward by int(3)
 }
 
 val Perfect = Kit("Perfect", ::PerfectProperties)  {
     displayMaterial = Material.RABBIT_STEW
+    description = "Every ${kit.properties.soupsForReward} soups you soup without presouping, you will receive ${kit.properties.soupsAsReward} soups."
 
     val perfectSoupHolder = HashMap<UUID, Int>()
     kitPlayerEvent<PlayerSoupEvent>({ it.player }) { it, player ->

@@ -1,4 +1,4 @@
-package de.hglabor.plugins.hungergames.game.mechanics
+package de.hglabor.plugins.hungergames.game.mechanics.implementation
 
 import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.SecondaryColor
@@ -15,6 +15,7 @@ import net.axay.kspigot.gui.openGUI
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
+import net.axay.kspigot.items.toLoreList
 import org.bukkit.Material
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -24,7 +25,7 @@ import org.bukkit.inventory.ItemStack
 object KitSelector {
     val kitSelectorItem = itemStack(Material.CHEST) { meta { name = "${SecondaryColor}Kit Selector" } }
     val gui = kSpigotGUI(GUIType.FIVE_BY_NINE) {
-        title = "${SecondaryColor}Kitselector"
+        title = "${SecondaryColor}Kit Selector"
         page(1) {
             val compound = createRectCompound<Kit<*>>(Slots.RowOneSlotTwo, Slots.RowFiveSlotEight,
                 iconGenerator = { kit ->
@@ -32,6 +33,7 @@ object KitSelector {
                         meta {
                             name = "${SecondaryColor}${kit.properties.kitname}"
                             addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+                            lore = kit.internal.description.toLoreList()
                         }
                     }
                 },

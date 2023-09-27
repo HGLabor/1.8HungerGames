@@ -1,4 +1,4 @@
-package de.hglabor.plugins.hungergames.game.mechanics
+package de.hglabor.plugins.hungergames.game.mechanics.implementation
 
 import net.axay.kspigot.extensions.server
 import org.bukkit.Material

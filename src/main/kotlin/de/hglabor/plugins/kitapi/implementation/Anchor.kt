@@ -22,6 +22,7 @@ class AnchorProperties : KitProperties() {
 
 val Anchor = Kit("Anchor", ::AnchorProperties) {
     displayMaterial = Material.ANVIL
+    description = "You neither deal nor take knockback"
 
     fun slownessEffect() = PotionEffect(PotionEffectType.SLOW, kit.properties.slownessDuration * 20, kit.properties.slownessAmplifier)
 

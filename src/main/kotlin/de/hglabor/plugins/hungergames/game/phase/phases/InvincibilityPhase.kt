@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames.game.phase.phases
 
+import de.hglabor.plugins.hungergames.game.mechanics.MechanicsManager
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.HGPlayer
 import de.hglabor.plugins.hungergames.player.PlayerList
@@ -16,6 +17,7 @@ object InvincibilityPhase: IngamePhase(120, PvPPhase) {
     override fun onStart() {
         PlayerList.allPlayers.forEach(HGPlayer::makeGameReady)
         PlayerKits.register()
+        MechanicsManager.mechanics.filter { it.internal.isEnabled }.onEach { it.enable() }
     }
 
     @EventHandler

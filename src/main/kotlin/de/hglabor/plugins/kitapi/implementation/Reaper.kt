@@ -26,6 +26,7 @@ class ReaperProperties : MultipleUsesCooldownProperties(4, 25000) {
 
 val Reaper = Kit("Reaper", ::ReaperProperties) {
     displayMaterial = Material.IRON_HOE
+    description = "Right-click your kit-item to shoot wither skulls. Hit an enemy with your kit-item to give them wither effect"
 
     clickableItem(ItemStack(Material.IRON_HOE)) {
         if (!it.action.isRightClick) return@clickableItem

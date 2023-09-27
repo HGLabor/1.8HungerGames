@@ -34,6 +34,10 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
         get() = kit.internal.displayItem.type
         set(value) { kit.internal.displayItem.type = value }
 
+    var description: String
+        get() = kit.internal.description
+        set(value) { kit.internal.description = value }
+
     fun simpleItem(stack: ItemStack) {
         kit.internal.items[currentItemId++] = SimpleKitItem(stack)
     }

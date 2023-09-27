@@ -9,6 +9,7 @@ class RedstonerProperties : KitProperties()
 
 val Redstoner = Kit("Redstoner", ::RedstonerProperties) {
     displayMaterial = Material.REDSTONE
+    description = "You receive a lot of redstone items"
 
     simpleItem(ItemStack(Material.PISTON_BASE, 32))
     simpleItem(ItemStack(Material.PISTON_STICKY_BASE, 16))

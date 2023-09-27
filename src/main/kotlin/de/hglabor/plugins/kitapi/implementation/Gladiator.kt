@@ -191,6 +191,8 @@ class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
 
 val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
     displayMaterial = Material.IRON_FENCE
+    description = "Right-click a player to 1v1 them in an arena"
+
     val gladiatorInstances: HashMap<UUID, GladiatorInstance> = hashMapOf()
 
     fun stopGladi(gladiatorInstance: GladiatorInstance) {

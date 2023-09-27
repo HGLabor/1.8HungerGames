@@ -16,6 +16,7 @@ class LumberjackProperties : KitProperties() {
 
 val Lumberjack = Kit("Lumberjack", ::LumberjackProperties) {
     displayMaterial = Material.LOG
+    description = "Break an entire tree by breaking just one log"
 
     simpleItem(ItemStack(Material.WOOD_AXE))
 

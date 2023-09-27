@@ -20,11 +20,12 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 class NightshadeProperties  : CooldownProperties(20000) {
-    val duration by long(12*20)
+    val duration by long(8*20)
 }
 
 val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
     displayMaterial = Material.NETHER_BRICK_ITEM
+    description = "Right-click players with your kit-item to infect 1-2 soups and reduce their health for ${kit.properties.duration / 20} seconds. If your enemy presoups during this time or if they eat an infected soup, they will receive wither 3 for 4 seconds."
 
     clickOnEntityItem(ItemStack(Material.NETHER_BRICK_ITEM)) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem
@@ -35,7 +36,7 @@ val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
                 return@clickOnEntityItem
             }
 
-            rightClicked.healthScale -= 4.0
+            rightClicked.healthScale -= 2.0
             rightClicked.mark("nightshadeHealth")
 
             repeat(if (GameManager.feast?.isFinished == true) 2 else 1) {
@@ -55,7 +56,7 @@ val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
             }
 
             taskRunLater(kit.properties.duration) {
-                rightClicked.healthScale += 4.0
+                rightClicked.healthScale += 2.0
                 rightClicked.unmark("nightshadeHealth")
             }
         }

@@ -3,7 +3,7 @@ package de.hglabor.plugins.hungergames.commands
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.mechanics.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
