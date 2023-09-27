@@ -1,9 +1,9 @@
 package de.hglabor.plugins.hungergames.game.mechanics.implementation.arena
 
+import de.hglabor.plugins.hungergames.event.FeastBeginEvent
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.Mechanic
 import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
-import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import de.hglabor.plugins.hungergames.player.PlayerList
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.runnables.task
@@ -42,10 +42,8 @@ val ArenaMechanic by Mechanic("Arena") {
                 Arena.startNewMatch()
             }
 
-            // 15 minutes into pvp phase
-            val isTimeOver = GameManager.phase == PvPPhase && GameManager.elapsedTime.toInt() > 900
             val cantStartNewFightBecauseOfPlayerCount = Arena.queuedPlayers.isEmpty() && PlayerList.alivePlayers.size <= 2
-            if (Arena.isOpen && (isTimeOver || cantStartNewFightBecauseOfPlayerCount)) {
+            if (Arena.isOpen && cantStartNewFightBecauseOfPlayerCount) {
                 Arena.close()
             }
 
@@ -54,5 +52,10 @@ val ArenaMechanic by Mechanic("Arena") {
                 return@task
             }
         }
+    }
+
+    mechanicEvent<FeastBeginEvent> {
+        if (!Arena.isOpen) return@mechanicEvent
+        Arena.close()
     }
 }
