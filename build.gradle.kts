@@ -81,5 +81,8 @@ bukkit {
         register("info") {
             description = "Info about the game"
         }
+        register("list") {
+            description = "Show all competing players"
+        }
     }
 }
