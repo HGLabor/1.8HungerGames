@@ -47,8 +47,8 @@ object PvPPhase : IngamePhase(3600, EndPhase) {
             GameManager.world.worldBorder.setSize(25.0 * 2, 10 * 60)
         }
 
-        // Feast - nach 15 minuten
-        if (tickCount == 900) {
+        // Feast - nach 10 minuten announcen | 5 min später spawnt es
+        if (tickCount == 600) {
             val world = GameManager.world
 
             GameManager.feast = Feast(world).apply {
