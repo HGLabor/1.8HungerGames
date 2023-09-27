@@ -6,6 +6,7 @@ import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.taskRunLater
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -18,7 +19,7 @@ class DiggerProperties : CooldownProperties(12000) {
 
 val Digger = Kit("Digger", ::DiggerProperties) {
     displayMaterial = Material.DRAGON_EGG
-    description = "Place your kit-item to create a ${kit.properties.radius}x${kit.properties.radius}x${kit.properties.radius} hole"
+    description = "${ChatColor.WHITE}Place ${ChatColor.GRAY}your kit-item to create a ${ChatColor.WHITE}${kit.properties.radius}x${kit.properties.radius}x${kit.properties.radius} hole"
 
     fun Block.isReplaceable(): Boolean =
         when {

@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -16,7 +17,7 @@ class LumberjackProperties : KitProperties() {
 
 val Lumberjack = Kit("Lumberjack", ::LumberjackProperties) {
     displayMaterial = Material.LOG
-    description = "Break an entire tree by breaking just one log"
+    description = "${ChatColor.WHITE}Break an entire tree ${ChatColor.GRAY}by breaking just one log"
 
     simpleItem(ItemStack(Material.WOOD_AXE))
 

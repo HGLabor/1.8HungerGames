@@ -21,7 +21,7 @@ class BlinkProperties : MultipleUsesCooldownProperties(4, 16000) {
 
 val Blink = Kit("Blink", ::BlinkProperties) {
     displayMaterial = Material.NETHER_STAR
-    description = "Right click your kit-item to teleport in the direction you are looking"
+    description = "${ChatColor.WHITE}Right click ${ChatColor.GRAY}your kit-item to teleport in the direction you are looking"
 
     fun Location.isSafe(): Boolean {
         val feet: Block = block

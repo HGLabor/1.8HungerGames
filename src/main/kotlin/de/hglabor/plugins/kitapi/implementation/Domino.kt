@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -15,7 +16,7 @@ class DominoProperties : KitProperties() {
 
 val Domino = Kit("Domino", ::DominoProperties) {
     displayMaterial = Material.QUARTZ_BLOCK
-    description = "The damage and knockback you deal will be applied to all nearby entities"
+    description = "${ChatColor.GRAY}The ${ChatColor.WHITE}damage and knockback ${ChatColor.GRAY}you deal will be applied to all ${ChatColor.WHITE}nearby entities"
 
     kitPlayerEvent<EntityDamageByEntityEvent>(
         { it.damager as? Player },

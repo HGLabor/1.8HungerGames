@@ -16,6 +16,7 @@ import net.axay.kspigot.extensions.geometry.subtract
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import net.axay.kspigot.runnables.taskRunLater
+import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -191,7 +192,7 @@ class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
 
 val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
     displayMaterial = Material.IRON_FENCE
-    description = "Right-click a player to 1v1 them in an arena"
+    description = "${ChatColor.WHITE}Right-click ${ChatColor.GRAY}a player to 1v1 them in an arena"
 
     val gladiatorInstances: HashMap<UUID, GladiatorInstance> = hashMapOf()
 

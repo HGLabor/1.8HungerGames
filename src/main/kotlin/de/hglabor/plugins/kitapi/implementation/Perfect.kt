@@ -4,6 +4,7 @@ package de.hglabor.plugins.kitapi.implementation
 import de.hglabor.plugins.hungergames.event.PlayerSoupEvent
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import java.util.*
@@ -15,7 +16,10 @@ class PerfectProperties : KitProperties() {
 
 val Perfect = Kit("Perfect", ::PerfectProperties)  {
     displayMaterial = Material.RABBIT_STEW
-    description = "Every ${kit.properties.soupsForReward} soups you soup without presouping, you will receive ${kit.properties.soupsAsReward} soups."
+    description {
+        +"${ChatColor.GRAY}After eating ${kit.properties.soupsForReward} soups, without presouping,"
+        +"${ChatColor.GRAY}You will receive ${ChatColor.WHITE}${kit.properties.soupsAsReward} soups."
+    }
 
     val perfectSoupHolder = HashMap<UUID, Int>()
     kitPlayerEvent<PlayerSoupEvent>({ it.player }) { it, player ->

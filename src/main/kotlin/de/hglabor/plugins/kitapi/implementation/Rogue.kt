@@ -19,7 +19,7 @@ class RogueProperties : CooldownProperties(16000) {
 
 val Rogue = Kit("Rogue", ::RogueProperties) {
     displayMaterial = Material.STICK
-    description = "Disable your enemies' kits"
+    description = "${ChatColor.GRAY}Disable your enemies' kits"
 
     val coroutineScope = CoroutineScope(Dispatchers.Default)
     clickableItem(ItemStack(Material.STICK)) {

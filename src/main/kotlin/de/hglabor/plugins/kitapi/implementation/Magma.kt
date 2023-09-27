@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
@@ -17,7 +18,10 @@ class MagmaProperties : KitProperties() {
 
 val Magma = Kit("Magma", ::MagmaProperties) {
     displayMaterial = Material.FIREBALL
-    description = "Ignite players when hitting them. You are immune to lava and fire damage"
+    description {
+        +"${ChatColor.WHITE}Ignite players ${ChatColor.GRAY}when hitting them"
+        +"${ChatColor.GRAY}You are ${ChatColor.WHITE}immune to lava and fire damage"
+    }
 
     kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, _ ->
         val isFireDamage = when (it.cause) {

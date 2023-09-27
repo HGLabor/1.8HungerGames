@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent
@@ -14,7 +15,7 @@ class AutomaticProperties : KitProperties() {
 
 val Automatic = Kit("Automatic", ::AutomaticProperties) {
     displayMaterial = Material.MUSHROOM_SOUP
-    description = "The soups in your hotbar will automatically be consumed when needed"
+    description = "${ChatColor.GRAY}The ${ChatColor.WHITE}soups ${ChatColor.GRAY}in your hotbar will ${ChatColor.WHITE}automatically ${ChatColor.GRAY}be ${ChatColor.WHITE}consumed ${ChatColor.GRAY}when needed"
 
     kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { _, player ->
         val maxHealth = player.maxHealth

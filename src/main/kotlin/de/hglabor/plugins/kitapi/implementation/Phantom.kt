@@ -22,7 +22,7 @@ class PhantomProperties : CooldownProperties(30000) {
 
 val Phantom = Kit("Phantom", ::PhantomProperties) {
     displayMaterial = Material.FEATHER
-    description = "Right-click your kit-item to fly for ${kit.properties.flightTime} seconds"
+    description = "${ChatColor.WHITE}Right-click ${ChatColor.GRAY}your kit-item to fly for ${kit.properties.flightTime} seconds"
 
     clickableItem(itemStack(Material.FEATHER) { meta { name = "${SecondaryColor}Phantom" } }) {
         applyCooldown(it) {

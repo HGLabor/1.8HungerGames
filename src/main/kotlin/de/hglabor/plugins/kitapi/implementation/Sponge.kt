@@ -13,6 +13,7 @@ import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import net.axay.kspigot.runnables.taskRunLater
 import net.axay.kspigot.utils.OnlinePlayerMap
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -38,7 +39,10 @@ class SpongeProperties : MultipleUsesCooldownProperties(15, 30000) {
 
 val Sponge = Kit("Sponge", ::SpongeProperties) {
     displayMaterial = Material.SPONGE
-    description = "Place your sponges to launch players into the air! Right-click a block to water it"
+    description {
+        +"${ChatColor.WHITE}Place sponges ${ChatColor.GRAY}to launch players into the air"
+        +"${ChatColor.WHITE}Right-click ${ChatColor.GRAY}a block with a hand to water it"
+    }
 
     val waterBlocks = ArrayList<Block>()
     val waterTasks = OnlinePlayerMap<KSpigotRunnable?>()

@@ -15,6 +15,7 @@ import net.axay.kspigot.extensions.bukkit.spawnCleanEntity
 import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
+import org.bukkit.ChatColor
 import org.bukkit.Effect
 import org.bukkit.Location
 import org.bukkit.Material
@@ -110,7 +111,7 @@ class UltimatoInstance(private val ultimato: Player) {
 
 val Ultimato = Kit("Ultimato", ::UltimatoProperties) {
     displayItem = ItemStack(Material.STAINED_GLASS_PANE, 1, 14)
-    description = "Create an arena to fight nearby players"
+    description = "${ChatColor.GRAY}Create an arena to fight nearby players"
 
     clickableItem(ItemStack(Material.STAINED_GLASS_PANE, 1, 14), useInInvincibility = false) {
         if (it.player.isInUltimato || it.player.isInGladiator) return@clickableItem

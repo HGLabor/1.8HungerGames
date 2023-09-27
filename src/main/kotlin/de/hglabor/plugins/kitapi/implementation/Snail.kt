@@ -3,6 +3,7 @@ package de.hglabor.plugins.kitapi.implementation
 import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -19,7 +20,10 @@ class SnailProperties : KitProperties() {
 
 val Snail = Kit("Snail", ::SnailProperties) {
     displayMaterial = Material.SLIME_BALL
-    description = "Hit an enemy to give them slowness. Sneak to retreat into your shell, while sneaking you deal and take half a heart of damage"
+    description {
+        +"${ChatColor.WHITE}Hit ${ChatColor.GRAY}an enemy to give them ${ChatColor.WHITE}slowness"
+        +"${ChatColor.WHITE}While sneaking ${ChatColor.GRAY}you deal and take half a heart of damage"
+    }
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, damager ->
         if (damager.isSneaking) {

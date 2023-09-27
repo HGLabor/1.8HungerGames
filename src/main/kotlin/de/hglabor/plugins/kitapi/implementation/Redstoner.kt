@@ -2,6 +2,7 @@ package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
@@ -9,7 +10,7 @@ class RedstonerProperties : KitProperties()
 
 val Redstoner = Kit("Redstoner", ::RedstonerProperties) {
     displayMaterial = Material.REDSTONE
-    description = "You receive a lot of redstone items"
+    description = "${ChatColor.GRAY}You receive a lot of redstone items"
 
     simpleItem(ItemStack(Material.PISTON_BASE, 32))
     simpleItem(ItemStack(Material.PISTON_STICKY_BASE, 16))

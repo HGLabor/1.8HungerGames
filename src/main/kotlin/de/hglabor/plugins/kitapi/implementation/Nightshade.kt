@@ -13,6 +13,7 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
 import net.axay.kspigot.runnables.taskRunLater
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -25,7 +26,13 @@ class NightshadeProperties  : CooldownProperties(20000) {
 
 val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
     displayMaterial = Material.NETHER_BRICK_ITEM
-    description = "Right-click players with your kit-item to infect 1-2 soups and reduce their health for ${kit.properties.duration / 20} seconds. If your enemy presoups during this time or if they eat an infected soup, they will receive wither 3 for 4 seconds."
+    description {
+        +"${ChatColor.WHITE}Right-click ${ChatColor.GRAY}a player to:"
+        +" ${ChatColor.DARK_GRAY}- ${ChatColor.WHITE}Reduce their health ${ChatColor.GRAY}for ${kit.properties.duration / 20} seconds"
+        +" ${ChatColor.DARK_GRAY}- ${ChatColor.GRAY}Infect up to 2 soups"
+        +"${ChatColor.GRAY}When ${ChatColor.WHITE}presouping ${ChatColor.GRAY}or eating an ${ChatColor.WHITE}infected soup"
+        +"${ChatColor.GRAY}They will receive ${ChatColor.WHITE}wither effect"
+    }
 
     clickOnEntityItem(ItemStack(Material.NETHER_BRICK_ITEM)) {
         val rightClicked = it.rightClicked as? Player ?: return@clickOnEntityItem

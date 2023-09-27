@@ -33,7 +33,7 @@ object KitSelector {
                         meta {
                             name = "${SecondaryColor}${kit.properties.kitname}"
                             addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-                            lore = kit.internal.description.toLoreList()
+                            lore = kit.internal.description
                         }
                     }
                 },
