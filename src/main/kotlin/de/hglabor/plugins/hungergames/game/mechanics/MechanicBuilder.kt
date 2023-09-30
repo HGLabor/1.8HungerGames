@@ -75,4 +75,11 @@ class MechanicBuilder(val mechanic: Mechanic) {
     internal fun onEnable(callback: () -> Unit) {
         mechanic.internal.onEnable = callback
     }
+
+    /**
+    * [callback] will be executed every second, if the Mechanic is enabled
+    */
+    internal fun onTick(callback: (second: Int) -> Unit) {
+        mechanic.internal.onTick = callback
+    }
 }

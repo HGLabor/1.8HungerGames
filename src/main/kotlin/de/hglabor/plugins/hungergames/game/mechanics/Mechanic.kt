@@ -23,6 +23,7 @@ class Mechanic(val name: String) {
         var displayItem: ItemStack = ItemStack(Material.BARRIER)
         var isEnabled = true
         var onEnable: (() -> Unit)? = null
+        var onTick: ((second: Int) -> Unit)? = null
     }
 
     val internal = this.Internal()
@@ -31,5 +32,9 @@ class Mechanic(val name: String) {
 
     fun enable() {
         internal.onEnable?.invoke()
+    }
+
+    fun onTick(second: Int) {
+        internal.onTick?.invoke(second)
     }
 }

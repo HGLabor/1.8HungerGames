@@ -3,6 +3,7 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.mechanics.MechanicsManager
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
@@ -61,5 +62,7 @@ object PvPPhase : IngamePhase(3600, EndPhase) {
         if (PlayerList.alivePlayers.size <= 1 && Arena.currentMatch == null && Arena.queuedPlayers.size < 2) {
             GameManager.startNextPhase()
         }
+
+        super.tick(tickCount)
     }
 }
