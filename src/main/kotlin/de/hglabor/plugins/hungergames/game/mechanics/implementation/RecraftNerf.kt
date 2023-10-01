@@ -1,4 +1,4 @@
-package de.hglabor.plugins.hungergames.game.mechanics.implementation.recraftnerf
+package de.hglabor.plugins.hungergames.game.mechanics.implementation
 
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.Mechanic

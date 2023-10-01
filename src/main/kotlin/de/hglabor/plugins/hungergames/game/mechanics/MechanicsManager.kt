@@ -2,7 +2,7 @@ package de.hglabor.plugins.hungergames.game.mechanics
 
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.*
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.ArenaMechanic
-import de.hglabor.plugins.hungergames.game.mechanics.implementation.recraftnerf.RecraftNerf
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.RecraftNerf
 
 object MechanicsManager {
     val mechanics = listOf(
