@@ -3,6 +3,7 @@ package de.hglabor.plugins.hungergames.game.phase
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.event.PlayerKilledEntityEvent
 import de.hglabor.plugins.hungergames.game.GameManager
+import de.hglabor.plugins.hungergames.game.mechanics.MechanicsManager
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.DeathMessages
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.OfflineTimer
@@ -27,6 +28,13 @@ import org.bukkit.event.player.PlayerQuitEvent
 open class IngamePhase(maxDuration: Long, nextPhase: GamePhase) : GamePhase(maxDuration, nextPhase) {
     override fun getTimeString(): String = ""
     override val timeName: String = ""
+
+    override fun tick(tickCount: Int) {
+        MechanicsManager.mechanics.filter { it.internal.isEnabled }.onEach {
+            it.onTick(tickCount)
+        }
+        super.tick(tickCount)
+    }
 
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {

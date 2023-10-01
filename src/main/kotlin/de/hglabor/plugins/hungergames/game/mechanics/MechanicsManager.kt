@@ -2,6 +2,7 @@ package de.hglabor.plugins.hungergames.game.mechanics
 
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.*
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.ArenaMechanic
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.recraftnerf.RecraftNerf
 
 object MechanicsManager {
     val mechanics = listOf(
@@ -15,6 +16,7 @@ object MechanicsManager {
         NoInvDropOnClose,
         MoreDurability,
         MushroomCowNerf,
-        HungerNerf
+        HungerNerf,
+        RecraftNerf
     )
 }

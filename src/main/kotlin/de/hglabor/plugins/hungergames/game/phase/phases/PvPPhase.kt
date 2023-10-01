@@ -61,5 +61,7 @@ object PvPPhase : IngamePhase(3600, EndPhase) {
         if (PlayerList.alivePlayers.size <= 1 && Arena.currentMatch == null && Arena.queuedPlayers.size < 2) {
             GameManager.startNextPhase()
         }
+
+        super.tick(tickCount)
     }
 }
