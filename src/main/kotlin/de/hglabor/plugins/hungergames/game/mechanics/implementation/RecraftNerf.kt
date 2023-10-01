@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack
 
 val RecraftNerf by Mechanic("Recraft Nerf") {
     val MAX_RECRAFT = 64
-    val SECONDS_BETWEEN_CHECK = 64
+    val SECONDS_BETWEEN_CHECK = 10
     val emptyStack = ItemStack(Material.AIR)
 
     fun getRecraftItems(player: Player): List<Pair<Int, ItemStack>> {
