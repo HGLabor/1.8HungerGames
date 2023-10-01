@@ -16,7 +16,10 @@ import de.hglabor.plugins.kitapi.kit.KitManager
 import de.hglabor.plugins.kitapi.player.PlayerKits.chooseKit
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.onlinePlayers
+import net.axay.kspigot.runnables.async
+import net.axay.kspigot.runnables.sync
 import org.bukkit.ChatColor
+import org.bukkit.GameMode
 
 object PvPPhase : IngamePhase(3600, EndPhase) {
     override val timeName = "Time"
@@ -33,34 +36,65 @@ object PvPPhase : IngamePhase(3600, EndPhase) {
     }
 
     override fun tick(tickCount: Int) {
-        // recraft nerf
-        // if (tickCount % 5 == 0) recraftInspector.tick()
-
-        // Combat Timer
-        PlayerList.alivePlayers.filter { it.isInCombat }.forEach { alive ->
-            alive.combatTimer.decrementAndGet()
-        }
-
-        // Bordershrink - 20 min vor ende
-        if (remainingTime.toInt() == 20 * 60) {
-            broadcast("${Prefix}${ChatColor.WHITE}${ChatColor.BOLD}The border starts shrinking now.")
-            GameManager.world.worldBorder.setSize(25.0 * 2, 10 * 60)
-        }
-
-        // Feast - nach 10 minuten announcen | 5 min später spawnt es
-        if (tickCount == 600) {
-            val world = GameManager.world
-
-            GameManager.feast = Feast(world).apply {
-                feastCenter = LocationUtils.getHighestBlock(world, (world.worldBorder.size / 4).toInt(), 0)
-                spawn()
+        fun handleCombatTimer() {
+            async {
+                PlayerList.alivePlayers.filter { it.isInCombat }.forEach { alive ->
+                    alive.combatTimer.decrementAndGet()
+                }
             }
         }
 
-        // Winner
-        if (PlayerList.alivePlayers.size <= 1 && Arena.currentMatch == null && Arena.queuedPlayers.size < 2) {
-            GameManager.startNextPhase()
+        fun handleBorderShrink() {
+            // Bordershrink - 20 min vor ende
+            if (remainingTime.toInt() == 20 * 60) {
+                broadcast("${Prefix}${ChatColor.WHITE}${ChatColor.BOLD}The border starts shrinking now.")
+                GameManager.world.worldBorder.setSize(25.0 * 2, 10 * 60)
+            }
         }
+
+        fun handleFeast() {
+            // Feast - nach 10 minuten announcen | 5 min später spawnt es
+            if (tickCount == 600) {
+                val world = GameManager.world
+
+                GameManager.feast = Feast(world).apply {
+                    feastCenter = LocationUtils.getHighestBlock(world, (world.worldBorder.size / 4).toInt(), 0)
+                    spawn()
+                }
+            }
+        }
+
+        fun checkForWinner() {
+            // Winner
+            if (PlayerList.alivePlayers.size <= 1 && Arena.currentMatch == null && Arena.queuedPlayers.size < 2) {
+                GameManager.startNextPhase()
+            }
+        }
+
+        fun teleportAutisticSpectators() {
+            async {
+                if (tickCount % 2 != 0) return@async
+                val worldBorder = GameManager.world.worldBorder
+                val borderRadius = worldBorder.size / 2.0
+
+                onlinePlayers.filter { it.gameMode == GameMode.SPECTATOR }.forEach { player ->
+                    val playerLoc = player.location
+                    if (playerLoc.x > borderRadius || playerLoc.x < -borderRadius ||
+                        playerLoc.z > borderRadius || playerLoc.z < -borderRadius
+                    ) {
+                        sync {
+                            player.teleport(GameManager.world.spawnLocation)
+                        }
+                    }
+                }
+            }
+        }
+
+        handleCombatTimer()
+        handleBorderShrink()
+        handleFeast()
+        checkForWinner()
+        teleportAutisticSpectators()
 
         super.tick(tickCount)
     }
