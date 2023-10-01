@@ -119,6 +119,6 @@ open class HGPlayer(val uuid: UUID, val name: String) {
 }
 
 val Player.hgPlayer get() = PlayerList.getPlayer(this)
-/*
+
 val Player.staffPlayer
-    get() = hgPlayer as? StaffPlayer*/
+    get() = hgPlayer as? StaffPlayer

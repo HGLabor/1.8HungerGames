@@ -15,7 +15,7 @@ object InvincibilityPhase: IngamePhase(120, PvPPhase) {
     override fun getTimeString() = TimeConverter.stringify(remainingTime.toInt())
 
     override fun onStart() {
-        PlayerList.allPlayers.forEach(HGPlayer::makeGameReady)
+        PlayerList.lobbyPlayers.forEach(HGPlayer::makeGameReady)
         PlayerKits.register()
         MechanicsManager.mechanics.filter { it.internal.isEnabled }.onEach { it.onGameStart() }
     }

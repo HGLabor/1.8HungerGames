@@ -8,6 +8,7 @@ import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.PlayerTracker
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.RecraftRecipes
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.SoupHealing
+import de.hglabor.plugins.hungergames.staff.StaffCommand
 import net.axay.kspigot.extensions.bukkit.register
 import net.axay.kspigot.main.KSpigot
 import org.bukkit.ChatColor
@@ -45,6 +46,7 @@ class HungerGames : KSpigot() {
         InfoCommand.register("info")
         ListCommand.register("list")
         KitCommand.register("kit")
+        StaffCommand.register("staffmode")
         getCommand("kit").apply {
             executor = KitCommand
             tabCompleter = KitCommand

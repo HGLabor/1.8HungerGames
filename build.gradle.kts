@@ -84,5 +84,9 @@ bukkit {
         register("list") {
             description = "Show all competing players"
         }
+        register("staffmode") {
+            description = "Enter staffmode"
+            aliases = listOf("staff", "v", "vanish", "mod", "modmode")
+        }
     }
 }

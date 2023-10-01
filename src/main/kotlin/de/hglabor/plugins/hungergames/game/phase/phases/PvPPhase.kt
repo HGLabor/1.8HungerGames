@@ -26,11 +26,13 @@ object PvPPhase : IngamePhase(3600, EndPhase) {
     override fun getTimeString() = TimeConverter.stringify((GameManager.elapsedTime.get()).toInt())
 
     override fun onStart() {
-        onlinePlayers.forEach { player ->
-            player.inventory.remove(KitSelector.kitSelectorItem)
-            if (player.hgPlayer.kit == None.value && !player.hgPlayer.changedKitBefore) {
-                player.chooseKit(KitManager.kits.random(), false)
-                player.sendMessage("${Prefix}You have been given the kit $SecondaryColor${player.hgPlayer.kit.properties.kitname}${ChatColor.GRAY}.")
+        PlayerList.alivePlayers.forEach { hgPlayer ->
+            val player = hgPlayer.bukkitPlayer
+            player?.inventory?.remove(KitSelector.kitSelectorItem)
+            if (hgPlayer.kit == None.value && !hgPlayer.changedKitBefore) {
+                val kit = KitManager.kits.random()
+                player?.chooseKit(kit, false)
+                player?.sendMessage("${Prefix}You have been given the kit $SecondaryColor${kit.properties.kitname}${ChatColor.GRAY}.")
             }
         }
     }
