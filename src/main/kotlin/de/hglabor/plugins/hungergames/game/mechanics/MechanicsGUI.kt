@@ -4,10 +4,7 @@ import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.gui.GUIType
-import net.axay.kspigot.gui.Slots
-import net.axay.kspigot.gui.kSpigotGUI
-import net.axay.kspigot.gui.openGUI
+import net.axay.kspigot.gui.*
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
@@ -29,7 +26,7 @@ class MechanicsGUI(val mechanics: List<Mechanic>) {
         title = "${PrimaryColor}Mechanics"
 
         page(1) {
-            val compound = createRectCompound<Mechanic>(Slots.RowOneSlotTwo, Slots.RowFiveSlotEight,
+            val compound = createRectCompound<Mechanic>(Slots.RowThreeSlotTwo, Slots.RowFiveSlotEight,
                 iconGenerator = { mechanic ->
                     mechanic.internal.displayItem.clone().apply {
                         meta {
@@ -67,7 +64,36 @@ class MechanicsGUI(val mechanics: List<Mechanic>) {
                     }
                 }, compound, 7 * 4
             )
-            compound.setContent(mechanics)
+            compound.setContent(mechanics.filter { !it.isEvent })
+
+            placeholder(Slots.RowOneSlotOne, itemStack(Material.COMMAND) {
+                meta {
+                    name = "${PrimaryColor}Event Mechanics"
+                }
+            })
+            val specialCompound = createRectCompound<Mechanic>(Slots.RowOneSlotTwo, Slots.RowOneSlotEight,
+                iconGenerator = { mechanic ->
+                    mechanic.internal.displayItem.clone().apply {
+                        meta {
+                            name = "${if (mechanic.internal.isEnabled) ChatColor.GREEN else ChatColor.RED}${mechanic.name}"
+                            addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+                            addItemFlags(ItemFlag.HIDE_ENCHANTS)
+                            if (mechanic.internal.isEnabled) {
+                                addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1)
+                            }
+                            mechanic.description?.let { description ->
+                                lore = description.toLoreList()
+                            }
+                        }
+                    }
+                },
+                onClick = { clickEvent, mechanic ->
+                    clickEvent.bukkitEvent.isCancelled = true
+                    mechanic.internal.isEnabled = !mechanic.internal.isEnabled
+                    clickEvent.guiInstance.reloadCurrentPage()
+                })
+            specialCompound.sortContentBy { mechanic -> mechanic.name.lowercase() }
+            specialCompound.setContent(mechanics.filter { it.isEvent })
         }
     }
 

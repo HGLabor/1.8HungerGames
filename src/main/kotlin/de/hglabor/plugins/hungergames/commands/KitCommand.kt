@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.RandomKits
 import de.hglabor.plugins.hungergames.game.phase.phases.EndPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
@@ -27,7 +28,10 @@ object KitCommand : CommandExecutor, TabCompleter {
         args: Array<out String>
     ): Boolean {
         val player = sender as? Player ?: return false
-
+        if (RandomKits.internal.isEnabled) {
+            sender.sendMessage("${Prefix}${ChatColor.RED}You can't choose a kit whilst ${ChatColor.UNDERLINE}Random Kit${ChatColor.RED} is enabled")
+            return false
+        }
         when (GameManager.phase) {
             PvPPhase, EndPhase -> {
                 sender.sendMessage("${Prefix}You can't choose a kit anymore.")

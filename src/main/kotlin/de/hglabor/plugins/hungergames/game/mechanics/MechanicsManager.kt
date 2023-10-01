@@ -17,6 +17,7 @@ object MechanicsManager {
         MoreDurability,
         MushroomCowNerf,
         HungerNerf,
-        RecraftNerf
+        RecraftNerf,
+        RandomKits
     )
 }

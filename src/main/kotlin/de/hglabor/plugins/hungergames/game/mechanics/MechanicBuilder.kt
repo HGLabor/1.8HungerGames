@@ -70,10 +70,24 @@ class MechanicBuilder(val mechanic: Mechanic) {
     }
 
     /**
-    * [callback] will be executed when the game starts, if the Mechanic is enabled
-    */
+     * [callback] will be executed when the mechanic is enabled
+     */
     internal fun onEnable(callback: () -> Unit) {
         mechanic.internal.onEnable = callback
+    }
+
+    /**
+     * [callback] will be executed when the mechanic is disabled
+     */
+    internal fun onDisable(callback: () -> Unit) {
+        mechanic.internal.onDisable = callback
+    }
+
+    /**
+    * [callback] will be executed when the game starts, if the Mechanic is enabled
+    */
+    internal fun onGameStart(callback: () -> Unit) {
+        mechanic.internal.onGameStart = callback
     }
 
     /**

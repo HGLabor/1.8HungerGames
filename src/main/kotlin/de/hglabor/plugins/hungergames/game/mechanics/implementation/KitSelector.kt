@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames.game.mechanics.implementation
 
+import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.SecondaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
@@ -15,7 +16,7 @@ import net.axay.kspigot.gui.openGUI
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.items.name
-import net.axay.kspigot.items.toLoreList
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -39,7 +40,11 @@ object KitSelector {
                 },
                 onClick = { clickEvent, kit ->
                     clickEvent.bukkitEvent.isCancelled = true
-                    clickEvent.player.chooseKit(kit)
+                    if (RandomKits.internal.isEnabled) {
+                        clickEvent.player.sendMessage("$Prefix${ChatColor.RED}You can't choose a kit whilst ${ChatColor.UNDERLINE}Random Kit${ChatColor.RED} is enabled")
+                    } else {
+                        clickEvent.player.chooseKit(kit)
+                    }
                     clickEvent.player.closeInventory()
                 })
             compound.sortContentBy { kit -> kit.properties.kitname.lowercase() }
@@ -65,6 +70,7 @@ object KitSelector {
 
     fun register() {
         listen<PlayerInteractEvent> {
+            if (RandomKits.internal.isEnabled) return@listen
             if (it.item == kitSelectorItem) {
                 if (GameManager.phase == PvPPhase) {
                     it.player.inventory.remove(kitSelectorItem)
@@ -75,6 +81,7 @@ object KitSelector {
         }
 
         listen<BlockPlaceEvent> {
+            if (RandomKits.internal.isEnabled) return@listen
             if (it.player.itemInHand == kitSelectorItem) {
                 it.isCancelled = true
             }

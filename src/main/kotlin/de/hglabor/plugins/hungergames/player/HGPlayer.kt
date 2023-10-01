@@ -5,6 +5,7 @@ import de.hglabor.plugins.hungergames.event.KitEnableEvent
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.OfflineTimer
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.RandomKits
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.hungergames.scoreboard.Board
@@ -85,7 +86,9 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             feedSaturate()
             heal()
             if (kit == None.value && GameManager.phase == InvincibilityPhase) {
-                inventory.addItem(KitSelector.kitSelectorItem)
+                if (!RandomKits.internal.isEnabled) {
+                    inventory.addItem(KitSelector.kitSelectorItem)
+                }
             } else {
                 kit.internal.givePlayer(this)
             }

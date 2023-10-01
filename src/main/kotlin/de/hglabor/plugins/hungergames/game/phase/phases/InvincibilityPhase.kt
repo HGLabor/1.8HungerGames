@@ -17,7 +17,7 @@ object InvincibilityPhase: IngamePhase(120, PvPPhase) {
     override fun onStart() {
         PlayerList.allPlayers.forEach(HGPlayer::makeGameReady)
         PlayerKits.register()
-        MechanicsManager.mechanics.filter { it.internal.isEnabled }.onEach { it.enable() }
+        MechanicsManager.mechanics.filter { it.internal.isEnabled }.onEach { it.onGameStart() }
     }
 
     @EventHandler

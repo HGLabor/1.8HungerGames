@@ -15,7 +15,7 @@ val ArenaMechanic by Mechanic("Arena") {
     description = "After dieing for the first time, fight for a revive!"
     displayMaterial = Material.IRON_SWORD
 
-    onEnable {
+    onGameStart {
         task(true, 20, 20) {
             if (GameManager.phase == EndPhase) {
                 it.cancel()

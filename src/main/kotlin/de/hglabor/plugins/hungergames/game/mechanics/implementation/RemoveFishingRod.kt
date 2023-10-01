@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 val RemoveFishingRod by Mechanic("No Fishing Rod") {
     displayMaterial = Material.FISHING_ROD
 
-    onEnable {
+    onGameStart {
         val iterator = Bukkit.getServer().recipeIterator()
         while (iterator.hasNext()) {
             val recipe = iterator.next()

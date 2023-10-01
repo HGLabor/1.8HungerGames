@@ -3,6 +3,7 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.MechanicsGUI
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.RandomKits
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.utils.TimeConverter
@@ -33,7 +34,9 @@ object LobbyPhase : GamePhase(150, InvincibilityPhase) {
             teleport(GameManager.world.spawnLocation)
             gameMode = GameMode.SURVIVAL
             inventory.clear()
-            inventory.addItem(KitSelector.kitSelectorItem)
+            if (!RandomKits.internal.isEnabled) {
+                inventory.addItem(KitSelector.kitSelectorItem)
+            }
 
             if (hasPermission("hglabor.admin")) {
                 inventory.addItem(MechanicsGUI.mechanicsGuiItem)
