@@ -47,6 +47,7 @@ class HungerGames : KSpigot() {
         ListCommand.register("list")
         KitCommand.register("kit")
         StaffCommand.register("staffmode")
+        BanSpecsCommand.register("banspecs")
         getCommand("kit").apply {
             executor = KitCommand
             tabCompleter = KitCommand

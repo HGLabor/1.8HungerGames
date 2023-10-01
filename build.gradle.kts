@@ -88,5 +88,8 @@ bukkit {
             description = "Enter staffmode"
             aliases = listOf("staff", "v", "vanish", "mod", "modmode")
         }
+        register("banspecs") {
+            description = "Bans spectators for this game"
+        }
     }
 }

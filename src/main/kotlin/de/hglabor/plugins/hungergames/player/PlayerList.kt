@@ -13,7 +13,7 @@ object PlayerList {
     val lobbyPlayers: MutableList<HGPlayer>
         get() = allPlayers.filter { it.status == PlayerStatus.LOBBY }.toMutableList()
     val spectatingPlayers: MutableList<HGPlayer>
-        get() = allPlayers.filter { it.status == PlayerStatus.SPECTATOR }.toMutableList()
+        get() = allPlayers.filter { it.status == PlayerStatus.SPECTATOR || it.status == PlayerStatus.ELIMINATED }.toMutableList()
 
     fun getPlayer(player: Player) =
         players.computeIfAbsent(player.uniqueId) { uuid: UUID ->

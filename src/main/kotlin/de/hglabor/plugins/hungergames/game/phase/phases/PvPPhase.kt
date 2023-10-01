@@ -2,13 +2,15 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 
 import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.SecondaryColor
+import de.hglabor.plugins.hungergames.commands.BanSpecsCommand
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
-import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.feast.Feast
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
+import de.hglabor.plugins.hungergames.game.mechanics.implementation.arena.Arena
 import de.hglabor.plugins.hungergames.game.phase.IngamePhase
 import de.hglabor.plugins.hungergames.player.PlayerList
-import de.hglabor.plugins.hungergames.player.hgPlayer
+import de.hglabor.plugins.hungergames.player.PlayerStatus
+import de.hglabor.plugins.hungergames.player.StaffPlayer
 import de.hglabor.plugins.hungergames.utils.LocationUtils
 import de.hglabor.plugins.hungergames.utils.TimeConverter
 import de.hglabor.plugins.kitapi.implementation.None
@@ -18,8 +20,11 @@ import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.runnables.async
 import net.axay.kspigot.runnables.sync
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
+import org.bukkit.event.EventHandler
+import org.bukkit.event.player.PlayerPreLoginEvent
 
 object PvPPhase : IngamePhase(3600, EndPhase) {
     override val timeName = "Time"
@@ -92,12 +97,35 @@ object PvPPhase : IngamePhase(3600, EndPhase) {
             }
         }
 
+        fun kickSpectatorsIfBanned() {
+            if (tickCount % 5 != 0) return
+            if (BanSpecsCommand.allowSpecs) return
+            PlayerList.spectatingPlayers.mapNotNull {
+                if (it is StaffPlayer) null
+                else it.bukkitPlayer
+            }.forEach {
+                it.kickPlayer("Sorry, you can't spectate anymore.")
+            }
+        }
+
         handleCombatTimer()
         handleBorderShrink()
         handleFeast()
         checkForWinner()
         teleportAutisticSpectators()
+        kickSpectatorsIfBanned()
 
         super.tick(tickCount)
+    }
+
+    @EventHandler
+    fun onPlayerPreLogin(event: PlayerPreLoginEvent) {
+        if (BanSpecsCommand.allowSpecs) return
+        if (Bukkit.getOfflinePlayer(event.uniqueId).isOp) return
+        val hgPlayer = PlayerList.getPlayer(event.uniqueId)
+        if (hgPlayer is StaffPlayer) return
+        if (hgPlayer == null || hgPlayer.status == PlayerStatus.ELIMINATED || hgPlayer.status == PlayerStatus.SPECTATOR) {
+            event.disallow(PlayerPreLoginEvent.Result.KICK_WHITELIST, "Sorry, you can't spectate this game.")
+        }
     }
 }
