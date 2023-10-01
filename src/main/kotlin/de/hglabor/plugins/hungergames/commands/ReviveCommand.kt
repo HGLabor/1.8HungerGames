@@ -19,7 +19,7 @@ object ReviveCommand : CommandExecutor {
         args: Array<out String>
     ): Boolean {
         val player = sender as? Player ?: return false
-        if (!player.hasPermission("hglabor.hg.revive")) {
+        if (!player.hasPermission("hglabor.staff")) {
             sender.sendMessage("${Prefix}${ChatColor.RED}You are not permitted to execute this command.")
             return false
         }
