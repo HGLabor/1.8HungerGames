@@ -41,13 +41,31 @@ val RecraftNerf by Mechanic("Recraft Nerf") {
         biggestOppositeMushroomStack.second.amount = amountToKeep
     }
 
+    fun mergeRecraftItems(player: Player, recraftStacks: List<Pair<Int, ItemStack>>): List<Pair<Int, ItemStack>> {
+        val remainingStacks = mutableListOf<Pair<Int, ItemStack>>()
+        val groupedStacks = recraftStacks.sortedBy { (_, item) -> item.amount }.groupBy { it.second.type }
+
+        groupedStacks.forEach { type, _stacks ->
+            val stacks = _stacks.toMutableList()
+            val totalOfType = stacks.sumOf { it.second.amount }
+            val biggestStack = stacks.removeLast()
+            stacks.forEach { (slot, _) ->
+                player.inventory.setItem(slot, emptyStack)
+            }
+            biggestStack.second.amount = totalOfType.coerceAtMost(MAX_RECRAFT)
+            remainingStacks.add(biggestStack)
+        }
+        return remainingStacks
+    }
+
     fun removeExcessItems(player: Player, totalRecraft: Int, recraftStacks: List<Pair<Int, ItemStack>>) {
         if (totalRecraft <= MAX_RECRAFT) return
-        val sortedStacks = recraftStacks.sortedBy { (index, item) -> item.amount }.toMutableList()
         var remainingToRemove = totalRecraft - MAX_RECRAFT
         broadcast("removing ${remainingToRemove}x recraft for ${player.name}")
 
-        for ((slot, stack) in sortedStacks) {
+        val mergedStacks = mergeRecraftItems(player, recraftStacks)
+
+        for ((slot, stack) in mergedStacks) {
             val amountToRemove = stack.amount.coerceAtMost(remainingToRemove)
             if (amountToRemove >= stack.amount) {
                 stack.amount = 0
@@ -59,8 +77,8 @@ val RecraftNerf by Mechanic("Recraft Nerf") {
 
             if (stack.type == Material.RED_MUSHROOM || stack.type == Material.BROWN_MUSHROOM) {
                 val oppositeMushroom = if (stack.type == Material.BROWN_MUSHROOM) Material.RED_MUSHROOM else Material.BROWN_MUSHROOM
-                val remainingOfRemovedMushroom = sortedStacks.filter { (_, it) -> it.type == stack.type }.sumOf { it.second.amount }
-                removeMushrooms(player, oppositeMushroom, remainingOfRemovedMushroom, sortedStacks)
+                val remainingOfRemovedMushroom = mergedStacks.filter { (_, it) -> it.type == stack.type }.sumOf { it.second.amount }
+                removeMushrooms(player, oppositeMushroom, remainingOfRemovedMushroom, mergedStacks)
             }
 
             if (remainingToRemove <= 0) break
@@ -78,7 +96,7 @@ val RecraftNerf by Mechanic("Recraft Nerf") {
                         val player = hgPlayer.bukkitPlayer ?: return@player
                         val recraftStacks = getRecraftStacks(player)
                         val totalRecraftAmount = countRecraftItems(recraftStacks.map { it.second })
-                        broadcast("${player.name} has ${totalRecraftAmount} recraft")
+                        broadcast("${player.name} has $totalRecraftAmount recraft")
                         if (totalRecraftAmount < 64) return@player
                         removeExcessItems(player, totalRecraftAmount, recraftStacks)
                     }
