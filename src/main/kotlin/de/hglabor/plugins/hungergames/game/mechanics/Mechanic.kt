@@ -35,6 +35,7 @@ class Mechanic(val name: String) {
     }
 
     fun onTick(second: Int) {
+        if (!internal.isEnabled) return
         internal.onTick?.invoke(second)
     }
 }
