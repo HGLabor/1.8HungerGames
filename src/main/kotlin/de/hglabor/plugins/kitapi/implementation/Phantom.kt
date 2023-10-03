@@ -20,9 +20,9 @@ class PhantomProperties : CooldownProperties(30000) {
     val flightTime by int(5)
 }
 
-val Phantom = Kit("Phantom", ::PhantomProperties) {
-
+val Phantom by Kit("Phantom", ::PhantomProperties) {
     displayMaterial = Material.FEATHER
+    description = "${ChatColor.WHITE}Right-click ${ChatColor.GRAY}your kit-item to fly for ${kit.properties.flightTime} seconds"
 
     clickableItem(itemStack(Material.FEATHER) { meta { name = "${SecondaryColor}Phantom" } }) {
         applyCooldown(it) {
@@ -35,8 +35,8 @@ val Phantom = Kit("Phantom", ::PhantomProperties) {
 
                 val timer = AtomicInteger(kit.properties.flightTime)
                 task(true, 20, 20) { task ->
-                    val t = timer.getAndDecrement()
-                    if (t == 0) {
+                    val timeRemaining = timer.getAndDecrement()
+                    if (timeRemaining == 0) {
                         task.cancel()
                         cancelFalldamage(100, true)
                         allowFlight = false
@@ -44,7 +44,7 @@ val Phantom = Kit("Phantom", ::PhantomProperties) {
                         player.sendMessage("${Prefix}You are no longer able to fly.")
                         return@task
                     }
-                    player.sendMessage("${Prefix}Your flight has ${SecondaryColor}$t ${ChatColor.GRAY}seconds remaining.")
+                    player.sendMessage("${Prefix}Your flight has ${SecondaryColor}$timeRemaining ${ChatColor.GRAY}seconds remaining.")
                 }
             }
         }

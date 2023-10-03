@@ -38,8 +38,14 @@ class SpiderProperties : CooldownProperties(20000) {
     val climbVelocity by double(0.3)
 }
 
-val Spider = Kit("Spider", ::SpiderProperties) {
+val Spider by Kit("Spider", ::SpiderProperties) {
     displayMaterial = Material.SPIDER_EYE
+    description {
+        +"${ChatColor.WHITE}Hit ${ChatColor.GRAY}your enemy to poison them"
+        +"${ChatColor.WHITE}Hold your kit-item ${ChatColor.GRAY}to climb walls"
+        +"${ChatColor.WHITE}Throw your kit-item ${ChatColor.GRAY}to create a sphere of cobwebs"
+    }
+
     val spiderSnowball = "spidersb"
 
     // Viper ability

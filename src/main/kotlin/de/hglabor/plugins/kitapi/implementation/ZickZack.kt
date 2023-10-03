@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.ChatColor
 import org.bukkit.Effect
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -17,8 +18,10 @@ class ZickZackProperties : KitProperties() {
     val minCombo by int(2)
 }
 
-val ZickZack = Kit("ZickZack", ::ZickZackProperties) {
+val ZickZack by Kit("ZickZack", ::ZickZackProperties) {
     displayMaterial = Material.DIAMOND_BLOCK
+    description = "${ChatColor.GRAY}After having a combo on a player, you will have a shield, ${ChatColor.WHITE}blocking incoming damage"
+
     val comboMap: HashMap<UUID, AtomicInteger> = hashMapOf()
     val shieldMap: HashMap<UUID, AtomicInteger> = hashMapOf()
 

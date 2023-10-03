@@ -34,7 +34,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
          *
          * Usage:
          * ```kt
-         * val MyKit = Kit("MyKit", ::MyKitProperties) { }
+         * val MyKit by Kit("MyKit", ::MyKitProperties) { }
          * // or for instant access
          * val MyKit by Kit("MyKit", ::MyKitProperties) { }
          * ```
@@ -56,6 +56,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
     }
 
     inner class Internal internal constructor() {
+        var description: List<String>? = null
         val items = HashMap<Int, KitItem>()
         val kitPlayerEvents = HashSet<Listener>()
         var displayItem: ItemStack = ItemStack(Material.BARRIER)

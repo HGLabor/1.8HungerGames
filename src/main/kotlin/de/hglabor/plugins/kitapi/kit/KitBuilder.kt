@@ -8,6 +8,8 @@ import de.hglabor.plugins.kitapi.cooldown.CooldownScope
 import de.hglabor.plugins.kitapi.cooldown.MultipleUsesCooldownProperties
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
 import net.axay.kspigot.event.listen
+import net.axay.kspigot.items.ItemMetaLoreBuilder
+import net.axay.kspigot.items.toLoreList
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -33,6 +35,14 @@ class KitBuilder<P : KitProperties>(val kit: Kit<P>) {
     var displayMaterial: Material
         get() = kit.internal.displayItem.type
         set(value) { kit.internal.displayItem.type = value }
+
+    fun description(callback: ItemMetaLoreBuilder.() -> Unit) {
+        kit.internal.description = ItemMetaLoreBuilder().apply(callback).lorelist
+    }
+
+    var description: String
+        get() = ""
+        set(value) { kit.internal.description = value.toLoreList() }
 
     fun simpleItem(stack: ItemStack) {
         kit.internal.items[currentItemId++] = SimpleKitItem(stack)

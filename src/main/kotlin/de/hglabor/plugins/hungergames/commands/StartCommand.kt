@@ -16,7 +16,7 @@ object StartCommand: CommandExecutor {
         label: String,
         args: Array<out String>
     ): Boolean {
-        if (!sender.hasPermission("hglabor.hg.start")) {
+        if (!sender.hasPermission("hglabor.staff")) {
             sender.sendMessage("${Prefix}${ChatColor.RED}You are not permitted to execute this command.")
             return false
         }

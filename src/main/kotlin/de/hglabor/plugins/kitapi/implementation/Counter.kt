@@ -6,6 +6,7 @@ import org.bukkit.Material
 
 class CounterProperties: KitProperties()
 
-val Counter = Kit("Counter", ::CounterProperties) {
+val Counter by Kit("Counter", ::CounterProperties) {
     displayMaterial = Material.STAINED_GLASS_PANE
+    description = "Counter kits of your enemies"
 }

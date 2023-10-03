@@ -7,6 +7,7 @@ object KitManager {
         Anchor,
         Automatic,
         Blink,
+        Cannibal,
         //Counter,
         Digger,
         Domino,
@@ -21,7 +22,6 @@ object KitManager {
         Phantom,
         Reaper,
         Redstoner,
-        //Relaxo,
         Revive,
         Rogue,
         Smoothyy,
@@ -34,5 +34,5 @@ object KitManager {
         //Ultimato,
         Viking,
         ZickZack,
-    ).map { it.value }
+    )
 }

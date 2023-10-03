@@ -35,8 +35,12 @@ class EndermageProperties : MultipleUsesCooldownProperties(5, 15000) {
 
 private val whoMaged = mutableMapOf<UUID, UUID>()
 
-val Endermage = Kit("Endermage", ::EndermageProperties) {
+val Endermage by Kit("Endermage", ::EndermageProperties) {
     displayMaterial = Material.ENDER_PORTAL_FRAME
+    description {
+        +"${ChatColor.WHITE}Place ${ChatColor.GRAY}your kit-item to teleport other player to you"
+        +"${ChatColor.GRAY}After teleporting you are invulnerable for 5 seconds"
+    }
 
     val mageInstances = mutableMapOf<UUID, EndermageSearch>()
 
@@ -89,7 +93,7 @@ class EndermageSearch(mage: Player, val location: Location) {
 
     private fun startSearching() {
         task = task(true, 0, 10) {
-            val radius = Endermage.value.properties.searchRadius
+            val radius = Endermage.properties.searchRadius
             val tempEntity = tempEntity ?: return@task
 
             for (entity in tempEntity.getNearbyEntities(radius, 256.0, radius)) {

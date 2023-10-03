@@ -7,6 +7,7 @@ import de.hglabor.plugins.kitapi.cooldown.applyCooldown
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.isKitItem
 import net.axay.kspigot.extensions.events.isRightClick
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
@@ -24,8 +25,12 @@ class ReaperProperties : MultipleUsesCooldownProperties(4, 25000) {
     val blueWitherProbability by int(10)
 }
 
-val Reaper = Kit("Reaper", ::ReaperProperties) {
+val Reaper by Kit("Reaper", ::ReaperProperties) {
     displayMaterial = Material.IRON_HOE
+    description {
+        +"${ChatColor.WHITE}Right-click ${ChatColor.GRAY}to shoot ${ChatColor.WHITE}wither skulls"
+        +"${ChatColor.WHITE}Hit ${ChatColor.GRAY}an enemy with your kit-item to give them ${ChatColor.WHITE}wither effect"
+    }
 
     clickableItem(ItemStack(Material.IRON_HOE)) {
         if (!it.action.isRightClick) return@clickableItem

@@ -17,8 +17,9 @@ class RogueProperties : CooldownProperties(16000) {
     val duration by long(10000)
 }
 
-val Rogue = Kit("Rogue", ::RogueProperties) {
+val Rogue by Kit("Rogue", ::RogueProperties) {
     displayMaterial = Material.STICK
+    description = "${ChatColor.GRAY}Disable your enemies' kits"
 
     val coroutineScope = CoroutineScope(Dispatchers.Default)
     clickableItem(ItemStack(Material.STICK)) {
@@ -36,7 +37,7 @@ val Rogue = Kit("Rogue", ::RogueProperties) {
                     continue
 
                 coroutineScope.launch {
-                    hgPlayer.disableKit()
+                    hgPlayer.disableKit(isByRogue = true)
                     player.sendMessage("${Prefix}Your kit has been ${ChatColor.RED}disabled${ChatColor.GRAY}.")
 
                     delay(kit.properties.duration)

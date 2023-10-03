@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.player.hgPlayer
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import de.hglabor.plugins.kitapi.player.PlayerKits.hasKit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent
@@ -13,8 +14,9 @@ class StomperProperties : KitProperties() {
     val radius by double(3.0)
 }
 
-val Stomper = Kit("Stomper", ::StomperProperties) {
+val Stomper by Kit("Stomper", ::StomperProperties) {
     displayMaterial = Material.DIAMOND_BOOTS
+    description = "${ChatColor.GRAY}Your falldamage will be reflected to nearby players"
 
     kitPlayerEvent<EntityDamageEvent>({ it.entity as? Player }) { it, player ->
         if (it.cause != EntityDamageEvent.DamageCause.FALL) return@kitPlayerEvent

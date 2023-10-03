@@ -15,6 +15,7 @@ import net.axay.kspigot.extensions.bukkit.spawnCleanEntity
 import net.axay.kspigot.extensions.geometry.add
 import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
+import org.bukkit.ChatColor
 import org.bukkit.Effect
 import org.bukkit.Location
 import org.bukkit.Material
@@ -24,12 +25,13 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 class UltimatoProperties : CooldownProperties(45000) {
-    val radius by double(13.0)
+    val radius by int(13)
     val duration by int(35)
     val boostStrength by double(0.8)
 }
 
 class UltimatoInstance(private val ultimato: Player) {
+    val properties = Ultimato.properties
     private var centerLocation: Location = ultimato.location.block.location.clone().apply { add(0, 2, 0) }
     private var tempEntity: ArmorStand =
         (centerLocation.clone().add(0, 100, 0).spawnCleanEntity(EntityType.ARMOR_STAND) as ArmorStand).apply {
@@ -38,7 +40,7 @@ class UltimatoInstance(private val ultimato: Player) {
         }
 
     val players = tempEntity
-        .getNearbyEntities(Ultimato.value.properties.radius, 256.0, Ultimato.value.properties.radius)
+        .getNearbyEntities(properties.radius.toDouble(), 256.0, properties.radius.toDouble())
         .filterIsInstance<Player>().filterNot { it.isInGladiator }.onEach { it.mark("inUltimato") }
 
     var particleTask: KSpigotRunnable? = null
@@ -56,13 +58,13 @@ class UltimatoInstance(private val ultimato: Player) {
                 endFight()
                 return@task
             }
-            if (count / 10 >= Ultimato.value.properties.duration) {
+            if (count / 10 >= properties.duration) {
                 endFight()
                 return@task
             }
 
-            val radius = Ultimato.value.properties.radius
-            val strength = Ultimato.value.properties.boostStrength
+            val radius = properties.radius
+            val strength = properties.boostStrength
 
             for (entity in tempEntity.getNearbyEntities(radius + 0.5, 256.0, radius + 0.5)) {
                 if ((entity as? Player ?: return@task).isInGladiator) continue
@@ -86,7 +88,7 @@ class UltimatoInstance(private val ultimato: Player) {
     }
 
     private fun createArena() {
-        WorldUtils.makeCircle(centerLocation.clone().add(0, -3, 0), Gladiator.value.properties.radius, 12, true, false)
+        WorldUtils.makeCircle(centerLocation.clone().add(0, -3, 0), properties.radius, 12, true, false)
             .forEach {
                 it.world.playEffect(it, Effect.COLOURED_DUST, 3)
             }
@@ -102,19 +104,20 @@ class UltimatoInstance(private val ultimato: Player) {
             it.unmark("inUltimato")
         }
         if (ultimato.hgPlayer.isAlive) {
-            CooldownManager.addCooldown(Ultimato.value.properties.cooldownInstance, ultimato)
+            CooldownManager.addCooldown(properties.cooldownInstance, ultimato)
         }
     }
 }
 
 
-val Ultimato = Kit("Ultimato", ::UltimatoProperties) {
+val Ultimato by Kit("Ultimato", ::UltimatoProperties) {
     displayItem = ItemStack(Material.STAINED_GLASS_PANE, 1, 14)
+    description = "${ChatColor.GRAY}Create an arena to fight nearby players"
 
     clickableItem(ItemStack(Material.STAINED_GLASS_PANE, 1, 14), useInInvincibility = false) {
         if (it.player.isInUltimato || it.player.isInGladiator) return@clickableItem
         val radius = kit.properties.radius
-        if (it.player.getNearbyEntities(radius, 128.0, radius)
+        if (it.player.getNearbyEntities(radius.toDouble(), 128.0, radius.toDouble())
                 .filterIsInstance<Player>()
                 .filterNot { it.isInGladiator || it.isInUltimato }
                 .isEmpty()

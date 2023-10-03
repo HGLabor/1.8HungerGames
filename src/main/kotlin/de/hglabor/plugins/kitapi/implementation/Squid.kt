@@ -6,6 +6,7 @@ import de.hglabor.plugins.hungergames.utils.ChanceUtils
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
 import net.axay.kspigot.runnables.taskRunLater
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -18,11 +19,15 @@ import org.bukkit.potion.PotionEffectType
 class SquidProperties : KitProperties() {
     val effectDuration by int(3)
     val effectMultiplier by int(0)
-    val probability by int(30)
+    val probability by int(8)
 }
 
-val Squid = Kit("Squid", ::SquidProperties) {
+val Squid by Kit("Squid", ::SquidProperties) {
     displayMaterial = Material.INK_SACK
+    description {
+        +"${ChatColor.WHITE}Hit ${ChatColor.GRAY}an enemy to blind them"
+        +"${ChatColor.GRAY}You receive ${ChatColor.WHITE}permanent water-breathing"
+    }
 
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, _ ->
         if (it.isCancelled) return@kitPlayerEvent
