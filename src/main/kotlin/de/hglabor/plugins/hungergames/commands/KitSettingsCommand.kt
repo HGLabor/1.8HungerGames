@@ -2,8 +2,6 @@ package de.hglabor.plugins.hungergames.commands
 
 import de.hglabor.plugins.kitapi.kit.KitManager
 import de.hglabor.plugins.kitapi.kit.KitProperties
-import net.axay.kspigot.extensions.broadcast
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
