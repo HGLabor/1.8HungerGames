@@ -1,5 +1,6 @@
 package de.hglabor.plugins.hungergames.game.mechanics.implementation
 
+import de.hglabor.plugins.hungergames.Prefix
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.Mechanic
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
@@ -14,6 +15,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 val RecraftNerf by Mechanic("Recraft Nerf") {
+    displayMaterial = Material.MUSHROOM_SOUP
+
     val MAX_RECRAFT = 64
     val SECONDS_BETWEEN_CHECK = 10
     val emptyStack = ItemStack(Material.AIR)
@@ -51,25 +54,32 @@ val RecraftNerf by Mechanic("Recraft Nerf") {
     }
 
     fun removeMushrooms(player: Player, mushroomToRemove: Material, amountToKeep: Int, sortedStacks: List<Pair<Int, ItemStack>>) {
-        val oppositeMushroomStacks = sortedStacks.filter { (_, it) -> it.type == mushroomToRemove }.toMutableList()
-        if (oppositeMushroomStacks.sumOf { (_, it) -> it.amount } <= amountToKeep) return
-        val biggestOppositeMushroomStack = oppositeMushroomStacks.removeLast()
-        oppositeMushroomStacks.forEach { (slot, _) -> player.inventory.setItem(slot, emptyStack) }
-        if (amountToKeep == 0) {
-            player.inventory.setItem(biggestOppositeMushroomStack.first, emptyStack)
-        } else {
-            biggestOppositeMushroomStack.second.amount = amountToKeep
-        }
+        val (oppositeSlot, oppositeStack) = sortedStacks.first { (_, it) -> it.type == mushroomToRemove }
+        if (oppositeStack.amount <= amountToKeep) return
+        if (amountToKeep == 0) player.inventory.setItem(oppositeSlot, emptyStack)
+        oppositeStack.amount = amountToKeep
     }
 
-    fun removeExcessItems(player: Player, totalRecraft: Int, recraftStacks: List<Pair<Int, ItemStack>>) {
-        if (totalRecraft <= MAX_RECRAFT) return
-        var remainingToRemove = totalRecraft - MAX_RECRAFT
-
+    fun removeExcessItems(player: Player, recraftStacks: List<Pair<Int, ItemStack>>) {
         val mergedStacks = mergeRecraftItems(player, recraftStacks).sortedBy { it.second.amount }
+        val totalRecraft = countRecraftItems(mergedStacks.map { it.second })
+        var remainingToRemove = totalRecraft - MAX_RECRAFT
+        if (remainingToRemove <= 0) return
+        player.sendMessage("${Prefix}Sorry, you can't carry more than 64 recraft at the time.")
+//        player.sendMessage("Recraft nerf:")
+//        player.sendMessage(" - You had a total of: $totalRecraft")
+//        mergedStacks.onEach {
+//            player.sendMessage("   - ${it.second.amount}x ${it.second.type.name}")
+//        }
+//        player.sendMessage(" - Amount to remove: $remainingToRemove")
 
+
+        var mushroomsWereRemoved = false
         for ((slot, stack) in mergedStacks) {
+            val isMushroom = stack.type == Material.RED_MUSHROOM || stack.type == Material.BROWN_MUSHROOM
+            if (mushroomsWereRemoved && isMushroom) continue
             val amountToRemove = stack.amount.coerceAtMost(remainingToRemove)
+            //player.sendMessage("Removed: ${amountToRemove}x ${stack.type.name}")
             if (amountToRemove >= stack.amount) {
                 stack.amount = 0
                 player.inventory.setItem(slot, emptyStack)
@@ -78,10 +88,11 @@ val RecraftNerf by Mechanic("Recraft Nerf") {
             }
             remainingToRemove -= amountToRemove
 
-            if (stack.type == Material.RED_MUSHROOM || stack.type == Material.BROWN_MUSHROOM) {
+            if (isMushroom) {
                 val oppositeMushroom = if (stack.type == Material.BROWN_MUSHROOM) Material.RED_MUSHROOM else Material.BROWN_MUSHROOM
-                val remainingOfRemovedMushroom = mergedStacks.filter { (_, it) -> it.type == stack.type }.sumOf { it.second.amount }
+                val remainingOfRemovedMushroom = stack.amount
                 removeMushrooms(player, oppositeMushroom, remainingOfRemovedMushroom, mergedStacks)
+                mushroomsWereRemoved = true
             }
 
             if (remainingToRemove <= 0) break
@@ -98,8 +109,8 @@ val RecraftNerf by Mechanic("Recraft Nerf") {
                         val player = hgPlayer.bukkitPlayer ?: return@player
                         val recraftStacks = getRecraftItems(player)
                         val totalRecraftAmount = countRecraftItems(recraftStacks.map { it.second })
-                        if (totalRecraftAmount < 64) return@player
-                        removeExcessItems(player, totalRecraftAmount, recraftStacks)
+                        if (totalRecraftAmount <= MAX_RECRAFT) return@player
+                        removeExcessItems(player, recraftStacks)
                     }
                 }
                 delay((SECONDS_BETWEEN_CHECK - 1 * 1000L) / windows.size)
@@ -113,4 +124,3 @@ private fun ItemStack.isCocoa() = type == Material.INK_SACK && data.data.toInt()
 private fun ItemStack.isRecraftMaterial(): Boolean {
     return isCocoa() || type in recraftMaterials
 }
-
