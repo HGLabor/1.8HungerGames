@@ -37,7 +37,12 @@ object KitSettingsCommand : CommandExecutor, TabCompleter {
         }
 
         // getting the property
-        val property = kit.properties.propertyList.firstOrNull { property -> property.kProperty.name.startsWith(propertyName, true) }
+        val property = kit.properties.propertyList.firstOrNull { property ->
+            property.kProperty.name.startsWith(
+                propertyName,
+                true
+            )
+        }
         if (property == null) {
             player.sendMessage("property not found")
             return false
@@ -52,7 +57,11 @@ object KitSettingsCommand : CommandExecutor, TabCompleter {
         return true
     }
 
-    private fun <T> setPropertyValue(kitProperties: KitProperties, property: KitProperties.KitProperty<T>, valueAsString: String): Boolean {
+    private fun <T> setPropertyValue(
+        kitProperties: KitProperties,
+        property: KitProperties.KitProperty<T>,
+        valueAsString: String
+    ): Boolean {
         val defaultValue = property.defaultValue ?: return false
         val propertyType = defaultValue::class.createType()
 
@@ -64,8 +73,14 @@ object KitSettingsCommand : CommandExecutor, TabCompleter {
     private fun parseValue(valueAsString: String, kType: KType): Any? {
         return when (kType) {
             typeOf<String>() -> valueAsString
-            typeOf<Material>() -> Material.values().firstOrNull { material -> material.name.startsWith(valueAsString, true) }
+            typeOf<Material>() -> Material.values()
+                .firstOrNull { material -> material.name.startsWith(valueAsString, true) }
+
             typeOf<Boolean>() -> valueAsString.lowercase().toBooleanStrictOrNull()
+            typeOf<Int>() -> valueAsString.toInt()
+            typeOf<Long>() -> valueAsString.toLong()
+            typeOf<Float>() -> valueAsString.toFloat()
+            typeOf<Double>() -> valueAsString.toDouble()
 
             else -> {
                 val stringsClass = Class.forName("kotlin.text.StringsKt")
@@ -88,7 +103,43 @@ object KitSettingsCommand : CommandExecutor, TabCompleter {
         cmd: Command,
         label: String,
         args: Array<out String>
-    ): MutableList<String> {
-        return KitManager.kits.map { it.properties.kitname }.toMutableList()
+    ): MutableList<String>? {
+
+        when (args.size) {
+            1 -> {
+                val (kitName) = args
+                val allKits = KitManager.kits.map { it.properties.kitname }
+                val kits = if (kitName.isBlank()) allKits
+                else allKits.filter { it.startsWith(kitName, true) }
+
+                return kits.takeIf { it.isNotEmpty() }?.toMutableList() ?: allKits.toMutableList()
+            }
+
+            2 -> {
+                val (kitName, propertyName) = args
+                val kit = KitManager.kits.firstOrNull { kit -> kit.properties.kitname.startsWith(kitName, true) }
+                    ?: return mutableListOf("Kit not found")
+
+                val allProperties = kit.properties.propertyList.map { it.kProperty.name }
+                val properties = if (propertyName.isBlank()) allProperties
+                else allProperties.filter { it.startsWith(propertyName, true) }
+
+                return properties.takeIf { it.isNotEmpty() }?.toMutableList() ?: properties.toMutableList()
+            }
+
+            3 -> {
+                val (kitName, propertyName) = args
+                val kit = KitManager.kits.firstOrNull { kit -> kit.properties.kitname.startsWith(kitName, true) }
+                    ?: return mutableListOf("Kit not found")
+                val property = kit.properties.propertyList.firstOrNull { it.kProperty.name.startsWith(propertyName, true) }
+                    ?: return mutableListOf("Property not found")
+
+                val defaultValue = property.defaultValue ?: return mutableListOf("Property not found")
+                val dataType = defaultValue::class.createType().jvmErasure.simpleName
+
+                return mutableListOf("$dataType value")
+            }
+        }
+        return null
     }
 }
