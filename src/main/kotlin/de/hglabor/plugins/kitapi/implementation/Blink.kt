@@ -19,7 +19,7 @@ class BlinkProperties : MultipleUsesCooldownProperties(4, 16000) {
     val distance by double(4.0)
 }
 
-val Blink = Kit("Blink", ::BlinkProperties) {
+val Blink by Kit("Blink", ::BlinkProperties) {
     displayMaterial = Material.NETHER_STAR
     description = "${ChatColor.WHITE}Right click ${ChatColor.GRAY}your kit-item to teleport in the direction you are looking"
 

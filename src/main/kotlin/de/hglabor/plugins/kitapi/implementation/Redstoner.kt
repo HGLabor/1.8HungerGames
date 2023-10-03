@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack
 
 class RedstonerProperties : KitProperties()
 
-val Redstoner = Kit("Redstoner", ::RedstonerProperties) {
+val Redstoner by Kit("Redstoner", ::RedstonerProperties) {
     displayMaterial = Material.REDSTONE
     description = "${ChatColor.GRAY}You receive a lot of redstone items"
 

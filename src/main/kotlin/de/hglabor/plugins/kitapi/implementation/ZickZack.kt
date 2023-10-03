@@ -18,7 +18,7 @@ class ZickZackProperties : KitProperties() {
     val minCombo by int(2)
 }
 
-val ZickZack = Kit("ZickZack", ::ZickZackProperties) {
+val ZickZack by Kit("ZickZack", ::ZickZackProperties) {
     displayMaterial = Material.DIAMOND_BLOCK
     description = "${ChatColor.GRAY}After having a combo on a player, you will have a shield, ${ChatColor.WHITE}blocking incoming damage"
 

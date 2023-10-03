@@ -14,7 +14,7 @@ class DominoProperties : KitProperties() {
     val radius by double(4.0)
 }
 
-val Domino = Kit("Domino", ::DominoProperties) {
+val Domino by Kit("Domino", ::DominoProperties) {
     displayMaterial = Material.QUARTZ_BLOCK
     description = "${ChatColor.GRAY}The ${ChatColor.WHITE}damage and knockback ${ChatColor.GRAY}you deal will be applied to all ${ChatColor.WHITE}nearby entities"
 

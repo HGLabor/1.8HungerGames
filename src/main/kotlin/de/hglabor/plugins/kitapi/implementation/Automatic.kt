@@ -13,7 +13,7 @@ class AutomaticProperties : KitProperties() {
     val soupHealAmount by double(6.0)
 }
 
-val Automatic = Kit("Automatic", ::AutomaticProperties) {
+val Automatic by Kit("Automatic", ::AutomaticProperties) {
     displayMaterial = Material.MUSHROOM_SOUP
     description = "${ChatColor.GRAY}The ${ChatColor.WHITE}soups ${ChatColor.GRAY}in your hotbar will ${ChatColor.WHITE}automatically ${ChatColor.GRAY}be ${ChatColor.WHITE}consumed ${ChatColor.GRAY}when needed"
 

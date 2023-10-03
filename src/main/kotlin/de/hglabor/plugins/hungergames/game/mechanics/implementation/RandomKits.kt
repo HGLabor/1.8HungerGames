@@ -19,7 +19,7 @@ val RandomKits by Mechanic("Random Kits", isEvent = true) {
     onEnable {
         if (GameManager.phase != LobbyPhase) return@onEnable
         PlayerList.allPlayers.forEach { hgPlayer ->
-            hgPlayer.kit = None.value
+            hgPlayer.kit = None
             hgPlayer.changedKitBefore = false
             hgPlayer.bukkitPlayer?.let { player ->
                 player.inventory.remove(KitSelector.kitSelectorItem)
@@ -31,8 +31,8 @@ val RandomKits by Mechanic("Random Kits", isEvent = true) {
 
     onGameStart {
         onlinePlayers.forEach { player ->
-            if (player.hgPlayer.kit == None.value && !player.hgPlayer.changedKitBefore) {
-                val kit = KitManager.kits.filter { it != None.value }.random()
+            if (player.hgPlayer.kit == None && !player.hgPlayer.changedKitBefore) {
+                val kit = KitManager.kits.filter { it != None }.random()
                 player.chooseKit(kit, false)
                 player.sendMessage("${Prefix}You have been given the kit $SecondaryColor${kit.properties.kitname}${ChatColor.GRAY}.")
             }
@@ -50,8 +50,8 @@ val RandomKits by Mechanic("Random Kits", isEvent = true) {
     mechanicEvent<PlayerJoinEvent> {
         if (GameManager.phase != LobbyPhase) return@mechanicEvent
         val player = it.player
-        if (player.hgPlayer.kit != None.value) return@mechanicEvent
-        val kit = KitManager.kits.filter { it != None.value }.random()
+        if (player.hgPlayer.kit != None) return@mechanicEvent
+        val kit = KitManager.kits.filter { it != None }.random()
         player.chooseKit(kit, false)
         player.sendMessage("${Prefix}You have been given the kit $SecondaryColor${kit.properties.kitname}${ChatColor.GRAY}.")
     }

@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack
 class SmoothyyProperties : KitProperties()
 
 
-val Smoothyy = Kit("smoothyy", ::SmoothyyProperties) {
+val Smoothyy by Kit("smoothyy", ::SmoothyyProperties) {
     displayMaterial = Material.COOKED_CHICKEN
     description = "Taitos erstes kit! Es geht aber nichts haha"
 

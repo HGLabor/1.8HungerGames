@@ -6,7 +6,7 @@ import org.bukkit.Material
 
 class NoneProperties : KitProperties()
 
-val None = Kit("None", ::NoneProperties) {
+val None by Kit("None", ::NoneProperties) {
     displayMaterial = Material.BARRIER
     description = "Nothing?"
 }

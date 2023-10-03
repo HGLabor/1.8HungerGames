@@ -1,7 +1,6 @@
 package de.hglabor.plugins.kitapi.implementation
 
 import de.hglabor.plugins.hungergames.game.GameManager
-import de.hglabor.plugins.hungergames.game.phase.GamePhase
 import de.hglabor.plugins.hungergames.game.phase.phases.InvincibilityPhase
 import de.hglabor.plugins.kitapi.kit.Kit
 import de.hglabor.plugins.kitapi.kit.KitProperties
@@ -21,7 +20,7 @@ class AnchorProperties : KitProperties() {
     val slownessAmplifier by int(0)
 }
 
-val Anchor = Kit("Anchor", ::AnchorProperties) {
+val Anchor by Kit("Anchor", ::AnchorProperties) {
     displayMaterial = Material.ANVIL
     description = "${ChatColor.GRAY}You neither deal nor take knockback"
 

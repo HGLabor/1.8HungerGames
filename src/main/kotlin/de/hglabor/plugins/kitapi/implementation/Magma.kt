@@ -16,7 +16,7 @@ class MagmaProperties : KitProperties() {
     val likelihood by int(25)
 }
 
-val Magma = Kit("Magma", ::MagmaProperties) {
+val Magma by Kit("Magma", ::MagmaProperties) {
     displayMaterial = Material.FIREBALL
     description {
         +"${ChatColor.WHITE}Ignite players ${ChatColor.GRAY}when hitting them"

@@ -18,7 +18,7 @@ class SnailProperties : KitProperties() {
     val probability by int(30)
 }
 
-val Snail = Kit("Snail", ::SnailProperties) {
+val Snail by Kit("Snail", ::SnailProperties) {
     displayMaterial = Material.SLIME_BALL
     description {
         +"${ChatColor.WHITE}Hit ${ChatColor.GRAY}an enemy to give them ${ChatColor.WHITE}slowness"

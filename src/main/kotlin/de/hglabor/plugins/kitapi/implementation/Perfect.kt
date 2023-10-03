@@ -14,7 +14,7 @@ class PerfectProperties : KitProperties() {
     val soupsAsReward by int(3)
 }
 
-val Perfect = Kit("Perfect", ::PerfectProperties)  {
+val Perfect by Kit("Perfect", ::PerfectProperties)  {
     displayMaterial = Material.RABBIT_STEW
     description {
         +"${ChatColor.GRAY}After eating ${kit.properties.soupsForReward} soups, without presouping,"

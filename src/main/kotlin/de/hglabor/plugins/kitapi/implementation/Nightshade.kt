@@ -24,7 +24,7 @@ class NightshadeProperties  : CooldownProperties(20000) {
     val duration by long(8*20)
 }
 
-val Nightshade = Kit("Nightshade", ::NightshadeProperties) {
+val Nightshade by Kit("Nightshade", ::NightshadeProperties) {
     displayMaterial = Material.NETHER_BRICK_ITEM
     description {
         +"${ChatColor.WHITE}Right-click ${ChatColor.GRAY}a player to:"

@@ -20,7 +20,7 @@ import kotlin.math.sin
 
 class ReviveProperties : CooldownProperties(50000)
 
-val Revive = Kit("Revive", ::ReviveProperties) {
+val Revive by Kit("Revive", ::ReviveProperties) {
     displayMaterial = Material.GOLDEN_APPLE
     description = "${ChatColor.GRAY}Instead of dieing, you will receive ${ChatColor.WHITE}effects to keep you alive"
 

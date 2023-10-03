@@ -25,7 +25,7 @@ class ReaperProperties : MultipleUsesCooldownProperties(4, 25000) {
     val blueWitherProbability by int(10)
 }
 
-val Reaper = Kit("Reaper", ::ReaperProperties) {
+val Reaper by Kit("Reaper", ::ReaperProperties) {
     displayMaterial = Material.IRON_HOE
     description {
         +"${ChatColor.WHITE}Right-click ${ChatColor.GRAY}to shoot ${ChatColor.WHITE}wither skulls"

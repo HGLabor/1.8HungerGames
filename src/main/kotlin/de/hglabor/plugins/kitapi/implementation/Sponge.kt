@@ -37,7 +37,7 @@ class SpongeProperties : MultipleUsesCooldownProperties(15, 30000) {
     val spongeBoost by double(1.0)
 }
 
-val Sponge = Kit("Sponge", ::SpongeProperties) {
+val Sponge by Kit("Sponge", ::SpongeProperties) {
     displayMaterial = Material.SPONGE
     description {
         +"${ChatColor.WHITE}Place sponges ${ChatColor.GRAY}to launch players into the air"

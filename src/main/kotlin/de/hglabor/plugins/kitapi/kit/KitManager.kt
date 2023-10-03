@@ -34,5 +34,5 @@ object KitManager {
         //Ultimato,
         Viking,
         ZickZack,
-    ).map { it.value }
+    )
 }

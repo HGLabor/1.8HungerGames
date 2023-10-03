@@ -22,7 +22,7 @@ class SquidProperties : KitProperties() {
     val probability by int(8)
 }
 
-val Squid = Kit("Squid", ::SquidProperties) {
+val Squid by Kit("Squid", ::SquidProperties) {
     displayMaterial = Material.INK_SACK
     description {
         +"${ChatColor.WHITE}Hit ${ChatColor.GRAY}an enemy to blind them"

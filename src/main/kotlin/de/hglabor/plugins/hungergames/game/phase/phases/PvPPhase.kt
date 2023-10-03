@@ -34,7 +34,7 @@ object PvPPhase : IngamePhase(3600, EndPhase) {
         PlayerList.alivePlayers.forEach { hgPlayer ->
             val player = hgPlayer.bukkitPlayer
             player?.inventory?.remove(KitSelector.kitSelectorItem)
-            if (hgPlayer.kit == None.value && !hgPlayer.changedKitBefore) {
+            if (hgPlayer.kit == None && !hgPlayer.changedKitBefore) {
                 val kit = KitManager.kits.random()
                 player?.chooseKit(kit, false)
                 player?.sendMessage("${Prefix}You have been given the kit $SecondaryColor${kit.properties.kitname}${ChatColor.GRAY}.")

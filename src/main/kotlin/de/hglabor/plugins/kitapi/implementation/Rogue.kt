@@ -17,7 +17,7 @@ class RogueProperties : CooldownProperties(16000) {
     val duration by long(10000)
 }
 
-val Rogue = Kit("Rogue", ::RogueProperties) {
+val Rogue by Kit("Rogue", ::RogueProperties) {
     displayMaterial = Material.STICK
     description = "${ChatColor.GRAY}Disable your enemies' kits"
 

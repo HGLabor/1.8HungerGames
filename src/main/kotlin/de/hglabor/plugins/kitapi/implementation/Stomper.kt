@@ -14,7 +14,7 @@ class StomperProperties : KitProperties() {
     val radius by double(3.0)
 }
 
-val Stomper = Kit("Stomper", ::StomperProperties) {
+val Stomper by Kit("Stomper", ::StomperProperties) {
     displayMaterial = Material.DIAMOND_BOOTS
     description = "${ChatColor.GRAY}Your falldamage will be reflected to nearby players"
 

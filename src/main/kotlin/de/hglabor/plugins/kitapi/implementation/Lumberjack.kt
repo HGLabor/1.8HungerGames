@@ -15,7 +15,7 @@ class LumberjackProperties : KitProperties() {
     val maxBlocks by int(300)
 }
 
-val Lumberjack = Kit("Lumberjack", ::LumberjackProperties) {
+val Lumberjack by Kit("Lumberjack", ::LumberjackProperties) {
     displayMaterial = Material.LOG
     description = "${ChatColor.WHITE}Break an entire tree ${ChatColor.GRAY}by breaking just one log"
 

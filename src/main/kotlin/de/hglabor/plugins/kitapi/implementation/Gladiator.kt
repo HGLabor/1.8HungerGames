@@ -45,7 +45,7 @@ class GladiatorProperties : CooldownProperties(7500) {
 class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
     val players = arrayOf(gladiator, playerTwo)
     private var isFinished = false
-    val properties = Gladiator.value.properties
+    val properties = Gladiator.properties
     private var oldLocations: Array<Location> = Array(2) { players[it].location.clone() }
     private lateinit var spawnLocations: Array<Location>
     private lateinit var allLocations: HashSet<Location>
@@ -61,7 +61,7 @@ class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
     }
 
     private fun startTimer() {
-        taskRunLater(Gladiator.value.properties.duration.toLong() * 20) {
+        taskRunLater(properties.duration.toLong() * 20) {
             if (isFinished) return@taskRunLater
             players.forEach {
                 it.addPotionEffect(PotionEffect(PotionEffectType.WITHER, Int.MAX_VALUE, 1))
@@ -132,7 +132,7 @@ class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
         task = null
 
         if (gladiator.hgPlayer.isAlive) {
-            CooldownManager.addCooldown(Gladiator.value.properties.cooldownInstance, gladiator)
+            CooldownManager.addCooldown(properties.cooldownInstance, gladiator)
         }
         players.forEachIndexed { index, player ->
             player.fallDistance = 0f
@@ -190,7 +190,7 @@ class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
 
 
 
-val Gladiator = Kit("Gladiator", ::GladiatorProperties) {
+val Gladiator by Kit("Gladiator", ::GladiatorProperties) {
     displayMaterial = Material.IRON_FENCE
     description = "${ChatColor.WHITE}Right-click ${ChatColor.GRAY}a player to 1v1 them in an arena"
 

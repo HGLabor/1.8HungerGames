@@ -35,7 +35,7 @@ open class Kit<P : KitProperties> private constructor(val key: String, val prope
          *
          * Usage:
          * ```kt
-         * val MyKit = Kit("MyKit", ::MyKitProperties) { }
+         * val MyKit by Kit("MyKit", ::MyKitProperties) { }
          * // or for instant access
          * val MyKit by Kit("MyKit", ::MyKitProperties) { }
          * ```

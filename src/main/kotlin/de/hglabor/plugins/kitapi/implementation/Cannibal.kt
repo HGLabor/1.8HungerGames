@@ -20,7 +20,7 @@ class CannibalProperties : KitProperties() {
     val hungerDuration = 3
 }
 
-val Cannibal = Kit("Cannibal", ::CannibalProperties) {
+val Cannibal by Kit("Cannibal", ::CannibalProperties) {
     displayMaterial = Material.ANVIL
     description {
         +"${ChatColor.WHITE}Hitting ${ChatColor.GRAY}players feeds you."

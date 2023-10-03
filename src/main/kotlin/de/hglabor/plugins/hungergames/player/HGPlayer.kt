@@ -41,7 +41,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
     val isInCombat: Boolean
         get() = combatTimer.get() > 0 && isAlive
     var board: Board? = null
-    var kit: Kit<*> = None.value
+    var kit: Kit<*> = None
     var changedKitBefore: Boolean = false
     var isKitEnabled = true
     var isKitByRogueDisabled: Boolean = false
@@ -85,7 +85,7 @@ open class HGPlayer(val uuid: UUID, val name: String) {
             maxHealth = 20.0
             feedSaturate()
             heal()
-            if (kit == None.value && GameManager.phase == InvincibilityPhase) {
+            if (kit == None && GameManager.phase == InvincibilityPhase) {
                 if (!RandomKits.internal.isEnabled) {
                     inventory.addItem(KitSelector.kitSelectorItem)
                 }

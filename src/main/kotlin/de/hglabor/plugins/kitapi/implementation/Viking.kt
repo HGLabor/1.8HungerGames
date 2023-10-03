@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 class VikingProperties : KitProperties()
 
-val Viking = Kit("Viking", ::VikingProperties) {
+val Viking by Kit("Viking", ::VikingProperties) {
     displayMaterial = Material.IRON_AXE
     description = "${ChatColor.GRAY}Deal increased damage using axes"
 

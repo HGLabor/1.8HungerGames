@@ -20,7 +20,7 @@ class PhantomProperties : CooldownProperties(30000) {
     val flightTime by int(5)
 }
 
-val Phantom = Kit("Phantom", ::PhantomProperties) {
+val Phantom by Kit("Phantom", ::PhantomProperties) {
     displayMaterial = Material.FEATHER
     description = "${ChatColor.WHITE}Right-click ${ChatColor.GRAY}your kit-item to fly for ${kit.properties.flightTime} seconds"
 

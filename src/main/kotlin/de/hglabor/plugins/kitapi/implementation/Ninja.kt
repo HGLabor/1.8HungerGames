@@ -24,7 +24,7 @@ class NinjaProperties : CooldownProperties(10000) {
     val maxDistance by int(30)
 }
 
-val Ninja = Kit("Ninja", ::NinjaProperties) {
+val Ninja by Kit("Ninja", ::NinjaProperties) {
     displayMaterial = Material.EMERALD
     description = "${ChatColor.GRAY}Sneak to teleport behind your latest enemy"
 

@@ -22,7 +22,7 @@ fun rand(min: Int, max: Int): Int {
     return (min..max).random()
 }
 
-val Toblerone = Kit("Toblerone", ::TobleroneProperties) {
+val Toblerone by Kit("Toblerone", ::TobleroneProperties) {
     displayItem = ItemStack(Material.INK_SACK, 1, 3)
     description = "${ChatColor.GRAY}Eat your chocolate to receive speed and jump boost"
 

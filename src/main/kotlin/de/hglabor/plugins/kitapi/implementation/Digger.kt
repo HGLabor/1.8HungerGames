@@ -17,7 +17,7 @@ class DiggerProperties : CooldownProperties(12000) {
     val radius by int(3)
 }
 
-val Digger = Kit("Digger", ::DiggerProperties) {
+val Digger by Kit("Digger", ::DiggerProperties) {
     displayMaterial = Material.DRAGON_EGG
     description = "${ChatColor.WHITE}Place ${ChatColor.GRAY}your kit-item to create a ${ChatColor.WHITE}${kit.properties.radius}x${kit.properties.radius}x${kit.properties.radius} hole"
 
