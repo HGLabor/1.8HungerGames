@@ -21,7 +21,7 @@ class CannibalProperties : KitProperties() {
 }
 
 val Cannibal by Kit("Cannibal", ::CannibalProperties) {
-    displayMaterial = Material.ANVIL
+    displayMaterial = Material.ROTTEN_FLESH
     description {
         +"${ChatColor.WHITE}Hitting ${ChatColor.GRAY}players feeds you."
         +"${ChatColor.WHITE}Hit ${ChatColor.GRAY}players get hunger effect."
