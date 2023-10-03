@@ -7,6 +7,7 @@ object KitManager {
         Anchor,
         Automatic,
         Blink,
+        Cannibal,
         //Counter,
         Digger,
         Domino,
