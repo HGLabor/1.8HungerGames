@@ -56,7 +56,11 @@ object KitCommand : CommandExecutor, TabCompleter {
             sender.sendMessage("${Prefix}Please specify a kit.")
             return false
         }
-        player.chooseKit(kit)
+
+        if (kit.properties.isEnabled)
+            player.chooseKit(kit)
+        else
+            player.sendMessage("${Prefix}This Kit is disabled.")
         return true
     }
 
@@ -66,6 +70,6 @@ object KitCommand : CommandExecutor, TabCompleter {
         label: String?,
         args: Array<out String>?
     ): MutableList<String> {
-        return KitManager.kits.map { it.properties.kitname }.toMutableList()
+        return KitManager.kits.filter { it.properties.isEnabled }.map { it.properties.kitname }.toMutableList()
     }
 }

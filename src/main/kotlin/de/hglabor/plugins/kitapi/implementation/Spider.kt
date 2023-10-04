@@ -28,13 +28,13 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 
-class SpiderProperties : CooldownProperties(20000) {
-    val effectDuration by int(3)
-    val effectMultiplier by int(1)
-    val probability by int(30)
+class SpiderProperties : CooldownProperties(20) {
+    val poisonDuration by int(3)
+    val poisonAmplifier by int(1)
+    val likelihood by int(30)
 
-    val spidernetRadius by int(5)
-    val spidernetHeight by int(5)
+    val cobwebRadius by int(5)
+    val cobwebHeight by int(5)
     val climbVelocity by double(0.3)
 }
 
@@ -51,12 +51,12 @@ val Spider by Kit("Spider", ::SpiderProperties) {
     // Viper ability
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }) { it, _ ->
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
-        if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
+        if (!ChanceUtils.roll(kit.properties.likelihood)) return@kitPlayerEvent
         target.addPotionEffect(
             PotionEffect(
                 PotionEffectType.POISON,
-                this.kit.properties.effectDuration * 20,
-                this.kit.properties.effectMultiplier
+                this.kit.properties.poisonDuration * 20,
+                this.kit.properties.poisonAmplifier
             )
         )
     }
@@ -74,7 +74,7 @@ val Spider by Kit("Spider", ::SpiderProperties) {
     fun createSpiderNet(startLocation: Location): Set<Block> {
         val result: MutableSet<Block> = HashSet()
         val p = kit.properties
-        for (location in WorldUtils.makeCircle(startLocation, p.spidernetRadius, p.spidernetHeight, true, true)) {
+        for (location in WorldUtils.makeCircle(startLocation, p.cobwebRadius, p.cobwebHeight, true, true)) {
             if (location.block.type != Material.AIR) {
                 continue
             }

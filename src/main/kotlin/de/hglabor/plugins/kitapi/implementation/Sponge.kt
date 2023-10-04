@@ -28,10 +28,10 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 
 
-class SpongeProperties : MultipleUsesCooldownProperties(15, 30000) {
-    val waterRemoveDelay by long(50)
-    val poisonDuration by int(60)
-    val poisonAmplifier by int(60)
+class SpongeProperties : MultipleUsesCooldownProperties(15, 30) {
+    val waterDuration by int(3)
+    val poisonDuration by int(3)
+    val poisonAmplifier by int(3)
     val spongesOnKill by int(2)
     val spongesOnStart by int(12)
     val spongeBoost by double(1.0)
@@ -90,7 +90,7 @@ val Sponge by Kit("Sponge", ::SpongeProperties) {
                 player.addPotionEffect(
                     PotionEffect(
                         PotionEffectType.POISON,
-                        properties.poisonDuration,
+                        properties.poisonDuration * 20,
                         properties.poisonAmplifier
                     )
                 )
@@ -114,7 +114,7 @@ val Sponge by Kit("Sponge", ::SpongeProperties) {
                 blockToReplace.setType(Material.STATIONARY_WATER, false)
                 waterBlocks.add(blockToReplace)
 
-                taskRunLater(kit.properties.waterRemoveDelay) {
+                taskRunLater(kit.properties.waterDuration * 20L) {
                     blockToReplace.setType(Material.AIR, false)
                     waterBlocks.remove(blockToReplace)
                 }

@@ -75,8 +75,8 @@ bukkit {
         register("revive") {
             description = "Revive a player"
         }
-        register("kitsettings") {
-            description = "Change kit settings"
+        register("settings") {
+            description = "Open the settings gui"
         }
         register("arenatp") {
             description = "Teleport into arena world"

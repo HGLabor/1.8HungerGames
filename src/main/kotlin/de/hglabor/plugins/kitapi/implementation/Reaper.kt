@@ -19,10 +19,10 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 
-class ReaperProperties : MultipleUsesCooldownProperties(4, 25000) {
-    val baseEffectDuration by int(3)
-    val effectMultiplier by int(0)
-    val blueWitherProbability by int(10)
+class ReaperProperties : MultipleUsesCooldownProperties(4, 25) {
+    val witherEffectDuration by int(3)
+    val witherAmplifier by int(0)
+    val blueWitherLikelihood by int(10)
 }
 
 val Reaper by Kit("Reaper", ::ReaperProperties) {
@@ -38,7 +38,7 @@ val Reaper by Kit("Reaper", ::ReaperProperties) {
             val player = it.player
             val loc = player.eyeLocation.clone().add(player.location.direction.multiply(2.3))
             val witherSkull = player.world.spawnEntity(loc, EntityType.WITHER_SKULL) as WitherSkull
-            if (ChanceUtils.roll(kit.properties.blueWitherProbability)) {
+            if (ChanceUtils.roll(kit.properties.blueWitherLikelihood)) {
                 witherSkull.isCharged = true
             }
             witherSkull.velocity = player.location.direction.multiply(1.75);
@@ -51,8 +51,8 @@ val Reaper by Kit("Reaper", ::ReaperProperties) {
             target.addPotionEffect(
                 PotionEffect(
                     PotionEffectType.WITHER,
-                    (this.kit.properties.baseEffectDuration + damager.hgPlayer.kills.get()) * 20,
-                    this.kit.properties.effectMultiplier
+                    (this.kit.properties.witherEffectDuration + damager.hgPlayer.kills.get()) * 20,
+                    this.kit.properties.witherAmplifier
                 )
             )
         }

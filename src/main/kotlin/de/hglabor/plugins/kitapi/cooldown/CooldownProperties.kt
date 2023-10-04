@@ -4,6 +4,7 @@ package de.hglabor.plugins.kitapi.cooldown
 
 import de.hglabor.plugins.kitapi.kit.KitBuilder
 import de.hglabor.plugins.kitapi.kit.KitProperties
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerEvent
 

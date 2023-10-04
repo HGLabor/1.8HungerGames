@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffectType
 class CannibalProperties : KitProperties() {
     val likelihood by int(33)
     val hungerAmplifier by int(1)
-    val hungerDuration = 3
+    val hungerDuration by int(3)
 }
 
 val Cannibal by Kit("Cannibal", ::CannibalProperties) {

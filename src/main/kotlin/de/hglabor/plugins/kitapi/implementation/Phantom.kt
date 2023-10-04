@@ -16,7 +16,7 @@ import org.bukkit.Material
 import org.bukkit.util.Vector
 import java.util.concurrent.atomic.AtomicInteger
 
-class PhantomProperties : CooldownProperties(30000) {
+class PhantomProperties : CooldownProperties(30) {
     val flightTime by int(5)
 }
 

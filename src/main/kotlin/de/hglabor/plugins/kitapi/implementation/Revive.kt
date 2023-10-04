@@ -17,8 +17,7 @@ import org.bukkit.potion.PotionEffectType
 import kotlin.math.cos
 import kotlin.math.sin
 
-
-class ReviveProperties : CooldownProperties(50000)
+class ReviveProperties : CooldownProperties(50)
 
 val Revive by Kit("Revive", ::ReviveProperties) {
     displayMaterial = Material.GOLDEN_APPLE

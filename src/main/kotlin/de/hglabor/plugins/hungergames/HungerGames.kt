@@ -4,6 +4,7 @@ import de.hglabor.plugins.hungergames.commands.*
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.MechanicsGUI
 import de.hglabor.plugins.hungergames.game.mechanics.MechanicsManager
+import de.hglabor.plugins.hungergames.game.mechanics.SettingsGUI
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.PlayerTracker
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.RecraftRecipes
@@ -52,7 +53,7 @@ class HungerGames : KSpigot() {
             executor = KitCommand
             tabCompleter = KitCommand
         }
-        KitSettingsCommand.register("kitsettings")
+        SettingsCommand.register("settings")
     }
 
     private fun registerListeners() {
@@ -65,7 +66,7 @@ class HungerGames : KSpigot() {
         PlayerTracker.register()
         KitSelector.register()
         RecraftRecipes.register()
-        MechanicsGUI(MechanicsManager.mechanics).register()
+        SettingsGUI.register()
     }
 }
 

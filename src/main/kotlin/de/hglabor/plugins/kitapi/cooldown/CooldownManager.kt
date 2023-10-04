@@ -19,9 +19,9 @@ object CooldownManager {
         val cooldownCollection = cooldownMap.getOrPut(cooldown) {
             Collections.synchronizedMap(HashMap())
         }
-        cooldownCollection += uuid to System.currentTimeMillis() + cooldown.property.get()
+        cooldownCollection += uuid to System.currentTimeMillis() + cooldown.property.get() * 1000
         cooldownCoroutineScope.launch {
-            delay(cooldown.property.get())
+            delay(cooldown.property.get() * 1000)
             cooldownCollection -= uuid
 
             // Reset uses

@@ -11,10 +11,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class TobleroneProperties : CooldownProperties(120000) {
+class TobleroneProperties : CooldownProperties(120) {
     val effectDuration by int(45)
-    val min by int(0)
-    val max by int(2)
+    val minEffectAmplifier by int(0)
+    val maxEffectAmplifier by int(2)
 }
 
 fun rand(min: Int, max: Int): Int {
@@ -36,14 +36,14 @@ val Toblerone by Kit("Toblerone", ::TobleroneProperties) {
                 PotionEffect(
                     PotionEffectType.SPEED,
                     kit.properties.effectDuration * 20,
-                    rand(kit.properties.min, kit.properties.max)
+                    rand(kit.properties.minEffectAmplifier, kit.properties.maxEffectAmplifier)
                 )
             )
             it.player.addPotionEffect(
                 PotionEffect(
                     PotionEffectType.JUMP,
                     kit.properties.effectDuration * 20,
-                    rand(kit.properties.min, kit.properties.max)
+                    rand(kit.properties.minEffectAmplifier, kit.properties.maxEffectAmplifier)
                 )
             )
         }
