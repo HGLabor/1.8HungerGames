@@ -34,12 +34,11 @@ import org.bukkit.potion.PotionEffectType
 import java.util.*
 import kotlin.random.Random
 
-class GladiatorProperties : CooldownProperties(7500) {
+class GladiatorProperties : CooldownProperties(8) {
     val radius by int(13)
     val height by int(10)
     val duration by int(240)
     val material by material(Material.GLASS)
-    val materialData by int(0)
 }
 
 class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
@@ -90,7 +89,6 @@ class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
         val radius = properties.radius
         val height = properties.height
         val material = properties.material
-        val materialData = properties.materialData
 
         fun setSpawnLocations() {
             spawnLocations = arrayOf(
@@ -102,15 +100,15 @@ class GladiatorInstance(private val gladiator: Player, playerTwo: Player) {
 
         setSpawnLocations()
         WorldUtils.makeCircle(centerLocation, radius, 1, false, false).forEach {
-            WorldUtils.setBlock(it, material, materialData.toByte(), blockQueue)
+            WorldUtils.setBlock(it, material, 0, blockQueue)
             it.block.setMetadata("gladiBlock", FixedMetadataValue(Manager, 0))
         }
         WorldUtils.makeCircle(centerLocation, radius, height, true, false).forEach {
-            WorldUtils.setBlock(it, material, materialData.toByte(), blockQueue)
+            WorldUtils.setBlock(it, material, 0, blockQueue)
             it.block.setMetadata("gladiBlock", FixedMetadataValue(Manager, 0))
         }
         WorldUtils.makeCircle(centerLocation.add(0, height, 0), radius, 1, false, false).forEach {
-            WorldUtils.setBlock(it, material, materialData.toByte(), blockQueue)
+            WorldUtils.setBlock(it, material, 0, blockQueue)
             it.block.setMetadata("gladiBlock", FixedMetadataValue(Manager, 0))
         }
     }

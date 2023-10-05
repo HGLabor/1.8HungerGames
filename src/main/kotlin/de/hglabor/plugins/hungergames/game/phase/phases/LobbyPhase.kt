@@ -2,9 +2,11 @@ package de.hglabor.plugins.hungergames.game.phase.phases
 
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.mechanics.MechanicsGUI
+import de.hglabor.plugins.hungergames.game.mechanics.SettingsGUI
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.KitSelector
 import de.hglabor.plugins.hungergames.game.mechanics.implementation.RandomKits
 import de.hglabor.plugins.hungergames.game.phase.GamePhase
+import de.hglabor.plugins.hungergames.kitsettings.gui.KitSettingsGUI
 import de.hglabor.plugins.hungergames.player.PlayerList
 import de.hglabor.plugins.hungergames.utils.TimeConverter
 import org.bukkit.GameMode
@@ -39,7 +41,7 @@ object LobbyPhase : GamePhase(150, InvincibilityPhase) {
             }
 
             if (hasPermission("hglabor.admin")) {
-                inventory.addItem(MechanicsGUI.mechanicsGuiItem)
+                inventory.addItem(SettingsGUI.item)
             }
         }
     }

@@ -13,7 +13,7 @@ import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 import java.awt.Container
 
-class DiggerProperties : CooldownProperties(12000) {
+class DiggerProperties : CooldownProperties(12) {
     val radius by int(3)
 }
 

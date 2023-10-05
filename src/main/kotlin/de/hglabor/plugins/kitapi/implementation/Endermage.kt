@@ -28,7 +28,7 @@ import java.util.*
 import kotlin.math.absoluteValue
 
 
-class EndermageProperties : MultipleUsesCooldownProperties(5, 15000) {
+class EndermageProperties : MultipleUsesCooldownProperties(5, 15) {
     val searchRadius by double(4.0)
     val searchTime by int(5)
 }

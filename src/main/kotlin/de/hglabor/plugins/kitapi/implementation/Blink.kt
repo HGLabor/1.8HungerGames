@@ -15,7 +15,7 @@ import org.bukkit.block.BlockFace
 import org.bukkit.inventory.ItemStack
 
 
-class BlinkProperties : MultipleUsesCooldownProperties(4, 16000) {
+class BlinkProperties : MultipleUsesCooldownProperties(4, 16) {
     val distance by double(4.0)
 }
 

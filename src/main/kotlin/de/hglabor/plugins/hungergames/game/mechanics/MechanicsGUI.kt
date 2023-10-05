@@ -3,6 +3,7 @@ package de.hglabor.plugins.hungergames.game.mechanics
 import de.hglabor.plugins.hungergames.PrimaryColor
 import de.hglabor.plugins.hungergames.game.GameManager
 import de.hglabor.plugins.hungergames.game.phase.phases.PvPPhase
+import de.hglabor.plugins.hungergames.kitsettings.gui.KitSettingsGUI
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.gui.*
 import net.axay.kspigot.items.itemStack
@@ -12,25 +13,33 @@ import net.axay.kspigot.items.toLoreList
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
-class MechanicsGUI(val mechanics: List<Mechanic>) {
-    companion object {
-        val mechanicsGuiItem = itemStack(Material.BEACON) { meta { name = "${PrimaryColor}Game Mechanics" } }
-    }
-
-    val gui = kSpigotGUI(GUIType.FIVE_BY_NINE) {
+object MechanicsGUI {
+    private val gui = kSpigotGUI(GUIType.FIVE_BY_NINE) {
         title = "${PrimaryColor}Mechanics"
 
         page(1) {
-            val compound = createRectCompound<Mechanic>(Slots.RowThreeSlotTwo, Slots.RowFiveSlotEight,
+            placeholder(Slots.RowOneSlotOne linTo Slots.RowFiveSlotOne, itemStack(Material.STAINED_GLASS_PANE) {
+                meta { name = "" }
+            })
+            placeholder(Slots.RowOneSlotNine linTo Slots.RowFiveSlotNine, itemStack(Material.STAINED_GLASS_PANE) {
+                meta { name = "" }
+            })
+            placeholder(Slots.RowFive, itemStack(Material.STAINED_GLASS_PANE) {
+                meta { name = "" }
+            })
+
+            val compound = createRectCompound<Mechanic>(Slots.RowThreeSlotTwo, Slots.RowFourSlotEight,
                 iconGenerator = { mechanic ->
                     mechanic.internal.displayItem.clone().apply {
                         meta {
-                            name = "${if (mechanic.internal.isEnabled) ChatColor.GREEN else ChatColor.RED}${mechanic.name}"
+                            name =
+                                "${if (mechanic.internal.isEnabled) ChatColor.GREEN else ChatColor.RED}${mechanic.name}"
                             addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                             addItemFlags(ItemFlag.HIDE_ENCHANTS)
                             if (mechanic.internal.isEnabled) {
@@ -48,7 +57,7 @@ class MechanicsGUI(val mechanics: List<Mechanic>) {
                     clickEvent.guiInstance.reloadCurrentPage()
                 })
             compound.sortContentBy { mechanic -> mechanic.name.lowercase() }
-            compoundScroll(
+            /*compoundScroll(
                 Slots.RowThreeSlotNine,
                 ItemStack(Material.STAINED_GLASS_PANE, 1, 5).apply {
                     meta {
@@ -63,8 +72,8 @@ class MechanicsGUI(val mechanics: List<Mechanic>) {
                         name = "${PrimaryColor}Previous"
                     }
                 }, compound, 7 * 4
-            )
-            compound.setContent(mechanics.filter { !it.isEvent })
+            )*/
+            compound.setContent(MechanicsManager.mechanics.filter { !it.isEvent })
 
             placeholder(Slots.RowOneSlotOne, itemStack(Material.COMMAND) {
                 meta {
@@ -75,7 +84,8 @@ class MechanicsGUI(val mechanics: List<Mechanic>) {
                 iconGenerator = { mechanic ->
                     mechanic.internal.displayItem.clone().apply {
                         meta {
-                            name = "${if (mechanic.internal.isEnabled) ChatColor.GREEN else ChatColor.RED}${mechanic.name}"
+                            name =
+                                "${if (mechanic.internal.isEnabled) ChatColor.GREEN else ChatColor.RED}${mechanic.name}"
                             addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                             addItemFlags(ItemFlag.HIDE_ENCHANTS)
                             if (mechanic.internal.isEnabled) {
@@ -93,25 +103,19 @@ class MechanicsGUI(val mechanics: List<Mechanic>) {
                     clickEvent.guiInstance.reloadCurrentPage()
                 })
             specialCompound.sortContentBy { mechanic -> mechanic.name.lowercase() }
-            specialCompound.setContent(mechanics.filter { it.isEvent })
+            specialCompound.setContent(MechanicsManager.mechanics.filter { it.isEvent })
+            button(Slots.RowOneSlotNine, itemStack(Material.BARRIER) {
+                meta {
+                    name = "${ChatColor.RED}Back"
+                }
+            }) {
+                it.bukkitEvent.isCancelled = true
+                SettingsGUI.open(it.player)
+            }
         }
     }
 
-    fun register() {
-        listen<PlayerInteractEvent> {
-            if (it.item == mechanicsGuiItem) {
-                if (GameManager.phase == PvPPhase) {
-                    it.player.inventory.remove(mechanicsGuiItem)
-                } else {
-                    it.player.openGUI(gui)
-                }
-            }
-        }
-
-        listen<BlockPlaceEvent> {
-            if (it.player.itemInHand == mechanicsGuiItem) {
-                it.isCancelled = true
-            }
-        }
+    fun open(player: Player) {
+        player.openGUI(gui)
     }
 }

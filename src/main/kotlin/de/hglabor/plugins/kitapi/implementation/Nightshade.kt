@@ -20,15 +20,15 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class NightshadeProperties  : CooldownProperties(20000) {
-    val duration by long(8*20)
+class NightshadeProperties  : CooldownProperties(20) {
+    val duration by int(8)
 }
 
 val Nightshade by Kit("Nightshade", ::NightshadeProperties) {
     displayMaterial = Material.NETHER_BRICK_ITEM
     description {
         +"${ChatColor.WHITE}Right-click ${ChatColor.GRAY}a player to:"
-        +" ${ChatColor.DARK_GRAY}- ${ChatColor.WHITE}Reduce their health ${ChatColor.GRAY}for ${kit.properties.duration / 20} seconds"
+        +" ${ChatColor.DARK_GRAY}- ${ChatColor.WHITE}Reduce their health ${ChatColor.GRAY}for ${kit.properties.duration} seconds"
         +" ${ChatColor.DARK_GRAY}- ${ChatColor.GRAY}Infect up to 2 soups"
         +"${ChatColor.GRAY}When ${ChatColor.WHITE}presouping ${ChatColor.GRAY}or eating an ${ChatColor.WHITE}infected soup"
         +"${ChatColor.GRAY}They will receive ${ChatColor.WHITE}wither effect"
@@ -62,7 +62,7 @@ val Nightshade by Kit("Nightshade", ::NightshadeProperties) {
                 }
             }
 
-            taskRunLater(kit.properties.duration) {
+            taskRunLater(kit.properties.duration * 20L) {
                 rightClicked.healthScale += 2.0
                 rightClicked.unmark("nightshadeHealth")
             }

@@ -13,9 +13,9 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 class SnailProperties : KitProperties() {
-    val effectDuration by int(3)
-    val effectMultiplier by int(0)
-    val probability by int(30)
+    val slownessDuration by int(3)
+    val slownessAmplifier by int(0)
+    val likelihood by int(30)
 }
 
 val Snail by Kit("Snail", ::SnailProperties) {
@@ -30,14 +30,14 @@ val Snail by Kit("Snail", ::SnailProperties) {
             it.damage = it.finalDamage.coerceAtMost(1.0)
         }
 
-        if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
+        if (!ChanceUtils.roll(kit.properties.likelihood)) return@kitPlayerEvent
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
 
         target.addPotionEffect(
             PotionEffect(
                 PotionEffectType.SLOW,
-                this.kit.properties.effectDuration * 20,
-                this.kit.properties.effectMultiplier
+                this.kit.properties.slownessDuration * 20,
+                this.kit.properties.slownessAmplifier
             )
         )
     }

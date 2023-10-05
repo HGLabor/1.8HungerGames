@@ -12,9 +12,9 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class RogueProperties : CooldownProperties(16000) {
+class RogueProperties : CooldownProperties(16) {
     val radius by double(25.0)
-    val duration by long(10000)
+    val duration by int(10)
 }
 
 val Rogue by Kit("Rogue", ::RogueProperties) {
@@ -40,7 +40,7 @@ val Rogue by Kit("Rogue", ::RogueProperties) {
                     hgPlayer.disableKit(isByRogue = true)
                     player.sendMessage("${Prefix}Your kit has been ${ChatColor.RED}disabled${ChatColor.GRAY}.")
 
-                    delay(kit.properties.duration)
+                    delay(kit.properties.duration * 1000L)
 
                     hgPlayer.enableKit()
                     player.sendMessage("${Prefix}Your kit has been ${ChatColor.GREEN}enabled${ChatColor.GRAY}.")

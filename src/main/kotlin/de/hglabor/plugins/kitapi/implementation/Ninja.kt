@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent
 import kotlin.math.cos
 import kotlin.math.sin
 
-class NinjaProperties : CooldownProperties(10000) {
+class NinjaProperties : CooldownProperties(10) {
     val maxDistance by int(30)
 }
 

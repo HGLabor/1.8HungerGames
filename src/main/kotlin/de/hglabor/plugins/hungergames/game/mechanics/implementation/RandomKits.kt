@@ -13,9 +13,11 @@ import de.hglabor.plugins.kitapi.player.PlayerKits.chooseKit
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.onlinePlayers
 import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.event.player.PlayerJoinEvent
 
 val RandomKits by Mechanic("Random Kits", isEvent = true) {
+    displayMaterial = Material.CHEST
     onEnable {
         if (GameManager.phase != LobbyPhase) return@onEnable
         PlayerList.allPlayers.forEach { hgPlayer ->
@@ -32,7 +34,7 @@ val RandomKits by Mechanic("Random Kits", isEvent = true) {
     onGameStart {
         onlinePlayers.forEach { player ->
             if (player.hgPlayer.kit == None && !player.hgPlayer.changedKitBefore) {
-                val kit = KitManager.kits.filter { it != None }.random()
+                val kit = KitManager.kits.filter { it != None && it.properties.isEnabled }.random()
                 player.chooseKit(kit, false)
                 player.sendMessage("${Prefix}You have been given the kit $SecondaryColor${kit.properties.kitname}${ChatColor.GRAY}.")
             }
@@ -51,7 +53,7 @@ val RandomKits by Mechanic("Random Kits", isEvent = true) {
         if (GameManager.phase != LobbyPhase) return@mechanicEvent
         val player = it.player
         if (player.hgPlayer.kit != None) return@mechanicEvent
-        val kit = KitManager.kits.filter { it != None }.random()
+        val kit = KitManager.kits.filter { it != None && it.properties.isEnabled }.random()
         player.chooseKit(kit, false)
         player.sendMessage("${Prefix}You have been given the kit $SecondaryColor${kit.properties.kitname}${ChatColor.GRAY}.")
     }

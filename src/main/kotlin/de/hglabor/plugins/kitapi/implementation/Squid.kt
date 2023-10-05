@@ -17,9 +17,9 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 class SquidProperties : KitProperties() {
-    val effectDuration by int(3)
-    val effectMultiplier by int(0)
-    val probability by int(8)
+    val blindnessDuration by int(3)
+    val blindnessAmplifier by int(0)
+    val likelihood by int(8)
 }
 
 val Squid by Kit("Squid", ::SquidProperties) {
@@ -32,12 +32,12 @@ val Squid by Kit("Squid", ::SquidProperties) {
     kitPlayerEvent<EntityDamageByEntityEvent>({ it.damager as? Player }, priority = EventPriority.HIGH) { it, _ ->
         if (it.isCancelled) return@kitPlayerEvent
         val target = (it.entity as? LivingEntity) ?: return@kitPlayerEvent
-        if (!ChanceUtils.roll(kit.properties.probability)) return@kitPlayerEvent
+        if (!ChanceUtils.roll(kit.properties.likelihood)) return@kitPlayerEvent
         target.addPotionEffect(
             PotionEffect(
                 PotionEffectType.BLINDNESS,
-                this.kit.properties.effectDuration * 20,
-                this.kit.properties.effectMultiplier
+                this.kit.properties.blindnessDuration * 20,
+                this.kit.properties.blindnessAmplifier
             )
         )
     }
